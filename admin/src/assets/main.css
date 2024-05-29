@@ -1,0 +1,19 @@
+@font-face {
+  font-family: geomSans;
+  src: url(./fonts/Geom/Geom-Variable.ttf);
+}
+
+:root {
+  --orange: #f59120;
+  --white: #fffffa;
+  --black: #666666;
+}
+
+body {
+  font-family: geomSans;
+  font-weight: 500;
+}
+
+td {
+  text-align: center;
+}

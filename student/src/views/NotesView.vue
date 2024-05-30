@@ -33,7 +33,7 @@ const noteStore = useNoteStore()
 const errorStore = useErrorStore()
 
 const { history, getHistoryFromStorage, addCourseToStorage, deleteCourseFromStorage } = useHistory()
-const { getCourses, getNotes } = useFetch()
+const { getCourses, getNotes, getPdf } = useFetch()
 
 const handleDelete = (index: number) => {
   const cid = deleteCourseFromStorage(index)
@@ -56,22 +56,6 @@ const saveCourse = () => {
   } else {
     errorStore.addError('Course not Found')
   }
-}
-
-const fetchPdf = async (filename: string) => {
-  await fetch(`${import.meta.env.VITE_DOCUMENTS_API_URL}/${c_id.value}/${filename}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
-  })
-    .then((response) => response.blob())
-    .then((data) => {
-      const url = URL.createObjectURL(data)
-      window.open(url, '_blank')
-      URL.revokeObjectURL(url)
-    })
-    .catch((error: string) => errorStore.addError(error))
 }
 
 onMounted(async () => {
@@ -107,14 +91,22 @@ watch(c_id, async (newCid, oldCid) => {
         </section>
         <ul class="notes-list" id="theory-list">
           <li class="title">Θεωρία</li>
-          <li class="notes" v-for="note in noteStore.notes.filter((el) => el.type === `theory`)">
-            <span @click="fetchPdf(note.note_filename)">{{ note.note_display_name }}</span>
+          <li
+            class="notes"
+            v-for="note in noteStore.notes.filter((el) => el.type === `theory`)"
+            @click="getPdf(c_id, note.note_filename)"
+          >
+            <span>{{ note.note_display_name }}</span>
           </li>
         </ul>
         <ul class="notes-list" id="lab-list">
           <li class="title">Εργαστήριο</li>
-          <li class="notes" v-for="note in noteStore.notes.filter((el) => el.type === `lab`)">
-            <span @click="fetchPdf(note.note_filename)">{{ note.note_display_name }}</span>
+          <li
+            class="notes"
+            v-for="note in noteStore.notes.filter((el) => el.type === `lab`)"
+            @click="getPdf(c_id, note.note_filename)"
+          >
+            <span>{{ note.note_display_name }}</span>
           </li>
         </ul>
       </div>

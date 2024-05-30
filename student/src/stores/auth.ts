@@ -13,8 +13,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
     keycloak.value = new Keycloak({
       url: import.meta.env.VITE_AUTH_API_URL,
-      realm: 'student',
-      clientId: 'student-frontend'
+      realm: import.meta.env.VITE_KC_REALM,
+      clientId: import.meta.env.VITE_KC_CLIENT_ID
     })
   }
 

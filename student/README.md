@@ -19,3 +19,9 @@ VERSION=v0.1.0
 
 docker build -t student:$VERSION .
 ```
+
+### Run Docker Conatiner
+
+```sh
+docker run -d -p 5500:5500 --name student student:$VERSION
+```

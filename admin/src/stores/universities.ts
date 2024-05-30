@@ -14,7 +14,7 @@ export const useUniStore = defineStore('universities', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/universities`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())
@@ -33,7 +33,7 @@ export const useUniStore = defineStore('universities', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/university`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(uni)
@@ -54,7 +54,7 @@ export const useUniStore = defineStore('universities', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/university`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(uni)
@@ -75,7 +75,7 @@ export const useUniStore = defineStore('universities', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/university/${uni_id}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())

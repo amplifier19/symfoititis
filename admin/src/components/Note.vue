@@ -10,7 +10,7 @@ const fetchPdf = async (filename: string) => {
   await fetch(`${import.meta.env.VITE_DOCUMENTS_API_URL}/${props.note.c_id}/${filename}`, {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem('admin_token')}`
     }
   })
     .then((response) => response.blob())

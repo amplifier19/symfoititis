@@ -17,7 +17,7 @@ export const useCourseStore = defineStore('courses', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/courses/${dep_id}`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())
@@ -36,7 +36,7 @@ export const useCourseStore = defineStore('courses', () => {
     await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course/${c_id}`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())
@@ -55,7 +55,7 @@ export const useCourseStore = defineStore('courses', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(course)
@@ -76,7 +76,7 @@ export const useCourseStore = defineStore('courses', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(course)
@@ -97,7 +97,7 @@ export const useCourseStore = defineStore('courses', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course/${c_id}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())

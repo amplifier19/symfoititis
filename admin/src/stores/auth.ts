@@ -21,8 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
   const keycloakInit = async () => {
     await keycloak.value
       .init({
-        token: localStorage.getItem('token') || '',
-        refreshToken: localStorage.getItem('refreshToken') || ''
+        token: localStorage.getItem('admin_token') || '',
+        refreshToken: localStorage.getItem('admin_refreshToken') || ''
       })
       .then(async () => {
         await keycloakLogin()
@@ -73,13 +73,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const updateLocalStorage = () => {
-    localStorage.setItem('token', keycloak.value.token || '')
-    localStorage.setItem('refreshToken', keycloak.value.refreshToken || '')
+    localStorage.setItem('admin_token', keycloak.value.token || '')
+    localStorage.setItem('admin_refreshToken', keycloak.value.refreshToken || '')
   }
 
   const clearLocalStorage = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('admin_token')
+    localStorage.removeItem('admin_refreshToken')
   }
 
   return { keycloak, profile, keycloakCreate, keycloakInit, getProfile, updateToken, logout }

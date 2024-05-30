@@ -12,7 +12,7 @@ export const useFileStore = defineStore('files', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/files/${c_id}`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())
@@ -38,7 +38,7 @@ export const useFileStore = defineStore('files', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/files/upload/${c_id}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       },
       body: formData
     })
@@ -64,7 +64,7 @@ export const useFileStore = defineStore('files', () => {
       {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+          Authorization: `Bearer ${localStorage.getItem('admin_token')}`
         }
       }
     )

@@ -15,7 +15,7 @@ export const useDepStore = defineStore('departments', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/departments`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())
@@ -34,7 +34,7 @@ export const useDepStore = defineStore('departments', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/department`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(dep)
@@ -55,7 +55,7 @@ export const useDepStore = defineStore('departments', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/department`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(dep)
@@ -76,7 +76,7 @@ export const useDepStore = defineStore('departments', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/department/${dep_id}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())

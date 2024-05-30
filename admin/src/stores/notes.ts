@@ -16,7 +16,7 @@ export const useNoteStore = defineStore('notes', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/notes/${c_id}`, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())
@@ -35,7 +35,7 @@ export const useNoteStore = defineStore('notes', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/note`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(note)
@@ -56,7 +56,7 @@ export const useNoteStore = defineStore('notes', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/note`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(note)
@@ -77,7 +77,7 @@ export const useNoteStore = defineStore('notes', () => {
     return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/note/${note_id}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('admin_token')}`
       }
     })
       .then((response) => response.json())

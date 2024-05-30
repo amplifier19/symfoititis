@@ -11,5 +11,5 @@ docker build -t mynginx:$VERSION .
 ### Run Docker Conatiner
 
 ```sh
-docker run -d -p 80:80 --name mynginx admin:$VERSION
+docker run -d -p 80:80 --name mynginx mynginx:$VERSION
 ```

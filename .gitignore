@@ -32,7 +32,6 @@ coverage
 HELP.md
 target/
 **/resources/application.*
-**/resources/db
 **/resources/policy-enforcer.json
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

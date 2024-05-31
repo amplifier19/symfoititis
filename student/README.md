@@ -23,5 +23,5 @@ docker build -t student:$VERSION .
 ### Run Docker Conatiner
 
 ```sh
-docker run -d -p 5500:5500 --name student student:$VERSION
+docker run -d --name student --network symfoititis student:$VERSION
 ```

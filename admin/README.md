@@ -23,5 +23,5 @@ docker build -t admin:$VERSION .
 ### Run Docker Conatiner
 
 ```sh
-docker run -d -p 5500:5500 --name admin admin:$VERSION
+docker run -d --name admin --network symfoititis admin:$VERSION
 ```

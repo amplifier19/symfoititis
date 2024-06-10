@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./favicon.ico" />
+    <title>Symfoititis</title>
+</head>
+<body>
+<div class="main-section">
+    <div class="masthead">
+        <img class="masthead-logo" src="./images/logo_hor.svg" alt="symfoititis-logo">
+        <div class="masthead-title-container">
+            <span class="masthead-title">από φοιτητές για φοιτητές</span>        
+        </div>
+    </div>
+    <main class="main-wrapper">
+        <section class="main-container">
+            <h1 class="title">ΘΑ ΤΕΛΕΙΩΣΕΙΣ</h1>
+            <h1 class="title">ΤΗΝ ΣΧΟΛΗ</h1>
+            <div class="subtitle-container">
+                <h3 class="subtitle">(και με καλό βαθμό) </h2>
+                <span class="dot"></span>
+            </div>
+            <div class="text-container">
+                <p class="text-paragraph">
+                    <span class="line">Τι έτος είσαι;;</span>
+                    <span class="line">Βασικά δεν έχει σημασία.</span>
+                </p>
+                <p class="text-paragraph">
+                    <span class="line">Εσύ το μόνο που πρέπει να κάνεις, είναι</span>
+                    <span class="line">να γνωρίσεις τον νέο σου συμφοιτητή</span>
+                    <span class="line">και να παραλάβεις το πτυχίο σου.</span>
+                </p>
+            </div>
+        </section>
+        <section class="cta">
+            <div class="cta-head-container">
+                <span class="cta-head">Πτυχίο not found...</span>
+            </div>
+            <div class="cta-container">
+                <div>
+                    <h2 class="cta-title">ΕΞΑΜΗΝΟ 404</h2>
+                    <p class="cta-line">Κάνε εγγραφή με το email της σχολής σου</p>
+                </div>
+                <a class="login-btn-container" href="https://symfoititis.gr/student" target="_self" rel="noopener noreferrer">
+                    <div class="login-btn">Είσοδος</div>
+                </a>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+
+
+<style>
+@font-face {
+    font-family: geomSans;
+    src: url(./fonts/Geom/Geom-Variable.ttf);
+}
+@font-face {
+    font-family: geomLight;
+    src: url(./fonts/Geom/Geom-Light.ttf);
+}
+
+@font-face {
+    font-family: CarouselBold;
+    src: url(./fonts/Carousel/PVF_CarouselBold.otf);
+}
+@font-face {
+    font-family: CarouselMedium;
+    src: url(./fonts/Carousel/PVF_CarouselMedium.otf);
+}
+@font-face {
+    font-family: CarouselLight;
+    src: url(./fonts/Carousel/PVF_CarouselLight.otf);
+}
+
+:root {
+    height: 100vh;
+    --orange: #F59120;
+    --white: #FFFFFA;
+    --black: #000000;
+}
+
+body {
+    background-position: top right;
+    background-repeat: no-repeat;
+    font-family: geomSans;
+    margin: 0rem;
+}
+
+.main-section {
+    padding-bottom: 3rem;
+}
+
+.masthead {
+    display: flex;
+    align-items: center;
+    justify-content:baseline;
+}
+
+.masthead-logo {
+    width: 14rem;
+    margin: 2rem 0 0 2rem; 
+}
+
+.masthead-title-container {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.masthead-title {
+    color: var(--orange);
+    font-family: CarouselLight;
+    font-weight: bolder;
+    font-size: 1.4rem;
+    margin: 2rem 0 0 0; 
+    transform: translateX(-40%);
+}
+
+.main-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100vh;
+    margin-top: 7rem;
+}
+
+.main-container {
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0rem 0rem 0rem 4rem;
+}
+
+.title {
+    font-family: CarouselBold;
+    width: max-content;
+    color: var(--orange);
+    font-size: 155px;
+    margin: 0px;
+}
+
+.subtitle-container {
+    display: flex;
+    flex-direction: row;
+    color: var(--orange);
+    margin-top: 1rem;
+
+}
+
+.subtitle {
+    font-family: CarouselLight;
+    margin: 0rem;
+    font-size: 1.7rem;    
+}
+
+.dot {
+    background-color: var(--orange);
+    border-radius: 16px;
+    height: 1.5rem;
+    width: 1.5rem;
+    margin: auto 0.5rem;
+}
+
+.text-container {
+    color: var(--black);
+    margin-top: 7rem;
+}
+
+.text-paragraph {
+    display: flex;
+    flex-direction: column;
+}
+
+.line {
+    font-size: 1.7rem;
+    margin-top: 0.7rem;
+}
+
+.cta {    
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.cta-head {    
+    display: none;
+}
+
+.cta-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:space-between;
+    width: 604px;
+    height: 340px;
+    margin-top: 39.2rem;
+    margin-right: 24.3rem;
+}
+
+.cta-title {    
+    font-family: CarouselLight;
+    color: var(--black);
+    font-size: 3.2rem;
+    font-weight: bold;
+    margin: 0;
+    margin-top: 4rem;
+}
+
+.cta-line {
+    color: var(--black);
+    margin: 0;
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.cta-container > a {
+    text-decoration: none;
+    background-color: var(--orange);
+    color: var(--white);
+    margin-bottom: 4rem;
+    width: max-content;
+}
+
+.login-btn {
+    font-family: GeomLight;
+    font-size: 1.6rem;
+    margin: 1rem 1.3rem;
+}
+
+body {        
+    background-image: url("./images/back_large.jpg");
+    background-position-y: top;
+}
+
+@media screen and (max-width: 2330px) {
+    body{        
+        background-image: url("./images/back_medium.jpg");
+    }
+
+    .masthead-logo {
+        width: 10.5rem;
+        margin: 1rem 0 0 1rem; 
+    }
+
+    .masthead-title {
+        font-size: 1rem;
+        margin: 1rem 0 0 0; 
+    }
+
+    .main-wrapper {
+        margin-top: 5rem;
+    }
+
+    .main-container {
+        margin: 0rem 0rem 0rem 2rem;
+    }
+
+    .title {
+        font-size: 100px;
+        margin: 0px;
+    }
+
+    .subtitle-container {
+        margin-top: 0.7rem;
+    }
+
+    .subtitle {
+        margin: 0rem;
+        font-size: 1.4rem;    
+    }
+
+    .dot {
+        height: 1.2rem;
+        width: 1.2rem;
+        margin: auto 0.5rem;
+    }
+
+    .text-container {
+        margin-top: 5rem;
+    }
+
+
+    .line {
+        font-size: 1.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .cta-container {
+        width: 420px;
+        height: 240px;
+        margin: 0;
+        margin-top: 30rem;
+        margin-right: 19rem;
+    }
+
+    .cta-head-container  {
+        display: flex;
+        flex-grow: 1;
+        justify-content: start;
+    }
+
+    .cta-head {
+        display:none;
+    }
+
+    .cta-title {    
+        font-size: 2.6rem;
+        font-weight: 100;
+        margin-top: 2rem;
+    }
+
+    .cta-line {
+        margin: 0;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .cta-container > a {
+        margin-bottom: 2rem;
+    }
+
+    .login-btn {
+        font-size: 1.3rem;
+        margin: 0.75rem 1rem;
+    }
+}
+
+@media screen and (max-width: 1565px) {
+    body{
+        background-image: none;
+    }
+
+    .masthead {
+        justify-content: space-between;
+        padding: 0.7rem 0.7rem 0 0.7rem; 
+    }
+
+    .masthead-logo {
+        margin: 0;
+        width: 10rem;
+    }
+
+    .masthead-title-container {
+        flex-grow: 0;
+        justify-content:space-evenly;
+    }
+
+    .masthead-title {
+        font-size: 0.9rem;
+        margin: 0 auto;  
+        transform: translateX(0%);
+        font-family: CarouselMedium;
+        font-weight: lighter;
+    }
+
+    .main-wrapper {
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        margin:0;
+    }
+
+    .main-container {
+        margin: 0;
+        margin-top: 8vh;
+    }
+
+    .title {
+        font-size: 70px;
+        margin: 0px;
+    }
+
+    .subtitle-container {
+        margin-top: 0.7rem;
+    }
+
+    .subtitle {
+        margin: 0rem;
+        font-size: 1.2rem;    
+    }
+
+    .dot {
+        height: 1rem;
+        width: 1rem;
+        margin: auto 0.5rem;
+    }
+
+    .text-container {
+        margin-top: 8vh;
+    }
+
+    .line {
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+    }
+
+    .cta {
+        background-color: var(--white);   
+        flex-direction: column;
+        border: 2px var(--orange) solid;
+        margin-top: 8vh;
+        padding: 0;        
+    }
+
+    .cta-head-container {
+        margin: 0.3rem 0.3rem 0 0.3rem;
+        background-color: var(--orange);
+    }
+
+    .cta-head {
+        font-size: .8rem;
+        padding: 0.3rem 0.7rem;
+        color: white;
+        display: inline;
+    }
+
+    .cta-container {
+        margin: 0 3.5rem;
+        width: max-content;
+        height: auto;
+    }
+
+    .cta-container > div {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .cta-title {    
+        font-size: 2rem;
+        font-weight: 100;
+        margin: 0 auto;
+        margin-top: 2.5rem;
+    }
+
+    .cta-line {
+        margin: 0;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .cta-container > a {
+        margin: 3.5rem 0 1.5rem 0;
+    }
+
+    .login-btn {
+        font-size: 1.3rem;
+        margin: 0.75rem 1rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    body{
+        background-image: none;
+    }   
+
+    .masthead {
+        padding: 0.5rem 0.5rem 0 0.5rem; 
+    }
+
+    .masthead-logo {
+        margin: 0;
+        width: 8rem;
+    }
+
+    .masthead-title {
+        font-size: 0.75rem;
+    }
+
+    .main-container {
+        margin-top: 2.5rem;
+    }
+
+    .title {
+        font-size: 45px;
+        margin: 0px;
+    }
+
+    .subtitle-container {
+        margin-top: 0.7rem;
+    }
+
+    .subtitle {
+        margin: 0rem;
+        font-size: 0.9rem;    
+    }
+
+    .dot {
+        height: 0.8rem;
+        width: 0.8rem;
+        margin: auto 0.3rem;
+    }
+
+    .text-container {
+        margin-top: 2.5rem;
+    }
+
+    .line {
+        font-size: 0.95rem;
+        margin-top: 0.3rem;
+    }
+
+    .cta {
+        margin-top: 5vh;     
+    }
+
+    .cta-head {
+        font-size: .8rem;
+        padding: 0.3rem 0.7rem;
+        color: white;
+        display: inline;
+    }
+
+    .cta-container {
+        margin: 0 2rem;
+        width: max-content;
+        height: auto;
+    }
+
+    .cta-title {    
+        font-size: 1.7rem;
+        margin: 0 auto;
+        margin-top: 1.5rem;
+    }
+
+    .cta-line {
+        margin: 0;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .cta-container > a {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .login-btn {
+        font-size: 1rem;
+        margin: 0.6rem 1rem;
+    } 
+}
+</style>
+</html>

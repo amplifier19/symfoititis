@@ -30,9 +30,10 @@ public class OAuth2ResourceServerSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/rest/student/universities")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/rest/student/departments/*")).permitAll()
-                        .anyRequest().authenticated()
+                    .requestMatchers(new AntPathRequestMatcher("/student/documents/**")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/rest/student/universities")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/rest/student/departments/*")).permitAll()
+                    .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 //                .addFilterAfter(createPolicyEnforcerFilter(), BearerTokenAuthenticationFilter.class);

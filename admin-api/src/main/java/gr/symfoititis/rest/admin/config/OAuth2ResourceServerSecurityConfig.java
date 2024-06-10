@@ -29,7 +29,8 @@ public class OAuth2ResourceServerSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
+                    .requestMatchers(new AntPathRequestMatcher("/admin/documents/**")).permitAll()
+                    .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 //                .addFilterAfter(createPolicyEnforcerFilter(), BearerTokenAuthenticationFilter.class);

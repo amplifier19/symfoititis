@@ -68,22 +68,5 @@ export const useFetch = () => {
     }
   }
 
-  const getPdf = async (c_id: number, filename: string) => {
-    authStore.updateToken(420)
-    await fetch(`${import.meta.env.VITE_DOCUMENTS_API_URL}/${c_id}/${filename}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-      .then((response) => response.blob())
-      .then((data) => {
-        const url = URL.createObjectURL(data)
-        window.open(url, '_blank')
-        URL.revokeObjectURL(url)
-      })
-      .catch((error: string) => errorStore.addError(error))
-  }
-
-  return { getUserInfo, getUniversity, getDepartment, getCourses, getNotes, getPdf }
+  return { getUserInfo, getUniversity, getDepartment, getCourses, getNotes }
 }

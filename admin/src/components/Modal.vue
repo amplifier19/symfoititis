@@ -86,7 +86,7 @@ const props = defineProps<{ content: Modal }>()
                     :selected="
                       Object.values(option)[
                         Number(Object.keys(option).indexOf(select?.valueKey!))
-                      ] == select?.selection || option == select.valueKey
+                      ] == select?.selection || option == select?.selection
                     "
                   >
                     {{

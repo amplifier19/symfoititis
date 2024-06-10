@@ -19,6 +19,8 @@ import { useFetch } from '../composables/fetchService'
 const route = useRoute()
 const router = useRouter()
 
+const documents_url = import.meta.env.VITE_DOCUMENTS_API_URL
+
 const c_id = ref<number>(parseInt(route.params.c_id as string))
 const course = ref<Course>({
   c_id: -100,
@@ -33,7 +35,7 @@ const noteStore = useNoteStore()
 const errorStore = useErrorStore()
 
 const { history, getHistoryFromStorage, addCourseToStorage, deleteCourseFromStorage } = useHistory()
-const { getCourses, getNotes, getPdf } = useFetch()
+const { getCourses, getNotes } = useFetch()
 
 const handleDelete = (index: number) => {
   const cid = deleteCourseFromStorage(index)
@@ -91,22 +93,24 @@ watch(c_id, async (newCid, oldCid) => {
         </section>
         <ul class="notes-list" id="theory-list">
           <li class="title">Θεωρία</li>
-          <li
-            class="notes"
-            v-for="note in noteStore.notes.filter((el) => el.type === `theory`)"
-            @click="getPdf(c_id, note.note_filename)"
-          >
-            <span>{{ note.note_display_name }}</span>
+          <li class="notes" v-for="note in noteStore.notes.filter((el) => el.type === `theory`)">
+            <a
+              class="note-link"
+              :href="`${documents_url}/${c_id}/${note.note_filename}`"
+              target="_blank"
+              >{{ note.note_display_name }}</a
+            >
           </li>
         </ul>
         <ul class="notes-list" id="lab-list">
           <li class="title">Εργαστήριο</li>
-          <li
-            class="notes"
-            v-for="note in noteStore.notes.filter((el) => el.type === `lab`)"
-            @click="getPdf(c_id, note.note_filename)"
-          >
-            <span>{{ note.note_display_name }}</span>
+          <li class="notes" v-for="note in noteStore.notes.filter((el) => el.type === `lab`)">
+            <a
+              class="note-link"
+              :href="`${documents_url}/${c_id}/${note.note_filename}`"
+              target="_blank"
+              >{{ note.note_display_name }}</a
+            >
           </li>
         </ul>
       </div>
@@ -142,7 +146,6 @@ watch(c_id, async (newCid, oldCid) => {
 .description {
   cursor: pointer;
   font-size: 1rem;
-  padding: 0rem 1rem 0.5rem 1rem;
   width: 30%;
   border-bottom: 1.5px var(--orange) solid;
   margin-bottom: 1rem;
@@ -164,6 +167,11 @@ watch(c_id, async (newCid, oldCid) => {
   margin-bottom: 0rem;
 }
 
+.note-link {
+  display: block;
+  padding: 0rem 1rem 0.5rem 1rem;
+}
+
 @media screen and (max-width: 1024px) {
   .description-container {
     padding: 1.3rem 3.7rem;
@@ -180,9 +188,12 @@ watch(c_id, async (newCid, oldCid) => {
 
   .notes {
     font-size: 0.9rem;
-    padding: 0rem 0.8rem 0.5rem 0.8rem;
     width: 60%;
     margin-bottom: 0.8rem;
+  }
+
+  .note-link {
+    padding: 0rem 0.8rem 0.5rem 0.8rem;
   }
 }
 
@@ -202,9 +213,12 @@ watch(c_id, async (newCid, oldCid) => {
 
   .notes {
     font-size: 0.9rem;
-    padding: 0rem 0.5rem 0.5rem 0.5rem;
     width: 80%;
     margin-bottom: 0.5rem;
+  }
+
+  .note-link {
+    padding: 0rem 0.5rem 0.5rem 0.5rem;
   }
 }
 </style>

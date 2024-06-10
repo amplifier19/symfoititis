@@ -391,6 +391,7 @@ export const useModal = () => {
   }
 
   const activateNoteEditModal = (note: Note) => {
+    console.log(note.note_filename)
     modal.value = {
       title: 'Edit Note',
       icon: 'fa fa-edit',

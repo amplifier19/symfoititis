@@ -6,21 +6,7 @@ const props = defineProps<{ note: Note }>()
 
 const errorStore = useErrors()
 
-const fetchPdf = async (filename: string) => {
-  await fetch(`${import.meta.env.VITE_DOCUMENTS_API_URL}/${props.note.c_id}/${filename}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('admin_token')}`
-    }
-  })
-    .then((response) => response.blob())
-    .then((data) => {
-      const url = URL.createObjectURL(data)
-      window.open(url, '_blank')
-      URL.revokeObjectURL(url)
-    })
-    .catch((error: string) => errorStore.addError(error))
-}
+const documents_url = import.meta.env.VITE_DOCUMENTS_API_URL
 </script>
 
 <template>
@@ -44,9 +30,13 @@ const fetchPdf = async (filename: string) => {
       {{ props.note.type }}
     </td>
     <td class="pf-v5-c-table__td" role="cell" data-label="Note Type">
-      <button class="pf-v5-c-button pf-m-link" @click="fetchPdf(props.note.note_filename)">
+      <a
+        class="pf-v5-c-button pf-m-link"
+        :href="`${documents_url}/${note.c_id}/${props.note.note_filename}`"
+        target="_blank"
+      >
         Open note
-      </button>
+      </a>
     </td>
     <td class="pf-v5-c-table__td pf-v5-c-table__action" role="cell">
       <div class="pf-v5-c-overflow-menu__group pf-m-button-group">

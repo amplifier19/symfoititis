@@ -25,6 +25,7 @@ coverage
 *.sln
 *.sw?
 *.env*
+**/custom-keycloak-themes*
 *patternfly*
 *font-awesome*
 *.tsbuildinfo

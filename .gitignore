@@ -24,14 +24,17 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-*.env
+*.env*
 *patternfly*
 *font-awesome*
 *.tsbuildinfo
 
 HELP.md
 target/
+**/env
+**/prod
 **/resources/application.*
+**/cert/
 **/resources/policy-enforcer.json
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

@@ -32,7 +32,6 @@ public class CoursesController {
     @GetMapping("/course/{c_id}")
     public ResponseEntity<Response> course (@PathVariable(value="c_id", required=true) int c_id) {
         Course course = coursesService.getCourse(c_id);
-        String message = String.format("Successfully fetched course with id: %d", c_id);
         return ResponseEntity.ok(new Response (200, course));
     }
 }

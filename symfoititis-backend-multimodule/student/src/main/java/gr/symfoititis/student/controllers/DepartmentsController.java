@@ -37,7 +37,6 @@ public class DepartmentsController {
     ResponseEntity<Response> department (@RequestHeader("X-Department-Id") String id) {
         int dep_id = Integer.parseInt(id);
         Department department = departmentsService.getDepartment(dep_id);
-        String message = String.format("Successfully fetched university with id: %d", dep_id);
         return ResponseEntity.ok(new Response (200, department));
     }
 }

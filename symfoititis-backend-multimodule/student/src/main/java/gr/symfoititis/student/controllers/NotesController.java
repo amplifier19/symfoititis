@@ -27,7 +27,6 @@ public class NotesController {
     @GetMapping("/notes/{c_id}")
     ResponseEntity<Response> getNotes (@PathVariable(value="c_id", required=true) Integer c_id) {
         List<Note> notes = notesService.getNotes(c_id);
-        String message = String.format("Successfully fetched %d notes", notes.size());
         return ResponseEntity.ok(new Response(200, notes));
     }
 }

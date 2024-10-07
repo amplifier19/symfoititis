@@ -1,0 +1,29 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@symfoititis-frontend-monorepo/composables": [
+        "modules/composables/src/index.ts"
+      ],
+      "@symfoititis-frontend-monorepo/interfaces": [
+        "modules/interfaces/src/index.ts"
+      ],
+      "@symfoititis-frontend-monorepo/stores": ["modules/stores/src/index.ts"],
+      "@symfoititis-frontend-monorepo/ui": ["modules/ui/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

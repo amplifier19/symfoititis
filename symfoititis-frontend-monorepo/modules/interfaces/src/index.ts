@@ -1,0 +1,8 @@
+export { AvailabilitySlot } from './interfaces/AvailabilitySlot.ts'
+export { Course } from './interfaces/Course.ts'
+export { Day } from './interfaces/Day.ts'
+export { Departments } from './interfaces/Department.ts'
+export { Note } from './interfaces/Note.ts'
+export { Response } from './interfaces/Response.ts'
+export { University } from './interfaces/University.ts'
+export { Teacher } from './interfaces/Teacher.ts'

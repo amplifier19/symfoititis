@@ -1,0 +1,9 @@
+{
+  "name": "composables",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "modules/composables/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project composables --web",
+  "targets": {}
+}

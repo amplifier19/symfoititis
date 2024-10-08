@@ -1,0 +1,43 @@
+services:
+  institutions-db:
+    container_name: institutions-db
+    image: dev/institutions-db 
+    environment:
+      - POSTGRES_USER=${INSTITUTIONS_PG_USER}
+      - POSTGRES_PASSWORD=${INSTITUTIONS_PG_PASSWORD}
+      - POSTGRES_DB=${INSTITUTIONS_PG_DB}
+      - SERVICE_USER=${INSTITUTIONS_SERVICE_USER}
+      - SERVICE_PASSWORD=${INSTITUTIONS_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5431:5432"
+    volumes:
+      - ${HOST_PATH}/institutions-db/data:/var/lib/postgresql/data
+  education-db:
+    container_name: education-db
+    image: dev/education-db 
+    environment:
+      - POSTGRES_USER=${EDUCATION_PG_USER}
+      - POSTGRES_PASSWORD=${EDUCATION_PG_PASSWORD}
+      - POSTGRES_DB=${EDUCATION_PG_DB}
+      - SERVICE_USER=${EDUCATION_SERVICE_USER}
+      - SERVICE_PASSWORD=${EDUCATION_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5433:5432"
+    volumes:
+      - ${HOST_PATH}/education-db/data:/var/lib/postgresql/data
+  tutoring-db:
+    container_name: tutoring-db
+    image: dev/tutoring-db 
+    environment:
+      - POSTGRES_USER=${TUTORING_PG_USER}
+      - POSTGRES_PASSWORD=${TUTORING_PG_PASSWORD}
+      - POSTGRES_DB=${TUTORING_PG_DB}
+      - SERVICE_USER=${TUTORING_SERVICE_USER}
+      - SERVICE_PASSWORD=${TUTORING_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5434:5432"
+    volumes:
+      - ${HOST_PATH}/tutoring-db/data:/var/lib/postgresql/data

@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS universities (
+  uni_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  uni_display_name VARCHAR(64) NOT NULL,
+  uni_alt_name VARCHAR(32) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS departments (
+  dep_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  uni_id INT NOT NULL,
+  dep_display_name VARCHAR(64) NOT NULL,
+  dep_alt_name VARCHAR(32) NOT NULL,
+  FOREIGN KEY(uni_id) REFERENCES universities(uni_id) ON DELETE CASCADE
+);

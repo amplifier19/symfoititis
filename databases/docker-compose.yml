@@ -41,3 +41,17 @@ services:
       - "5434:5432"
     volumes:
       - ${HOST_PATH}/tutoring-db/data:/var/lib/postgresql/data
+  keycloak-db:
+    container_name: keycloak-db
+    image: dev/keycloak-db 
+    environment:
+      - POSTGRES_USER=${KEYCLOAK_PG_USER}
+      - POSTGRES_PASSWORD=${KEYCLOAK_PG_PASSWORD}
+      - POSTGRES_DB=${KEYCLOAK_PG_DB}
+      - SERVICE_USER=${KEYCLOAK_SERVICE_USER}
+      - SERVICE_PASSWORD=${KEYCLOAK_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5435:5432"
+    volumes:
+      - ${HOST_PATH}/keycloak-db/data:/var/lib/postgresql/data

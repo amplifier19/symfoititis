@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e 
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$POSTGRES_DB" <<-EOSQL
+        CREATE USER ${SERVICE_USER} WITH PASSWORD '${SERVICE_PASSWORD}';
+        CREATE DATABASE keycloak OWNER ${SERVICE_USER};
+EOSQL
+

@@ -1,28 +1,35 @@
-package gr.symfoititis.admin.services;
+package gr.symfoititis.institutions.services;
 
-import gr.symfoititis.admin.dao.UniversitiesDao;
-import gr.symfoititis.admin.exceptions.ConflictException;
-import gr.symfoititis.admin.exceptions.InternalServerErrorException;
+import gr.symfoititis.institutions.dao.UniversitiesDao;
 import gr.symfoititis.common.exceptions.BadRequestException;
+import gr.symfoititis.common.exceptions.ConflictException;
+import gr.symfoititis.common.exceptions.InternalServerErrorException;
 import gr.symfoititis.common.exceptions.NotFoundException;
-import gr.symfoititis.common.records.University;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import gr.symfoititis.institutions.records.University;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
-public class AdminUniversitiesService {
-    private final UniversitiesDao universitiesDao;
-    public AdminUniversitiesService(UniversitiesDao universitiesDao) {
-        this.universitiesDao = universitiesDao;
+public class UniversitiesService {
+    protected final UniversitiesDao universitiesDao;
+
+    public UniversitiesService(UniversitiesDao studentDao) {
+        this.universitiesDao = studentDao;
     }
 
-    /**
-     *
-     * Universities
-     */
+    public List<University> getUniversities () {
+        return universitiesDao.getUniversities();
+    }
+    public University getUniversity (Integer uni_id) {
+        if (Objects.isNull(uni_id) || uni_id <=0) {
+            throw new BadRequestException("Bad Request");
+        }
+        return universitiesDao.getUniversity(uni_id).orElseThrow(() -> new NotFoundException("University Not Found"));
+    }
     public void addUniversity (University university)  {
         if (
                 Objects.isNull(university) ||

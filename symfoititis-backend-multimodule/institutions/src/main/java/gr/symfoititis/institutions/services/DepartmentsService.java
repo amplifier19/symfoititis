@@ -1,29 +1,41 @@
-package gr.symfoititis.admin.services;
+package gr.symfoititis.institutions.services;
 
-import gr.symfoititis.admin.dao.DepartmentsDao;
-import gr.symfoititis.admin.exceptions.InternalServerErrorException;
+import gr.symfoititis.institutions.dao.DepartmentsDao;
 import gr.symfoititis.common.exceptions.BadRequestException;
+import gr.symfoititis.common.exceptions.InternalServerErrorException;
 import gr.symfoititis.common.exceptions.NotFoundException;
-import gr.symfoititis.common.records.Department;
-import gr.symfoititis.common.services.UniversitiesService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import gr.symfoititis.institutions.records.Department;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
-public class AdminDepartmentsService {
+public class DepartmentsService {
     private final DepartmentsDao departmentsDao;
-    private final UniversitiesService commonUniversitiesService;
-    public AdminDepartmentsService(DepartmentsDao departmentsDao, UniversitiesService universitiesService) {
+    private final UniversitiesService universitiesService;
+
+    public DepartmentsService(DepartmentsDao departmentsDao, UniversitiesService universitiesService) {
         this.departmentsDao = departmentsDao;
-        this.commonUniversitiesService = universitiesService;
+        this.universitiesService = universitiesService;
     }
 
-    /**
-     *
-     * Departments
-     */
+    public List<Department> getDepartments () {
+        return departmentsDao.getDepartments();
+    }
+    public List<Department> getDepartments (Integer uni_id) {
+        if (Objects.isNull(uni_id) || uni_id.compareTo(0) <= 0) {
+            throw new BadRequestException("Bad Request");
+        }
+        return departmentsDao.getDepartments(uni_id);
+    }
+    public Department getDepartment (Integer dep_id) {
+        if (Objects.isNull(dep_id) || dep_id.compareTo(0) <= 0) {
+            throw new BadRequestException("Bad Request");
+        }
+        return departmentsDao.getDepartment (dep_id).orElseThrow(() -> new NotFoundException("Department Not Found"));
+    }
     public void addDepartment (Department department) {
         if (
                 Objects.isNull(department) ||
@@ -34,7 +46,7 @@ public class AdminDepartmentsService {
         ) {
             throw new BadRequestException("Bad Request");
         }
-        commonUniversitiesService.getUniversity(department.uni_id());
+        universitiesService.getUniversity(department.uni_id());
         try {
             int status = departmentsDao.addDepartment(department);
             if (status == 0) {
@@ -58,7 +70,7 @@ public class AdminDepartmentsService {
         ) {
             throw new BadRequestException("Bad Request");
         }
-        commonUniversitiesService.getUniversity(department.uni_id());
+        universitiesService.getUniversity(department.uni_id());
         try {
             int status = departmentsDao.updateDepartment(department);
             if (status == 0) {

@@ -1,7 +1,7 @@
-package gr.symfoititis.common.rowMappers;
+package gr.symfoititis.institutions.rowMappers;
 
-import gr.symfoititis.common.records.University;
 import org.springframework.jdbc.core.RowMapper;
+import gr.symfoititis.institutions.records.University;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

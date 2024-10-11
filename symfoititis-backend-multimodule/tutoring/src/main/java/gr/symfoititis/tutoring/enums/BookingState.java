@@ -1,4 +1,4 @@
-package gr.symfoititis.student.enums;
+package gr.symfoititis.tutoring.enums;
 
 public enum BookingState {
       ACTIVE,

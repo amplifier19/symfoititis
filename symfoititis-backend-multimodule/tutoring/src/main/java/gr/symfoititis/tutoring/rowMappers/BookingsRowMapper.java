@@ -1,11 +1,12 @@
-package gr.symfoititis.student.rowMappers;
+package gr.symfoititis.tutoring.rowMappers;
 
-import gr.symfoititis.student.enums.BookingState;
-import gr.symfoititis.student.records.Booking;
+import gr.symfoititis.common.enums.BookingState;
+import gr.symfoititis.common.entities.Booking;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class BookingsRowMapper implements RowMapper<Booking> {
     @Override
@@ -15,7 +16,10 @@ public class BookingsRowMapper implements RowMapper<Booking> {
                rs.getInt("av_id"),
                rs.getString("s_id"),
                rs.getString("room"),
-               BookingState.valueOf(rs.getString("state"))
+               BookingState.valueOf(rs.getString("state")),
+               rs.getString("t_id"),
+               LocalDate.parse(rs.getString("date")),
+               rs.getInt("start_time")
         );
     }
 }

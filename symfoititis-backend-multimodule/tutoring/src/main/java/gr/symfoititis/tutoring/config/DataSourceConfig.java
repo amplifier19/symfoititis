@@ -1,4 +1,4 @@
-package gr.symfoititis.student.config;
+package gr.symfoititis.tutoring.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

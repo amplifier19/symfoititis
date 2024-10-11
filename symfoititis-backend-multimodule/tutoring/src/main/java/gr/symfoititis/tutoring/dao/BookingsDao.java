@@ -1,11 +1,14 @@
-package gr.symfoititis.student.dao;
+package gr.symfoititis.tutoring.dao;
 
-import org.springframework.jdbc.BadSqlGrammarException;
+import gr.symfoititis.common.entities.Booking;
 
 import java.util.List;
 
 public interface BookingsDao {
-    List<Booking> getBookings (String s_id);
-    int addBooking (Booking booking) throws BadSqlGrammarException;
-    int cancelBooking (Integer b_id);
+    List<Booking> getStudentBookings (String s_id);
+    List<Booking> getTeacherBookings (String t_id);
+    void addBooking (Booking booking);
+    int studentCancelBooking (Integer b_id, String s_id);
+    int teacherCancelBooking (Integer b_id, String t_id);
+    int adminCancelBooking (Integer b_id);
 }

@@ -1,4 +1,4 @@
-package gr.symfoititis.tutoring.records;
+package gr.symfoititis.tutoring.entities;
 
 import gr.symfoititis.tutoring.enums.SlotState;
 

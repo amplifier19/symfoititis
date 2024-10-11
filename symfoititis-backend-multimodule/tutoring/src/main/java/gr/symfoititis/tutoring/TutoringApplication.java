@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"gr.symfoititis.common.*", "gr.symfoititis.common.services.*", "gr.symfoititis.student.*"})
-public class StudentApplication {
+@ComponentScan(basePackages = {"gr.symfoititis.common.*", "gr.symfoititis.student.*", "gr.symfoititis.teacher.*", "gr.symfoititis.tutoring.*"})
+public class TutoringApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(StudentApplication.class, args);
+		SpringApplication.run(TutoringApplication.class, args);
 	}
 }

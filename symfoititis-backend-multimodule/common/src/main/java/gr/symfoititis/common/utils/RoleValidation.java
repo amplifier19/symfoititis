@@ -20,4 +20,16 @@ public class RoleValidation {
         if (Role.teacher.toString().equals(role)) return;
         throw new ForbiddenException("Forbidden");
     }
+    public static void isStudentOrTeacher(String role) {
+        if (Role.student.toString().equals(role) || Role.teacher.toString().equals(role)) return;
+        throw new ForbiddenException("Forbidden");
+    }
+    public static void isAnyone(String role) {
+        if (
+                Role.student.toString().equals(role) ||
+                Role.teacher.toString().equals(role) ||
+                Role.admin.toString().equals(role)
+        ) return;
+        throw new ForbiddenException("Forbidden");
+    }
 }

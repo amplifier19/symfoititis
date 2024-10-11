@@ -1,7 +1,7 @@
-package gr.symfoititis.tutoring.entities;
+package gr.symfoititis.common.entities;
 
 import gr.symfoititis.common.exceptions.BadRequestException;
-import gr.symfoititis.tutoring.enums.BookingState;
+import gr.symfoititis.common.enums.BookingState;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -20,10 +20,10 @@ public class Booking {
     private String teacher_first_name;
     private String teacher_last_name;
 
-    public Booking () {}
+    public Booking() {}
 
 
-    public Booking (Integer b_id, Integer av_id, String s_id, String room, BookingState state, String t_id, LocalDate date, Integer start_time) {
+    public Booking(Integer b_id, Integer av_id, String s_id, String room, BookingState state, String t_id, LocalDate date, Integer start_time) {
         this.b_id = b_id;
         this.av_id = av_id;
         this.s_id = s_id;

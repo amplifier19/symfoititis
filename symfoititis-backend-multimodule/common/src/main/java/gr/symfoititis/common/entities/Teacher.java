@@ -1,4 +1,4 @@
-package gr.symfoititis.tutoring.entities;
+package gr.symfoititis.common.entities;
 
 public class Teacher {
     private String t_id;
@@ -7,7 +7,7 @@ public class Teacher {
     public Teacher() {
     }
 
-    public Teacher (String t_id, String first_name, String last_name) {
+    public Teacher(String t_id, String first_name, String last_name) {
         this.t_id = t_id;
         this.first_name = first_name;
         this.last_name = last_name;

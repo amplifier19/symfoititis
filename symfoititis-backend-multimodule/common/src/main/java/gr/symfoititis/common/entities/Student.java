@@ -1,4 +1,4 @@
-package gr.symfoititis.student.entities;
+package gr.symfoititis.common.entities;
 
 public class Student {
     private String s_id;
@@ -12,19 +12,19 @@ public class Student {
         this.student_name = student_name;
     }
 
-    public String getS_id() {
+    public String getStudentId() {
         return s_id;
     }
 
-    public void setS_id(String s_id) {
+    public void setStudentId(String s_id) {
         this.s_id = s_id;
     }
 
-    public String getStudent_name() {
+    public String getStudentName() {
         return student_name;
     }
 
-    public void setStudent_name(String student_name) {
+    public void setStudentName(String student_name) {
         this.student_name = student_name;
     }
 

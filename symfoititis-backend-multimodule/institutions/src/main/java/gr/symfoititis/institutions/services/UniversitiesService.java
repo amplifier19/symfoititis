@@ -39,10 +39,7 @@ public class UniversitiesService {
             throw new BadRequestException("Bad Request");
         }
         try {
-            int status = universitiesDao.addUniversity(university);
-            if (status == 0) {
-                throw new InternalServerErrorException("Internal Server Error");
-            }
+            universitiesDao.addUniversity(university);
         } catch (DuplicateKeyException e) {
             throw new ConflictException("Conflict");
         } catch (DataIntegrityViolationException e) {

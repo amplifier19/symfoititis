@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UniversitiesDao {
     List<University> getUniversities ();
     Optional<University> getUniversity (Integer uni_id);
-    int addUniversity (University university);
+    void addUniversity (University university);
     int updateUniversity (University university);
     int deleteUniversity (Integer uni_id);
 }

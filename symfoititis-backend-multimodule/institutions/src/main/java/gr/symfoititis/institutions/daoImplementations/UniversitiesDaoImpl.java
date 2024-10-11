@@ -29,9 +29,9 @@ public class UniversitiesDaoImpl implements UniversitiesDao {
     }
 
     @Override
-    public int addUniversity(University university) {
+    public void addUniversity(University university) {
         String sql = "INSERT INTO universities(uni_display_name, uni_alt_name) VALUES(?, ?)";
-        return jdbcTemplate.update(sql, university.uni_display_name(), university.uni_alt_name());
+        jdbcTemplate.update(sql, university.uni_display_name(), university.uni_alt_name());
     }
 
     @Override

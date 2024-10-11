@@ -33,9 +33,9 @@ public class DepartmentsDaoImpl implements DepartmentsDao {
         return jdbcTemplate.query (sql, new DepartmentsRowMapper (), dep_id).stream().findFirst();
     }
     @Override
-    public int addDepartment(Department department) {
+    public void addDepartment(Department department) {
         String sql = "INSERT INTO departments(uni_id, dep_display_name, dep_alt_name) VALUES(?, ?, ?)";
-        return jdbcTemplate.update(sql, department.uni_id(), department.dep_display_name(), department.dep_alt_name());
+        jdbcTemplate.update(sql, department.uni_id(), department.dep_display_name(), department.dep_alt_name());
     }
     @Override
     public int updateDepartment(Department department) {

@@ -10,7 +10,7 @@ public interface DepartmentsDao {
     List<Department> getDepartments ();
     List<Department> getDepartments (Integer uni_id);
     Optional<Department> getDepartment (Integer dep_id);
-    int addDepartment (Department department);
+    void addDepartment (Department department);
     int updateDepartment (Department department);
     int deleteDepartment (Integer dep_id);
 }

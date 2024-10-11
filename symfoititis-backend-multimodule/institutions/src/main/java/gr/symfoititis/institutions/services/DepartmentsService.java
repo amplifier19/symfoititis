@@ -48,10 +48,7 @@ public class DepartmentsService {
         }
         universitiesService.getUniversity(department.uni_id());
         try {
-            int status = departmentsDao.addDepartment(department);
-            if (status == 0) {
-                throw new InternalServerErrorException("Internal Server Error");
-            }
+            departmentsDao.addDepartment(department);
         } catch (DataIntegrityViolationException e) {
             throw new BadRequestException("Bad Request");
         } catch (InternalServerErrorException e) {

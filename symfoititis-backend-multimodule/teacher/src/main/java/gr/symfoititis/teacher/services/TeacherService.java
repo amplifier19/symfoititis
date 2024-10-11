@@ -1,7 +1,7 @@
-package gr.symfoititis.tutoring.services;
+package gr.symfoititis.teacher.services;
 
-import gr.symfoititis.tutoring.entities.Booking;
-import gr.symfoititis.tutoring.entities.Teacher;
+import gr.symfoititis.common.entities.Booking;
+import gr.symfoititis.common.entities.Teacher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

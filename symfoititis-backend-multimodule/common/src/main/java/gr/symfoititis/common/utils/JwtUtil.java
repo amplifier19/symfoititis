@@ -4,29 +4,29 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gr.symfoititis.common.exceptions.InternalServerErrorException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 
-@Component
 public class JwtUtil {
-    @Value("${auth.base_url}")
-    private String baseUrl;
-    @Value("${auth.client_id}")
-    private String clientId;
-    @Value("${auth.client_secret}")
-    private String clientSecret;
 
-    public JwtUtil () {}
+    private final String baseUrl;
+    private final String clientId;
+    private final String clientSecret;
+
+    public JwtUtil (String baseUrl, String clientId, String clientSecret) {
+        this.baseUrl = baseUrl;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+    }
 
     private static String getDecodedPayload (String jwt) {
         String[] chunks = jwt.split("\\.");
@@ -56,7 +56,7 @@ public class JwtUtil {
         try {
              Long exp = getExpirationClaim(payload);
              Date expirationDate = new Date(exp * 1000L);
-             if (expirationDate.before(new Date())) {
+             if (expirationDate.before(Date.from(Instant.now().minusSeconds(10)))) {
                  return true;
              }
         } catch (JsonProcessingException e) {

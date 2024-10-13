@@ -46,7 +46,7 @@ public class BookingsDaoImpl implements BookingsDao {
     public void addBooking(Booking booking) throws BadSqlGrammarException {
         String sql = "INSERT INTO bookings(av_id, s_id, room, state) VALUES(?, ?, ?, 'ACTIVE')";
         UUID room = UUID.randomUUID();
-        jdbcTemplate.update(sql, booking.getAvailabilityId(), booking.getStudentId(), room.toString());
+        jdbcTemplate.update(sql, booking.getAv_id(), booking.getS_id(), room.toString());
     }
 
     @Override

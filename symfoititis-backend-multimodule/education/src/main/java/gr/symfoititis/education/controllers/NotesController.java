@@ -3,6 +3,10 @@ package gr.symfoititis.education.controllers;
 import gr.symfoititis.common.records.Response;
 import gr.symfoititis.education.records.Note;
 import gr.symfoititis.education.services.NotesService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +25,13 @@ public class NotesController {
 
     @GetMapping("/notes/{c_id}")
     ResponseEntity<Response> getNotes (
-            @PathVariable(value="c_id", required=true) Integer c_id,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @PathVariable(value="c_id", required=true)
+            @Positive(message = "Course id cannot be null")
+            int c_id
     ) {
         isAnyone(role);
         List<Note> notes = notesService.getNotes(c_id);
@@ -31,8 +40,11 @@ public class NotesController {
 
     @PostMapping("/note")
     ResponseEntity<Response> addNote (
-            @RequestHeader("X-Role") String role,
-            @RequestBody Note note
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestBody @Valid Note note
     ) {
         isAdmin(role);
         notesService.addNote (note);
@@ -42,8 +54,11 @@ public class NotesController {
 
     @PutMapping("/note")
     ResponseEntity<Response> updateNote (
-            @RequestHeader("X-Role") String role,
-            @RequestBody Note note
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestBody @Valid Note note
     ) {
         isAdmin(role);
         notesService.updateNote(note);
@@ -53,8 +68,13 @@ public class NotesController {
 
     @DeleteMapping("/note/{note_id}")
     ResponseEntity<Response> deleteNote (
-            @PathVariable(value="note_id", required=true) Integer note_id,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @PathVariable(value="note_id", required=true)
+            @Positive(message = "Note id must be positive")
+            int note_id
     ) {
         isAdmin(role);
         notesService.deleteNote(note_id);

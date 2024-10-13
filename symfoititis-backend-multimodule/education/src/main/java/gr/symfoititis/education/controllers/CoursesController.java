@@ -3,6 +3,10 @@ package gr.symfoititis.education.controllers;
 import gr.symfoititis.common.records.Response;
 import gr.symfoititis.education.records.Course;
 import gr.symfoititis.education.services.CoursesService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +24,14 @@ public class CoursesController {
 
     @GetMapping("/courses")
     public ResponseEntity<Response> courses (
-            @RequestHeader("X-Department-Id") String d_id,
-            @RequestHeader("X-Role-Id") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestHeader("X-Department-Id")
+            @NotNull(message = "Department id cannot be null")
+            @NotBlank(message = "Department id cannot be blank")
+            String d_id
     ) {
         isStudentOrTeacher(role);
         int dep_id = Integer.parseInt(d_id);
@@ -31,9 +41,17 @@ public class CoursesController {
 
     @GetMapping("/course/{c_id}")
     ResponseEntity<Response> course (
-            @PathVariable(value="c_id", required=true) int c_id,
-            @RequestHeader("X-Department-Id") String d_id,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestHeader("X-Department-Id")
+            @NotNull(message = "Department id cannot be null")
+            @NotBlank(message = "Department id cannot be blank")
+            String d_id,
+            @PathVariable(value="c_id", required=true)
+            @Positive(message = "Course id must be positive")
+            int c_id
     ) {
         isStudentOrTeacher(role);
         int dep_id = Integer.parseInt(d_id);
@@ -43,8 +61,13 @@ public class CoursesController {
 
     @GetMapping("/courses/{dep_id}")
     ResponseEntity<Response> courses (
-            @PathVariable(value="dep_id", required=true) int dep_id,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @PathVariable(value="dep_id", required=true)
+            @Positive(message = "Department id must be positive")
+            int dep_id
     ) {
         isAdmin(role);
         List<Course> courses = coursesService.getCourses(dep_id);
@@ -53,8 +76,11 @@ public class CoursesController {
 
     @PostMapping("/course")
     ResponseEntity<Response> addCourse (
-            @RequestBody Course course,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestBody @Valid Course course
     ) {
         isAdmin(role);
         coursesService.addCourse (course);
@@ -64,8 +90,11 @@ public class CoursesController {
 
     @PutMapping("/course")
     ResponseEntity<Response> updateCourse (
-            @RequestBody Course course,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestBody @Valid Course course
     ) {
         isAdmin(role);
         coursesService.updateCourse(course);
@@ -75,8 +104,13 @@ public class CoursesController {
 
     @DeleteMapping("/course/{c_id}")
     ResponseEntity<Response> deleteCourse (
-            @PathVariable(value="c_id", required=true) Integer c_id,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @PathVariable(value="c_id", required=true)
+            @Positive(message = "Course id must be positive")
+            int c_id
     ) {
         isAdmin(role);
         coursesService.deleteCourse(c_id);

@@ -1,7 +1,13 @@
 package gr.symfoititis.institutions.controllers;
 
+import gr.symfoititis.common.exceptions.BadRequestException;
 import gr.symfoititis.common.records.Response;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import gr.symfoititis.institutions.records.University;
 import gr.symfoititis.institutions.services.UniversitiesService;
@@ -11,6 +17,7 @@ import java.util.List;
 import static gr.symfoititis.common.utils.RoleValidation.isAdmin;
 import static gr.symfoititis.common.utils.RoleValidation.isStudentOrTeacher;
 
+@Validated
 @RestController
 public class UniversityController {
     private final UniversitiesService universitiesService;
@@ -27,19 +34,34 @@ public class UniversityController {
 
     @GetMapping("/university")
     public ResponseEntity<Response> university (
-            @RequestHeader("X-University-Id") String id,
-            @RequestHeader("X-Role") String role
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestHeader("X-University-Id")
+            @NotNull(message = "University id cannot be null")
+            @NotBlank(message = "University id cannot be blank")
+            String id
     ) {
         isStudentOrTeacher(role);
-        int uni_id = Integer.parseInt(id);
-        University university = universitiesService.getUniversity(uni_id);
-        return ResponseEntity.ok(new Response(200, university));
+        try {
+            int uni_id = Integer.parseInt(id);
+            University university = universitiesService.getUniversity(uni_id);
+            return ResponseEntity.ok(new Response(200, university));
+        } catch (NumberFormatException ex) {
+            throw new BadRequestException("University id could not be parsed to integer");
+        }
     }
 
     @GetMapping("/university/{uni_id}")
     ResponseEntity<Response> university (
-            @RequestHeader("X-Role") String role,
-            @PathVariable(value="uni_id", required=false) Integer uni_id
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @PathVariable(value="uni_id", required=false)
+            @Positive(message = "University id must be positive")
+            int uni_id
     ) {
         isAdmin(role);
         University university = universitiesService.getUniversity(uni_id);
@@ -48,8 +70,11 @@ public class UniversityController {
 
     @PostMapping("/university")
     ResponseEntity<Response> addUniversity (
-            @RequestHeader("X-Role") String role,
-            @RequestBody University university
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestBody @Valid University university
     ) {
         isAdmin(role);
         universitiesService.addUniversity(university);
@@ -59,8 +84,11 @@ public class UniversityController {
 
     @PutMapping ("/university")
     ResponseEntity<Response> updateUniversity (
-            @RequestHeader("X-Role") String role,
-            @RequestBody University university
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @RequestBody @Valid University university
     ) {
         isAdmin(role);
         universitiesService.updateUniversity(university);
@@ -70,8 +98,13 @@ public class UniversityController {
 
     @DeleteMapping("/university/{uni_id}")
     ResponseEntity<Response> deleteUniversity (
-            @RequestHeader("X-Role") String role,
-            @PathVariable(value="uni_id", required=true) Integer uni_id
+            @RequestHeader("X-Role")
+            @NotNull(message = "Role cannot be null")
+            @NotBlank(message = "Role cannot be blank")
+            String role,
+            @PathVariable(value="uni_id", required=true)
+            @Positive(message = "University id must be positive")
+            int uni_id
     ) {
         isAdmin(role);
         universitiesService.deleteUniversity(uni_id);

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: institutions
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://keycloak:8080/auth/realms/student/protocol/openid-connect/certs
+server:
+  port: 8081
+app:
+  datasource:
+    main:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://postgres:5432/symfoititis
+      username: student
+      password: mAmb0k@lItr!
+      pool-size: 10
+    server:
+      error:
+        include-binding-errors: always
+        include-message: always

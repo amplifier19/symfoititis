@@ -11,7 +11,6 @@ import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -26,14 +25,6 @@ public class BookingsService {
     }
 
     public List<Booking> getBookings (String id, String role) {
-        if (
-                Objects.isNull(id) ||
-                Objects.isNull(role) ||
-                id.isBlank() ||
-                role.isBlank()
-        )  {
-            throw new BadRequestException("Bad Request");
-        }
        return switch (role) {
            case "student" -> {
                List<Booking> bookings = bookingsDao.getStudentBookings(id);
@@ -41,9 +32,9 @@ public class BookingsService {
                for (String t_id : teacherIds) {
                    Teacher teacher = teacherService.getTeacher(t_id);
                    for (Booking booking : bookings) {
-                       if (booking.getTeacherId().equals(t_id)) {
-                           booking.setTeacherFirstName(teacher.getFirstName());
-                           booking.setTeacherLastName(teacher.getLastName());
+                       if (booking.getT_id().equals(t_id)) {
+                           booking.setTeacher_firstname(teacher.getFirstName());
+                           booking.setTeacher_lastname(teacher.getLastName());
                        }
                    }
                }
@@ -55,8 +46,8 @@ public class BookingsService {
                for (String s_id : studentIds) {
                    Student student = studentService.getStudent(s_id);
                    for (Booking booking : bookings) {
-                       if (booking.getStudentId().equals(student.getStudentId())) {
-                           booking.setStudentName(student.getStudentName());
+                       if (booking.getS_id().equals(student.getStudentId())) {
+                           booking.setStudent_name(student.getStudentName());
                        }
                    }
                }
@@ -67,22 +58,17 @@ public class BookingsService {
     }
 
     public void addBooking (Booking booking) {
-        booking.validateAvailabilityId();
-        booking.validateStudentId();
         try {
             bookingsDao.addBooking(booking);
         } catch (BadSqlGrammarException e) {
             if ("65001".equals(e.getSQLException().getSQLState())) {
-               throw new ConflictException("This slot is not available for booking");
+               throw new NotFoundException("This slot is not available for booking");
             }
             throw new InternalServerErrorException("Sql grammar error");
         }
     }
 
     public void cancelBooking (Integer b_id, String id, String role) {
-        if (Objects.isNull(b_id) || b_id.compareTo(0) <= 0) {
-           throw new BadRequestException("Bad Request");
-        }
         int ret = switch (role) {
             case "student" -> bookingsDao.studentCancelBooking(b_id, id);
             case "teacher" -> bookingsDao.teacherCancelBooking(b_id, id);
@@ -92,5 +78,9 @@ public class BookingsService {
         if (ret == 0) {
             throw new NotFoundException(String.format("Booking %d not found", b_id));
         }
+    }
+
+    public Student retrieveStudent (String s_id) {
+        return studentService.getStudent(s_id);
     }
 }

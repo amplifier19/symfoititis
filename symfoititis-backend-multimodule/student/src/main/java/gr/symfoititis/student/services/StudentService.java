@@ -29,7 +29,7 @@ public class StudentService {
     }
 
     public Set<String> getUniqueStudentIds (List<Booking> bookings) {
-        return bookings.stream().map(Booking::getStudentId).collect(Collectors.toSet());
+        return bookings.stream().map(Booking::getS_id).collect(Collectors.toSet());
     }
 
     public Student getStudent (String s_id) {

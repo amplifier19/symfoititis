@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Service
 public class TeacherService {
     public Set<String> getUniqueTeacherIds (List<Booking> bookings) {
-        return bookings.stream().map(Booking::getTeacherId).collect(Collectors.toSet());
+        return bookings.stream().map(Booking::getT_id).collect(Collectors.toSet());
     }
 
     public Teacher getTeacher (String t_id) {

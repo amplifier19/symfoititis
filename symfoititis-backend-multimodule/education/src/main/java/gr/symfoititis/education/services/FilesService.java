@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class FilesService {
@@ -24,9 +23,6 @@ public class FilesService {
     private String notesDirectory;
 
     public List<String> getFiles (Integer c_id) {
-        if (Objects.isNull(c_id) || c_id.compareTo(0) <=0) {
-            throw new BadRequestException("Bad Request");
-        }
         Path directoryPath = Path.of(notesDirectory).resolve(c_id.toString());
         List<String> filenames = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(directoryPath)) {
@@ -37,21 +33,16 @@ public class FilesService {
             }
         } catch (IOException e) {
             throw new InternalServerErrorException(e.getMessage());
-        } catch (Exception e){
-            throw e;
         }
         return filenames;
     }
     public String uploadOne (Integer c_id, MultipartFile file) {
-        if (Objects.isNull(c_id) || c_id.compareTo(0) <=0) {
-            throw new BadRequestException("Bad Request");
-        }
         try {
             if (file.getBytes().length > (50 * 1024 * 1024)) {
                 throw new ContentTooLargeException("File size limit exceeded");
             }
             if (!file.getOriginalFilename().matches("[a-zA-Z\\d]+(-[a-zA-Z\\d]+)*\\.[a-zA-Z]+")) {
-                throw new BadRequestException ("Bad file name");
+                throw new BadRequestException ("Invalid file name");
             }
         } catch (MaxUploadSizeExceededException e) {
             throw new BadRequestException("File size limit exceeded");
@@ -77,9 +68,6 @@ public class FilesService {
         return filename;
     }
     public List<String> uploadMany (Integer c_id, MultipartFile[] files) {
-        if (Objects.isNull(c_id) || c_id.compareTo(0) <=0 || Objects.isNull(files) || files.length == 0 ) {
-            throw new BadRequestException("Bad Request");
-        }
         List<String> filenames = new ArrayList<>();
         for (MultipartFile file: files) {
             filenames.add(uploadOne (c_id, file));
@@ -88,9 +76,6 @@ public class FilesService {
     }
 
     public void deleteFile (Integer c_id, String filename) {
-        if (Objects.isNull(c_id) || c_id.compareTo(0) <=0 || filename.isBlank()) {
-            throw new BadRequestException("Bad Request");
-        }
         Path directoryPath = Path.of(notesDirectory).resolve(c_id.toString());
         Path filepath = directoryPath.resolve(filename);
         try {

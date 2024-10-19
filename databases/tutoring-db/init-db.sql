@@ -2,6 +2,7 @@ CREATE TYPE slot_status_enum AS ENUM ('AVAILABLE', 'UNAVAILABLE', 'BOOKED');
 
 CREATE TABLE availability_slots(
   av_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  dep_id INT NOT NULL,
   c_id INT NOT NULL,
   t_id VARCHAR(36) NOT NULL,
   date DATE NOT NULL,
@@ -151,27 +152,3 @@ EXECUTE FUNCTION after_update_on_bookings();
 
 
 
-INSERT INTO availability_slots (c_id, t_id, date, week_day, start_time, state) 
-VALUES
-(1, 'teacher_001', '2024-10-10', 2, 9, 'AVAILABLE'),
-(1, 'teacher_002', '2024-10-11', 3, 10, 'UNAVAILABLE'),
-(2, 'teacher_003', '2024-10-12', 4, 11, 'AVAILABLE');
-
-INSERT INTO bookings (av_id, s_id, room, state)
-VALUES (1, 'student_001', 'b2a59f08-d7d2-45da-9fd6-9b6c3a763b24', 'ACTIVE');
-
---INSERT INTO bookings (av_id, s_id, room, state)
---VALUES (2, 'student_002', '7d1e4812-b364-47d5-95e2-02d109b53ff1', 'ACTIVE');
-
---UPDATE availability_slots
---SET state = 'UNAVAILABLE'
---WHERE av_id = 1;
-
---UPDATE bookings
---SET state = 'CANCELED'
---WHERE b_id = 1;
-
---INSERT INTO availability_slots (c_id, t_id, date, week_day, start_time, state) 
---VALUES (3, 'teacher_001', '2024-10-10', 2, 9, 'AVAILABLE');
---INSERT INTO availability_slots (c_id, t_id, date, week_day, start_time) 
---VALUES (5, 'teacher_001', '2025-12-10', 2, 9);

@@ -1,0 +1,38 @@
+services:
+  ingress-gateway:
+    container_name: ingress-gateway 
+    build:
+      context: ./ingress-gateway
+      target: ${BUILD_TARGET} 
+    image: ${INGRESS_GATEWAY_IMAGE}:${INGRESS_GATEWAY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - "80:80"
+  student-proxy:
+    container_name: student-proxy
+    build:
+      context: ./student-proxy
+      target: ${BUILD_TARGET} 
+    image: ${STUDENT_PROXY_IMAGE}:${STUDENT_PROXY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - "9081:80"
+  teacher-proxy:
+    container_name: teacher-proxy
+    build:
+      context: ./teacher-proxy
+      target: ${BUILD_TARGET} 
+    image: ${TEACHER_PROXY_IMAGE}:${TEACHER_PROXY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - "9082:80"
+  admin-proxy:
+    container_name: admin-proxy
+    build:
+      context: ./admin-proxy
+      target: ${BUILD_TARGET} 
+    image: ${ADMIN_PROXY_IMAGE}:${ADMIN_PROXY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - "9083:80"
+

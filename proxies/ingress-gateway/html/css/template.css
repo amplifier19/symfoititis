@@ -1,0 +1,127 @@
+@font-face {
+	font-family: Geom;
+	src: url('/fonts/Geom/Geom-Variable.ttf');
+}
+
+:root {
+	--orange: #F59120;
+    --white: #FFFFFA;
+    --black: #666666;
+}
+
+body {
+	background-color: var(--white);
+	font-family:  Geom;
+	width: 75%;
+    margin: 0 auto;
+}
+
+ul {
+	padding: 0;	
+}
+
+li {
+ list-style-type: none;
+}
+
+.title {
+	margin: 5vh 0;
+	color: var(--black);
+	text-align: center;
+}
+
+.exercises {
+	margin-top: 5vh;
+}
+
+.prompt {
+	margin-top: 2rem;
+	display: flex;
+	flex-direction: row;
+	
+}
+
+.prompt-num {
+	font-size: 1.4rem;
+	text-align: center;
+	margin-right: 0.5rem;	
+}
+
+.prompt-text {
+	margin: 0;
+	line-height: 1.8rem;
+	font-size: 1.4rem;
+}
+
+
+code {
+	font-size: 1.2rem;
+	padding: 0 4rem !important;
+    border-radius: 20px !important;    
+}
+
+@media screen and (max-width: 2300px) {
+	.prompt-num {
+		font-size: 1.2rem;
+		padding-top: 0.1rem;
+	}
+
+	.prompt-text {
+		font-size: 1.2rem;
+		line-height: 2rem;
+	}
+
+	code {
+		font-size: 1rem;
+	}
+
+}
+
+@media screen and (max-width: 1024px) {
+	body {
+		width: 80%;
+	}
+
+	.title {
+		font-size: 1.3rem;
+	}
+
+	.prompt-num {
+		font-size: 1rem;
+		padding-top: 0.1rem;
+	}
+
+	.prompt-text{
+		font-size: 1rem;
+		line-height: 1.4rem;
+	}
+
+	code {
+		font-size: 0.88rem;
+		padding: 0 3rem !important;
+	}
+}
+
+@media screen and (max-width: 590px) {
+	body {
+		width: 85%;
+	}
+
+	.title {
+		font-size: 1rem;
+	}
+
+	.prompt-num {
+		font-size: 0.8rem;
+	}
+
+	.prompt-text{
+		font-size: 0.85rem;
+		line-height: 1.2rem;
+	}
+
+	code {
+		font-size: 0.75rem;
+		padding: 0 1.5rem !important;
+	}
+}

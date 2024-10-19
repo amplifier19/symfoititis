@@ -1,0 +1,69 @@
+@font-face {
+    font-family: Geologica-Light;
+    src: url('/fonts/Geologica/Geologica-Light.ttf');
+}
+@font-face {
+    font-family: Geologica-Regular;
+    src: url('/fonts/Geologica/Geologica-Regular.ttf');
+}
+@font-face {
+    font-family: Geologica-Medium;
+    src: url('/fonts/Geologica/Geologica-Medium.ttf');
+}
+@font-face {
+    font-family: Geologica-SemiBold;
+    src: url('/fonts/Geologica/Geologica-SemiBold.ttf');
+}
+@font-face {
+    font-family: Geologica-Bold;
+    src: url('/fonts/Geologica/Geologica-Bold.ttf');
+}
+
+:root {
+    --orange-shadow: #DB7A0A;
+    --orange: #F59120;
+    --white: #FFFFFA;
+    --black: #4D4D4D;
+    --gray: #666666;
+    --main-border: 2px solid var(--orange);
+}
+
+body {
+    color: var(--black);
+    font-family: Geologica-Regular;
+    font-weight: 500;
+}
+
+a {
+    text-decoration: none;
+    color: var(--black);
+}
+
+.regular-text {
+  font-size: 1rem;
+}
+
+.search-input {
+  border-radius: 0px;
+  height: auto;
+  width: 100%;
+  box-sizing: unset;
+  border: none;
+  outline: none;
+  background-color: white;
+  margin: 0px;
+}
+
+@media screen and (max-width: 1800px) {
+
+}
+
+@media screen and (max-width: 1300px) {
+  .regular-text {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media screen and (max-width: 590px) {
+
+}

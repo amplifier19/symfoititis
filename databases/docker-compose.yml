@@ -1,7 +1,9 @@
 services:
   institutions-db:
     container_name: institutions-db
-    image: dev/institutions-db 
+    build:
+      context: ./institutions-db
+    image: ${INSTITUTIONS_DB_IMAGE}:${INSTITUTIONS_DB_IMAGE_TAG}
     environment:
       - POSTGRES_USER=${INSTITUTIONS_PG_USER}
       - POSTGRES_PASSWORD=${INSTITUTIONS_PG_PASSWORD}
@@ -15,7 +17,9 @@ services:
       - ${HOST_PATH}/institutions-db/data:/var/lib/postgresql/data
   education-db:
     container_name: education-db
-    image: dev/education-db 
+    build:
+      context: ./education-db
+    image: ${EDUCATION_DB_IMAGE}:${EDUCATION_DB_IMAGE_TAG}
     environment:
       - POSTGRES_USER=${EDUCATION_PG_USER}
       - POSTGRES_PASSWORD=${EDUCATION_PG_PASSWORD}
@@ -29,7 +33,9 @@ services:
       - ${HOST_PATH}/education-db/data:/var/lib/postgresql/data
   tutoring-db:
     container_name: tutoring-db
-    image: dev/tutoring-db 
+    build:
+      context: ./tutoring-db
+    image: ${TUTORING_DB_IMAGE}:${TUTORING_DB_IMAGE_TAG}
     environment:
       - POSTGRES_USER=${TUTORING_PG_USER}
       - POSTGRES_PASSWORD=${TUTORING_PG_PASSWORD}
@@ -43,7 +49,9 @@ services:
       - ${HOST_PATH}/tutoring-db/data:/var/lib/postgresql/data
   keycloak-db:
     container_name: keycloak-db
-    image: dev/keycloak-db 
+    build:
+      context: ./keycloak-db
+    image: ${KEYCLOAK_DB_IMAGE}:${KEYCLOAK_DB_IMAGE_TAG}
     environment:
       - POSTGRES_USER=${KEYCLOAK_PG_USER}
       - POSTGRES_PASSWORD=${KEYCLOAK_PG_PASSWORD}

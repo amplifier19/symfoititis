@@ -3,36 +3,72 @@ services:
     container_name: ingress-gateway 
     build:
       context: ./ingress-gateway
+      additional_contexts: 
+        lua-modules: ./lua-modules
       target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
     image: ${INGRESS_GATEWAY_IMAGE}:${INGRESS_GATEWAY_IMAGE_TAG}
     command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
     ports:
-      - "80:80"
+      - 80:80
   student-proxy:
     container_name: student-proxy
     build:
       context: ./student-proxy
+      additional_contexts: 
+        lua-modules: ./lua-modules
       target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
     image: ${STUDENT_PROXY_IMAGE}:${STUDENT_PROXY_IMAGE_TAG}
     command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
     ports:
-      - "9081:80"
+      - 9081:80
   teacher-proxy:
     container_name: teacher-proxy
     build:
       context: ./teacher-proxy
+      additional_contexts: 
+        lua-modules: ./lua-modules
       target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
     image: ${TEACHER_PROXY_IMAGE}:${TEACHER_PROXY_IMAGE_TAG}
     command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
     ports:
-      - "9082:80"
+      - 9082:80
   admin-proxy:
     container_name: admin-proxy
     build:
       context: ./admin-proxy
+      additional_contexts: 
+        lua-modules: ./lua-modules
       target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
     image: ${ADMIN_PROXY_IMAGE}:${ADMIN_PROXY_IMAGE_TAG}
     command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
     ports:
-      - "9083:80"
+      - 9083:80
 

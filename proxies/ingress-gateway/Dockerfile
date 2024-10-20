@@ -1,9 +1,9 @@
 FROM alpine:3.18 AS base
 
-ENV LUA_VERSION=5.1
-ENV LUA_PACKAGE=lua${LUA_VERSION}
-ENV LUAROCKS_VERSION=5.1 
-ENV NGINX_PATH=/usr/local/openresty/nginx 
+ARG LUA_VERSION
+ARG LUA_PACKAGE
+ARG LUA_MODULES_PATH 
+ARG NGINX_PATH
 
 # install lua, luajit, luarocks
 RUN apk add build-base git bash zip unzip curl
@@ -26,6 +26,10 @@ RUN ./openresty.sh
 
 # update PATH
 RUN echo 'PATH=${PATH}:/usr/local/openresty/nginx/sbin' >> /etc/profile
+
+# lua modules
+RUN mkdir $LUA_MODULES_PATH
+COPY --from=lua-modules ./auth.lua $LUA_MODULES_PATH
 
 COPY ./config/proxy_params ${NGINX_PATH}/conf/
 COPY ./html/ ${NGINX_PATH}/html/

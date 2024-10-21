@@ -1,39 +1,54 @@
 package gr.symfoititis.common.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import gr.symfoititis.common.enums.BookingState;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Booking {
-    @Positive(message = "Booking id must be a positive value")
+    @Positive
     private Integer b_id;
-    @NotNull(message = "Availability slot id cannot be null")
-    @Positive(message = "Availability slot id must be a positive value")
+    @NotNull
+    @Positive
     private Integer av_id;
-    @NotNull(message = "Student id cannot be null")
-    @NotBlank(message = "Student id cannot be blank")
+    @NotNull
+    @NotBlank
     private String s_id;
-    @NotBlank(message = "Room cannot be blank")
     private String room;
     private BookingState state;
-    @NotBlank(message = "Teacher id cannot be blank")
     private String t_id;
     private LocalDate date;
-    @Positive(message = "Start time must be a positive value")
+    @PositiveOrZero
     private Integer start_time;
-    @NotBlank(message = "Student name cannot be blank")
     private String student_name;
-    @NotBlank(message = "Teacher name cannot be blank")
     private String teacher_firstname;
-    @NotBlank(message = "Teacher name cannot be blank")
     private String teacher_lastname;
 
     public Booking () {}
 
-    public Booking(Integer b_id, Integer av_id, String s_id, String room, BookingState state, String t_id, LocalDate date, Integer start_time) {
+    public Booking(
+            Integer b_id,
+            Integer av_id,
+            @NotNull
+            @NotBlank
+            String s_id,
+            @NotNull
+            @NotBlank
+            String room,
+            @NotNull
+            BookingState state,
+            @NotNull
+            @NotBlank
+            String t_id,
+            @NotNull
+            LocalDate date,
+            Integer start_time
+    ) {
         this.b_id = b_id;
         this.av_id = av_id;
         this.s_id = s_id;

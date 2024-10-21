@@ -1,7 +1,7 @@
 package gr.symfoititis.tutoring.rowMappers;
 
 import gr.symfoititis.tutoring.enums.SlotState;
-import gr.symfoititis.tutoring.entities.AvailabilitySlot;
+import gr.symfoititis.tutoring.records.AvailabilitySlot;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

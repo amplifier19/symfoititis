@@ -1,35 +1,59 @@
 package gr.symfoititis.common.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Teacher {
     private String t_id;
-    private String first_name;
-    private String last_name;
-    public Teacher() {
-    }
+    @NotNull
+    @NotBlank
+    private String firstname;
+    @NotNull
+    @NotBlank
+    private String lastname;
+    public Teacher() {}
 
-    public Teacher(String t_id, String first_name, String last_name) {
+    public Teacher(
+            @NotNull
+            @NotBlank
+            String t_id,
+            String firstname,
+            String lastname
+    ) {
         this.t_id = t_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
-    public void setTeacherId(String t_id) {
+    public Teacher(String firstname, String lastname) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+
+    public void setT_id(String t_id) {
         this.t_id = t_id;
     }
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public String getFirstName() {
-        return first_name;
+    public String getT_id() {
+        return t_id;
     }
 
-    public String getLastName() {
-        return last_name;
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
     }
 }

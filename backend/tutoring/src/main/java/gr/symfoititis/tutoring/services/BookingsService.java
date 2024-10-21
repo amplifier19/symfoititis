@@ -25,36 +25,36 @@ public class BookingsService {
     }
 
     public List<Booking> getBookings (String id, String role) {
-       return switch (role) {
-           case "student" -> {
-               List<Booking> bookings = bookingsDao.getStudentBookings(id);
-               Set<String> teacherIds = teacherService.getUniqueTeacherIds(bookings);
-               for (String t_id : teacherIds) {
-                   Teacher teacher = teacherService.getTeacher(t_id);
-                   for (Booking booking : bookings) {
-                       if (booking.getT_id().equals(t_id)) {
-                           booking.setTeacher_firstname(teacher.getFirstName());
-                           booking.setTeacher_lastname(teacher.getLastName());
-                       }
-                   }
-               }
-               yield bookings;
-           }
-           case "teacher" -> {
-               List<Booking> bookings = bookingsDao.getTeacherBookings(id);
-               Set<String> studentIds = studentService.getUniqueStudentIds(bookings);
-               for (String s_id : studentIds) {
-                   Student student = studentService.getStudent(s_id);
-                   for (Booking booking : bookings) {
-                       if (booking.getS_id().equals(student.getStudentId())) {
-                           booking.setStudent_name(student.getStudentName());
-                       }
-                   }
-               }
-               yield bookings;
-           }
-           default -> throw new ForbiddenException("Invalid role");
-       };
+        return switch (role) {
+            case "student" -> {
+                List<Booking> bookings = bookingsDao.getStudentBookings(id);
+                Set<String> teacherIds = teacherService.getUniqueTeacherIds(bookings);
+                for (String t_id : teacherIds) {
+                    Teacher teacher = teacherService.getTeacher(t_id);
+                    for (Booking booking : bookings) {
+                        if (booking.getT_id().equals(t_id)) {
+                            booking.setTeacher_firstname(teacher.getFirstname());
+                            booking.setTeacher_lastname(teacher.getLastname());
+                        }
+                    }
+                }
+                yield bookings;
+            }
+            case "teacher" -> {
+                List<Booking> bookings = bookingsDao.getTeacherBookings(id);
+                Set<String> studentIds = studentService.getUniqueStudentIds(bookings);
+                for (String s_id : studentIds) {
+                    Student student = studentService.getStudent(s_id);
+                    for (Booking booking : bookings) {
+                        if (booking.getS_id().equals(student.getS_id())) {
+                            booking.setStudent_name(student.getUsername());
+                        }
+                    }
+                }
+                yield bookings;
+            }
+            default -> throw new ForbiddenException("Invalid role");
+        };
     }
 
     public void addBooking (Booking booking) {
@@ -62,7 +62,7 @@ public class BookingsService {
             bookingsDao.addBooking(booking);
         } catch (BadSqlGrammarException e) {
             if ("65001".equals(e.getSQLException().getSQLState())) {
-               throw new NotFoundException("This slot is not available for booking");
+                throw new NotFoundException("This slot is not available for booking");
             }
             throw new InternalServerErrorException("Sql grammar error");
         }
@@ -80,7 +80,7 @@ public class BookingsService {
         }
     }
 
-    public Student retrieveStudent (String s_id) {
-        return studentService.getStudent(s_id);
+    public Teacher retrieveTeacher (String t_id) {
+        return teacherService.getTeacher(t_id);
     }
 }

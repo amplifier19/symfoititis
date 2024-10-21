@@ -1,7 +1,9 @@
 package gr.symfoititis.tutoring.controllers;
 
 import gr.symfoititis.common.entities.Booking;
+import gr.symfoititis.common.exceptions.BadRequestException;
 import gr.symfoititis.common.records.Response;
+import gr.symfoititis.tutoring.services.AvailabilityService;
 import gr.symfoititis.tutoring.services.BookingsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,67 +21,78 @@ import static gr.symfoititis.common.utils.RoleValidation.*;
 @RestController
 public class BookingsController {
     private final BookingsService bookingsService;
-    public BookingsController(BookingsService bookingsService) {
+    private final AvailabilityService availabilityService;
+    public BookingsController(BookingsService bookingsService, AvailabilityService availabilityService) {
         this.bookingsService = bookingsService;
+        this.availabilityService = availabilityService;
     }
 
-   @GetMapping("/bookings")
-   ResponseEntity<Response> getBookings (
-           @RequestHeader("X-User-Id")
-           @NotBlank(message = "User id cannot be blank")
-           String id,
-           @RequestHeader("X-Role")
-           @NotBlank(message = "User id cannot be blank")
-           String role
-   ) {
+    @GetMapping("/bookings")
+    ResponseEntity<Response> getBookings (
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-User-Id")
+            String id,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Role")
+            String role
+    ) {
         isStudentOrTeacher(role);
-        List<Booking> bookings = bookingsService.getBookings(id, role);
+        List<@Valid Booking> bookings = bookingsService.getBookings(id, role);
         return ResponseEntity.ok(new Response(200, bookings));
-   }
+    }
 
-   @PostMapping("/booking")
-   ResponseEntity<Response> addBooking (
-           @RequestBody @Valid Booking booking,
-           @RequestHeader("X-User-Id")
-           @NotNull(message = "User id cannot be null")
-           @NotBlank(message = "User id cannot be blank")
-           String s_id,
-           @RequestHeader("X-Role")
-           @NotNull(message = "Role cannot be null")
-           @NotBlank(message = "Role cannot be blank")
-           String role
-   ) {
-       isStudent(role);
-       bookingsService.addBooking(booking);
-       String message = "Booking has been added successfully.";
-       return ResponseEntity.ok(new Response(200, message));
-   }
+    @PostMapping("/booking")
+    ResponseEntity<Response> addBooking (
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Department-Id")
+            String dep_id,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-User-Id")
+            String s_id,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Role")
+            String role,
+            @Valid
+            @RequestBody
+            Booking booking
+    ) {
+        isStudent(role);
+        try {
+            @Positive
+            int departmentId = Integer.parseInt(dep_id);
+            if (!s_id.equals(booking.getS_id())) {
+                throw new BadRequestException("Invalid student id");
+            }
+            availabilityService.getAvailabilitySlot(booking.getAv_id(), departmentId);
+            bookingsService.addBooking(booking);
+            String message = "Booking has been added successfully.";
+            return ResponseEntity.ok(new Response(200, message));
+        } catch (NumberFormatException ex) {
+            throw new BadRequestException("Department id cannot be parsed to integer");
+        }
+    }
 
-   @PutMapping("/cancel/booking/{b_id}")
-   ResponseEntity<Response> cancelBooking (
-           @PathVariable(value="b_id", required = true)
-           @Positive(message = "Booking id must be positive")
-           int b_id,
-           @RequestHeader("X-User-Id")
-           @NotNull(message = "User id cannot be null")
-           @NotBlank(message = "User id cannot be blank")
-           String id,
-           @RequestHeader("X-Role")
-           @NotNull(message = "Role cannot be null")
-           @NotBlank(message = "Role cannot be blank")
-           String role
-   ) {
-       bookingsService.cancelBooking(b_id, id, role);
-       String message = String.format("Booking %d has been successfully cancelled.", b_id);
-       return ResponseEntity.ok(new Response(200, message));
-   }
-
-   @GetMapping("/user/{s_id}")
-    ResponseEntity<Response> retrieveStudent(
-            @PathVariable(value="s_id")
-            @NotNull(message = "Student id cannot be null")
-            @NotBlank(message = "Student id cannot be blank")
-            String s_id) {
-        return ResponseEntity.ok(new Response(200, bookingsService.retrieveStudent(s_id)));
-   }
+    @PutMapping("/cancel/booking/{b_id}")
+    ResponseEntity<Response> cancelBooking (
+            @Positive
+            @PathVariable(value="b_id", required = true)
+            int b_id,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-User-Id")
+            String id,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Role")
+            String role
+    ) {
+        bookingsService.cancelBooking(b_id, id, role);
+        String message = String.format("Booking %d has been successfully cancelled.", b_id);
+        return ResponseEntity.ok(new Response(200, message));
+    }
 }

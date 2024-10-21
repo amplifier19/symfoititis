@@ -15,8 +15,8 @@ public class StudentConfig {
     @Value("${auth.student.client_secret}")
     private String clientSecret;
 
-    @Bean
-    public JwtUtil jwtUtility () {
+    @Bean (name = "studentJwtUtility")
+    public JwtUtil studentJwtUtility () {
         return new JwtUtil(tokenBaseUrl, clientId, clientSecret);
     }
 }

@@ -7,6 +7,7 @@ import gr.symfoititis.common.entities.Booking;
 import gr.symfoititis.common.entities.Student;
 import gr.symfoititis.common.exceptions.InternalServerErrorException;
 import gr.symfoititis.common.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,7 +25,7 @@ public class StudentService {
     private final JwtUtil jwtUtil;
     private String accessToken;
 
-    public StudentService(JwtUtil jwtUtil) {
+    public StudentService(@Qualifier("studentJwtUtility") JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
@@ -52,7 +53,7 @@ public class StudentService {
             String id = (String) properties.get("id");
             if (!id.equals(s_id)) throw new InternalServerErrorException("Fetched wrong user");
             String username = (String) properties.get("username");
-            return new Student(s_id, username);
+            return new Student(username);
         } catch (JsonProcessingException e) {
             throw new InternalServerErrorException("User deserialization from Json failed");
         }

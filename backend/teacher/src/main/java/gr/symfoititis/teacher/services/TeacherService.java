@@ -7,8 +7,11 @@ import gr.symfoititis.common.entities.Booking;
 import gr.symfoititis.common.entities.Teacher;
 import gr.symfoititis.common.exceptions.InternalServerErrorException;
 import gr.symfoititis.common.utils.JwtUtil;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
@@ -17,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Validated
 @Service
 public class TeacherService {
     @Value("${auth.teacher.admin.base_url}")
@@ -24,7 +28,7 @@ public class TeacherService {
     JwtUtil jwtUtil;
     String accessToken;
 
-    public TeacherService(JwtUtil jwtUtil){
+    public TeacherService(@Qualifier("teacherJwtUtility")JwtUtil jwtUtil){
         this.jwtUtil = jwtUtil;
     }
 
@@ -32,7 +36,7 @@ public class TeacherService {
         return bookings.stream().map(Booking::getT_id).collect(Collectors.toSet());
     }
 
-    public Teacher getTeacher (String t_id) {
+    public @Valid Teacher getTeacher (String t_id) {
         if (jwtUtil.isTokenExpired(accessToken)) {
             accessToken = jwtUtil.retrieveNewToken();
         }
@@ -51,9 +55,9 @@ public class TeacherService {
             Map<String, Object> properties = objectMapper.readValue(user, new TypeReference<Map<String, Object>>() {});
             String id = (String) properties.get("id");
             if (!id.equals(t_id)) throw new InternalServerErrorException("Fetched wrong user");
-            String firstname = (String) properties.get("username");
-            String lastname = (String) properties.get("lastname");
-            return new Teacher(t_id, firstname, lastname);
+            String firstName = (String) properties.get("firstName");
+            String lastName = (String) properties.get("lastName");
+            return new Teacher(firstName, lastName);
         } catch (JsonProcessingException e) {
             throw new InternalServerErrorException("User deserialization from Json failed");
         }

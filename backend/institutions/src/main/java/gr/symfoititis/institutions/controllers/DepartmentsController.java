@@ -27,10 +27,10 @@ public class DepartmentsController {
 
     @GetMapping("/departments")
     ResponseEntity<Response> departments (
-           @RequestHeader("X-Role")
-           @NotNull(message = "Role cannot be null")
-           @NotBlank(message = "Role cannot be blank")
-           String role
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Role")
+            String role
     ) {
         isAdmin(role);
         List<Department> departments = departmentsService.getDepartments ();
@@ -39,8 +39,8 @@ public class DepartmentsController {
 
     @GetMapping("/departments/{uni_id}")
     ResponseEntity<Response> departments (
+            @Positive
             @PathVariable (value="uni_id", required=true)
-            @Positive(message = "University id must positive")
             int uni_id
     ) {
         List<Department> departments = departmentsService.getDepartments (uni_id);
@@ -49,13 +49,13 @@ public class DepartmentsController {
 
     @GetMapping("/department")
     ResponseEntity<Response> department (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Department-Id")
-            @NotNull(message = "Department id cannot be null")
-            @NotBlank(message = "Department id cannot be blank")
             String id,
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role
     ) {
         isStudentOrTeacher(role);
@@ -70,12 +70,12 @@ public class DepartmentsController {
 
     @GetMapping("/department/{dep_id}")
     ResponseEntity<Response> department (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="dep_id", required=true)
-            @Positive(message = "Department id must be positive")
             int dep_id
     ) {
         isAdmin(role);
@@ -85,9 +85,9 @@ public class DepartmentsController {
 
     @PostMapping("/department")
     ResponseEntity<Response> addDepartment (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid Department department
     ) {
@@ -99,9 +99,9 @@ public class DepartmentsController {
 
     @PutMapping("/department")
     ResponseEntity<Response> updateDepartment (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid Department department
     ) {
@@ -113,11 +113,11 @@ public class DepartmentsController {
 
     @DeleteMapping("/department/{dep_id}")
     ResponseEntity<Response> deleteDepartment (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
-            @Positive(message = "Department id must be positive")
+            @Positive
             @PathVariable(value="dep_id", required=true) int dep_id
     ){
         isAdmin(role);

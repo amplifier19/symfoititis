@@ -25,12 +25,12 @@ public class NotesController {
 
     @GetMapping("/notes/{c_id}")
     ResponseEntity<Response> getNotes (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="c_id", required=true)
-            @Positive(message = "Course id cannot be null")
             int c_id
     ) {
         isAnyone(role);
@@ -40,9 +40,9 @@ public class NotesController {
 
     @PostMapping("/note")
     ResponseEntity<Response> addNote (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid Note note
     ) {
@@ -54,9 +54,9 @@ public class NotesController {
 
     @PutMapping("/note")
     ResponseEntity<Response> updateNote (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid Note note
     ) {
@@ -68,12 +68,12 @@ public class NotesController {
 
     @DeleteMapping("/note/{note_id}")
     ResponseEntity<Response> deleteNote (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="note_id", required=true)
-            @Positive(message = "Note id must be positive")
             int note_id
     ) {
         isAdmin(role);

@@ -24,13 +24,13 @@ public class CoursesController {
 
     @GetMapping("/courses")
     public ResponseEntity<Response> courses (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Department-Id")
-            @NotNull(message = "Department id cannot be null")
-            @NotBlank(message = "Department id cannot be blank")
             String d_id
     ) {
         isStudentOrTeacher(role);
@@ -41,16 +41,16 @@ public class CoursesController {
 
     @GetMapping("/course/{c_id}")
     ResponseEntity<Response> course (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Department-Id")
-            @NotNull(message = "Department id cannot be null")
-            @NotBlank(message = "Department id cannot be blank")
             String d_id,
+            @Positive
             @PathVariable(value="c_id", required=true)
-            @Positive(message = "Course id must be positive")
             int c_id
     ) {
         isStudentOrTeacher(role);
@@ -61,12 +61,12 @@ public class CoursesController {
 
     @GetMapping("/courses/{dep_id}")
     ResponseEntity<Response> courses (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="dep_id", required=true)
-            @Positive(message = "Department id must be positive")
             int dep_id
     ) {
         isAdmin(role);
@@ -76,9 +76,9 @@ public class CoursesController {
 
     @PostMapping("/course")
     ResponseEntity<Response> addCourse (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid Course course
     ) {
@@ -90,9 +90,9 @@ public class CoursesController {
 
     @PutMapping("/course")
     ResponseEntity<Response> updateCourse (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid Course course
     ) {
@@ -104,12 +104,12 @@ public class CoursesController {
 
     @DeleteMapping("/course/{c_id}")
     ResponseEntity<Response> deleteCourse (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="c_id", required=true)
-            @Positive(message = "Course id must be positive")
             int c_id
     ) {
         isAdmin(role);

@@ -24,12 +24,12 @@ public class FilesController {
 
     @GetMapping("/files/{c_id}")
     ResponseEntity<Response> getFiles (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="c_id", required=true)
-            @Positive(message = "Course is must be positive")
             int c_id
     ) {
         isAnyone(role);
@@ -39,12 +39,12 @@ public class FilesController {
 
     @PostMapping("/files/upload/{c_id}")
     ResponseEntity<Response> uploadFiles (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="c_id", required=true)
-            @Positive(message = "Course id must be positive")
             int c_id,
             @RequestParam("files") MultipartFile[] files
     ) {
@@ -55,15 +55,15 @@ public class FilesController {
 
     @DeleteMapping("/files/{c_id}/{filename}")
     ResponseEntity<Response> deleteFile (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="c_id", required=true)
-            @Positive(message = "Course id must be positive")
             int c_id,
-            @NotNull(message = "File name cannot be null")
-            @NotBlank(message = "File name cannot be blank")
+            @NotNull
+            @NotBlank
             @PathVariable(value="filename", required=true)
             String filename
     ) {

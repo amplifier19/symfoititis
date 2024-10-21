@@ -34,13 +34,13 @@ public class UniversityController {
 
     @GetMapping("/university")
     public ResponseEntity<Response> university (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @NotNull
+            @NotBlank
             @RequestHeader("X-University-Id")
-            @NotNull(message = "University id cannot be null")
-            @NotBlank(message = "University id cannot be blank")
             String id
     ) {
         isStudentOrTeacher(role);
@@ -55,12 +55,12 @@ public class UniversityController {
 
     @GetMapping("/university/{uni_id}")
     ResponseEntity<Response> university (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="uni_id", required=false)
-            @Positive(message = "University id must be positive")
             int uni_id
     ) {
         isAdmin(role);
@@ -70,9 +70,9 @@ public class UniversityController {
 
     @PostMapping("/university")
     ResponseEntity<Response> addUniversity (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid University university
     ) {
@@ -84,9 +84,9 @@ public class UniversityController {
 
     @PutMapping ("/university")
     ResponseEntity<Response> updateUniversity (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
             @RequestBody @Valid University university
     ) {
@@ -98,12 +98,12 @@ public class UniversityController {
 
     @DeleteMapping("/university/{uni_id}")
     ResponseEntity<Response> deleteUniversity (
+            @NotNull
+            @NotBlank
             @RequestHeader("X-Role")
-            @NotNull(message = "Role cannot be null")
-            @NotBlank(message = "Role cannot be blank")
             String role,
+            @Positive
             @PathVariable(value="uni_id", required=true)
-            @Positive(message = "University id must be positive")
             int uni_id
     ) {
         isAdmin(role);

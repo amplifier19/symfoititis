@@ -9,10 +9,10 @@ local function has_role(role_to_check, roles)
   return false
 end
 
-function _M.verify_jwt(realm, role, token_name)
+function _M.verify_jwt(host, realm, role, token_name)
   local cjson = require("cjson")
   local opts = {
-    discovery = "http://192.168.2.50:8080/auth/realms/" .. realm .. "/.well-known/openid-configuration",
+    discovery = "http://" .. host .. "/auth/realms/" .. realm .. "/.well-known/openid-configuration",
     token_signing_alg_values_expected = { "RS256" },
     auth_accept_token_as = "cookie:" .. token_name,
     pass_cookies = token_name

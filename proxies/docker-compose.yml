@@ -13,6 +13,7 @@ services:
         - NGINX_PATH=${NGINX_PATH}
     environment:
       - LUA_PATH=${LUA_PATH}
+      - DISCOVERY_HOST=${DISCOVERY_HOST}
     image: ${INGRESS_GATEWAY_IMAGE}:${INGRESS_GATEWAY_IMAGE_TAG}
     command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
     ports:

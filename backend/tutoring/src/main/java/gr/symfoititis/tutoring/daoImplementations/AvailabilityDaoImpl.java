@@ -37,6 +37,12 @@ public class AvailabilityDaoImpl implements AvailabilityDao {
     }
 
     @Override
+    public List<Integer> getAvailableTutoringCourseIds(Integer dep_id) {
+        String sql = "SELECT DISTINCT c_id FROM availability_slots WHERE dep_id = ? AND state = 'AVAILABLE'";
+        return jdbcTemplate.queryForList(sql, Integer.class, dep_id);
+    }
+
+    @Override
     public void addAvailabilitySlots(List<AvailabilitySlot> availabilitySlots) {
         String sql = """
                 INSERT INTO

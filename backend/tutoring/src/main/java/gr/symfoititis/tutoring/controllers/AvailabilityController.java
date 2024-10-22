@@ -6,10 +6,7 @@ import gr.symfoititis.common.records.Response;
 import gr.symfoititis.tutoring.records.AvailabilitySlot;
 import gr.symfoititis.tutoring.services.AvailabilityService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -110,6 +107,32 @@ public class AvailabilityController {
         }
     }
 
+    @GetMapping("availability/{dep_id}/courseIds")
+    ResponseEntity<Response> getAvailableTutoringCourseIds (
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Role")
+            String role,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-Department-Id")
+            String departmentId,
+            @Positive
+            @PathVariable(value = "dep_id", required = true)
+            int dep_id
+    ) {
+        isStudent(role);
+        try {
+            if (dep_id != Integer.parseInt(departmentId)) {
+                throw new BadRequestException("Invalid Department id");
+            }
+        } catch (NumberFormatException ex) {
+            throw new BadRequestException("Department id could not be parsed to integer");
+        }
+        List<@NotNull @Positive Integer> courseIds = availabilityService.getAvailableTutoringCourseIds(dep_id);
+        return ResponseEntity.ok(new Response(200, courseIds));
+    }
+
     @PostMapping("/availability")
     ResponseEntity<Response> addAvailabilitySlots (
             @NotNull
@@ -125,7 +148,7 @@ public class AvailabilityController {
             @RequestHeader("X-Department-Id")
             String dep_id,
             @NotNull
-            @NotEmpty
+            @Size(min=1, max=12)
             @RequestBody
             List<@Valid AvailabilitySlot> availabilitySlots
     ) {
@@ -156,8 +179,7 @@ public class AvailabilityController {
             @RequestHeader("X-Department-Id")
             String dep_id,
             @NotNull
-            @NotEmpty
-            @Valid
+            @Size(min=1, max=12)
             @RequestBody
             List<@Valid AvailabilitySlot> availabilitySlots
     ) {
@@ -188,7 +210,7 @@ public class AvailabilityController {
             @RequestHeader("X-Department-Id")
             String dep_id,
             @NotNull
-            @NotEmpty
+            @Size(min=1, max=12)
             @RequestBody
             List<@NotNull @Positive Integer> availabilitySlotIds
     ) {

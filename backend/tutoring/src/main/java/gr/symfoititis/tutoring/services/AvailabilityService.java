@@ -41,6 +41,10 @@ public class AvailabilityService {
                 .collect(Collectors.toList());
     }
 
+    public List<Integer> getAvailableTutoringCourseIds(Integer dep_id) {
+        return availabilityDao.getAvailableTutoringCourseIds(dep_id);
+    }
+
     @Transactional
     public void addAvailabilitySlots(List<AvailabilitySlot> availabilitySlots, Integer dep_id, String t_id) {
         availabilitySlots.forEach(slot -> {

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Teacher {
+    @NotNull
+    @NotBlank
     private String t_id;
     @NotNull
     @NotBlank
@@ -16,8 +18,6 @@ public class Teacher {
     public Teacher() {}
 
     public Teacher(
-            @NotNull
-            @NotBlank
             String t_id,
             String firstname,
             String lastname

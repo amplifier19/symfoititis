@@ -13,14 +13,14 @@ export const useAuthStore = defineStore("authStore", () => {
     cookiesRestPath = new Cookies("Cookie", { path: `/rest/${import.meta.env.VITE_KC_REALM}`, secure: true, sameSite: "lax" });
     cookiesDocsPath = new Cookies("Cookie", { path: `/${import.meta.env.VITE_KC_REALM}/documents`, secure: true, sameSite: "lax" });
   }
-  const keycloak = ref({});
-  const profile = ref({});
+  const keycloak = ref<any>({});
+  const profile = ref<KeycloakProfile>({});
   const keycloakCreate = () => {
     if (Object.keys(keycloak.value).length > 0) {
       return;
     }
     keycloak.value = new Keycloak({
-      url: import.meta.env.VITE_AUTH_API_URL,
+      url: import.meta.env.VITE_AUTH_BASE,
       realm: import.meta.env.VITE_KC_REALM,
       clientId: import.meta.env.VITE_KC_CLIENT_ID
     });
@@ -41,8 +41,8 @@ export const useAuthStore = defineStore("authStore", () => {
     if (keycloak.value.authenticated) return;
     await keycloak.value.login();
   };
-  const updateToken = async (sec) => {
-    await keycloak.value.updateToken(sec).then((refreshed) => {
+  const updateToken = async (sec: number) => {
+    await keycloak.value.updateToken(sec).then((refreshed: boolean) => {
       if (refreshed) {
         setTokens()
       }
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("authStore", () => {
   };
   const getProfile = async () => {
     if (!!profile.value?.id) return;
-    await keycloak.value.loadUserProfile().then((data) => {
+    await keycloak.value.loadUserProfile().then((data: KeycloakProfile) => {
       profile.value = data;
     }).catch((error: KeycloakError) => {
       throw new Error(JSON.stringify({status: 500, error: error.error_description}));
@@ -62,7 +62,7 @@ export const useAuthStore = defineStore("authStore", () => {
   const logout = () => {
     removeTokens();
     keycloak.value.logout({
-      redirectUri: import.meta.env.VITE_BASE_URL
+      redirectUri: import.meta.env.VITE_BASE
     });
   };
   const setTokens = () => {

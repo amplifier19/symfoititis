@@ -12,7 +12,7 @@ export const useDepartmentStore = defineStore('department', () => {
   })
 
   const getDepartment = async () => {
-    await fetch(`${import.meta.env.VITE_STUDENT_API_URL}/department`, {
+    await fetch(`${import.meta.env.VITE_API_BASE}/institutions/department`, {
       method: 'GET'
     })
       .then((response) => response.json())

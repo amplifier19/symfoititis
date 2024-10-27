@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { type Response } from '@symfoititis-frontend-monorepo/interfaces'
 
 export const useResponseStore = defineStore('responses', () => {
-  const responses = ref<Reponse[]>([])
+  const responses = ref<Response[]>([])
 
   const addResponse = (resp: Response) => {
     responses.value.push(resp)

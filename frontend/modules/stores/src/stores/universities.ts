@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { University } from '@symfoitititis-frontend-monorepo/interfaces'
+import { type University } from '@symfoitititis-frontend-monorepo/interfaces'
 
 export const useUniversityStore = defineStore('university', () => {
   const university = ref<University>({
@@ -10,7 +10,7 @@ export const useUniversityStore = defineStore('university', () => {
   })
 
   const getUniversity = async () => {
-    await fetch(`${import.meta.env.VITE_STUDENT_API_URL}/university`, {
+    await fetch(`${import.meta.env.VITE_API_BASE}/institutions/university`, {
       method: 'GET'
     })
       .then((response) => response.json())

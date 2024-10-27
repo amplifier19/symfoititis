@@ -3,15 +3,15 @@ import { ref, watch, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import TimePicker from './TimePicker.vue';
 import { Calendar } from '@symfoititis-frontend-monorepo/ui';
-import { useAvailabilityStore } from '@symfoititis-frontend-monorepo/stores'; 
+import  { type Teacher, type Day } from "@symfoititis-frontend-monorepo/interfaces"
+import { useAvailabilityStore } from '../stores/availability'
+import { useStudentFetch } from '../composables/fetch'
 
-const props = defineProps({
-  teacher: { type: Object, required: true }
-});
-
+const props = defineProps<{
+  teacher: Teacher
+}>()
 const route = useRoute();
-const availabilityStore = useAvailabilityStore();
-const selectedDay = ref({
+const selectedDay = ref<Day>({
   monthDay: -1,
   weekDay: -1,
   date: '',
@@ -19,27 +19,29 @@ const selectedDay = ref({
   cell_classes: [],
   btn_classes: []
 });
+const { getAvailabilitySlots } = useStudentFetch()
+const availabilityStore = useAvailabilityStore()
 
-const selectDate = (day: any) => {
+const selectDate = (day: Day) => {
   selectedDay.value = day;
 };
 
-onBeforeMount(() => {
-  availabilityStore.getAvailability(props.teacher.id, parseInt(route.params.c_id as string));
+onBeforeMount(async () => {
+  await getAvailabilitySlots(parseInt(route.params.c_id as string), props.teacher.t_id);
 });
 
-watch(route, () => {
-  availabilityStore.getAvailability(props.teacher.id, parseInt(route.params.c_id as string));
+watch(route, async (newRoute, oldRoute) => {
+  await getAvailabilitySlots(parseInt(route.params.c_id as string), props.teacher.t_id);
 });
 
-watch(props, () => {
-  availabilityStore.getAvailability(props.teacher.id, parseInt(route.params.c_id as string));
+watch(props, async (newProps, oldProps) => {
+  await getAvailabilitySlots(parseInt(route.params.c_id as string), props.teacher.t_id);
 });
 </script>
 
 <template>
   <div class="date-time-pick-container">
-    <Calendar @select-date="selectDate" />
+    <Calendar @select-date="selectDate" :availabilitySlots="availabilityStore.availabilitySlots"/>
     <TimePicker :selectedDay="selectedDay" />
   </div>
 </template>

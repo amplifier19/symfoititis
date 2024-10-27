@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useAvailabilityStore } from '@symfoititis-frontend-monorepo/stores'
-import { type AvailabilitySlots } from '@symfoititis-frontend-monorepo/intefaces'
-import { type Day } from '@symfoititis-frontend-monorepo/intefaces'
+import { useAvailabilityStore } from '../stores/availability'
+import { type AvailabilitySlot } from '@symfoititis-frontend-monorepo/interfaces'
+import { type Day } from '@symfoititis-frontend-monorepo/interfaces'
 
 const props = defineProps<{
   selectedDay: Day
 }>()
 const availabilityStore = useAvailabilityStore()
 const selectedDay = ref<Day>(props.selectedDay)
-const selectedDate = ref<Day>(props.selectedDay.date)
+const selectedDate = ref<string>(props.selectedDay.date)
 const filteredAvailabilitySlots = computed(() => {
   return availabilityStore.availabilitySlots.filter((s) => s.date === selectedDate.value)
 })
-const selectedAvailabilitySlots = ref<AvailabilitySlots[]>([])
-const timeSlotList = ref<HTMLElement>()
+const selectedAvailabilitySlots = ref<AvailabilitySlot[]>([])
+const timeSlotList = ref<HTMLUListElement>()
 const weekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
 
-const addTimeSlot = (event: Event, slot: AvailabilitySlot) => {
-  event.target.classList.toggle('active-btn')
+const addTimeSlot = (event: MouseEvent, slot: AvailabilitySlot) => {
+  (event.target as HTMLElement).classList.toggle('active-btn')
   const idx = selectedAvailabilitySlots.value.findIndex((el) => slot.av_id === el.av_id)
   if (idx >= 0) {
     selectedAvailabilitySlots.value.splice(idx, 1)
@@ -29,9 +29,9 @@ const addTimeSlot = (event: Event, slot: AvailabilitySlot) => {
 const clearStyles = () => {
   if (!!timeSlotList.value) {
     timeSlotList.value.childNodes.forEach((li) => {
-      li.childNodes.forEach((span) => {
-        if (!!span.classList) {
-          span.classList.remove('active-btn')
+      li.childNodes.forEach((span: ChildNode) => {
+        if (!!(span as HTMLElement).classList) {
+          (span as HTMLElement).classList.remove('active-btn')
         }
       })
     })

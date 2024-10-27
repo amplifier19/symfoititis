@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from 'vue';
-import { type Teacher, type AvailabilitySlot } from '@symfoititis-frontend-monorepo/interfaces';
+import { defineAsyncComponent } from 'vue';
+import { type Teacher } from '@symfoititis-frontend-monorepo/interfaces';
 
 const DateTimePicker = defineAsyncComponent(() => import('./DateTimePicker.vue'));
 const props = defineProps<{
-  teacher: Teacher 
-  selectedTeacherId: number
+  teacher: Teacher
+  selectedTeacherId: string
 }>();
 const emit = defineEmits<{
-  (e: 'select-teacher', teacher: Teacher, event: Event)
+  (e: 'select-teacher', teacher: Teacher, event: Event):void
 }>()
-const availableSlots = ref<AvailabilitySlot[]>([]);
 
 const handleSelectTeacher = (event: Event) => {
   emit('select-teacher', props.teacher, event);
@@ -21,15 +20,15 @@ const handleSelectTeacher = (event: Event) => {
   <div class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width">
     <section @click="handleSelectTeacher" class="pf-v5-c-expandable-section__toggle">
       <span class="regular-text pf-v5-c-expandable-section__toggle-text toogle-item">
-        {{ props.teacher.first_name }} {{ props.teacher.last_name }}
+        {{ props.teacher.firstname }} {{ props.teacher.lastname }}
       </span>
       <span class="pf-v5-c-expandable-section__toggle-icon toogle-item">
         <i class="fa fa-angle-right" aria-hidden="true"></i>
       </span>
     </section>
-    
-    <div v-if="props.selectedTeacherId === props.teacher.id" class="pf-v5-c-expandable-section__content calendar-container">
-      <DateTimePicker :availableSlots="availableSlots" :teacher="props.teacher" />
+
+    <div v-if="props.selectedTeacherId === props.teacher.t_id" class="pf-v5-c-expandable-section__content calendar-container">
+      <DateTimePicker :teacher="props.teacher" />
     </div>
   </div>
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
-import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
 import { SearchHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Page } from '@symfoititis-frontend-monorepo/ui'
 import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
@@ -8,22 +7,22 @@ import { History } from '@symfoititis-frontend-monorepo/ui'
 import { Recents } from '@symfoititis-frontend-monorepo/ui'
 import { Gallery } from '@symfoititis-frontend-monorepo/ui'
 import { Toasts } from '@symfoititis-frontend-monorepo/ui'
-import TutoringHeader from '../components/TutoringHeader.vue'
-import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
+import { useCourseStore, useDepartmentStore } from '@symfoititis-frontend-monorepo/stores'
 import { useRecents } from '@symfoititis-frontend-monorepo/composables'
 import { useHistory } from '@symfoititis-frontend-monorepo/composables'
 import { useFetch } from '@symfoititis-frontend-monorepo/composables'
 
 const search = ref<string>('')
 const courseStore = useCourseStore()
-const { getCourses } = useFetch()
-const { recents, getRecFromStorage } = useRecents('bookings_recent')
-recents.value = getRecFromStorage()
+const departmentStore = useDepartmentStore();
+const { getCourses, getAvailableTutoringCourses, getDepartment } = useFetch();
 const { history, getHistoryFromStorage, deleteCourseFromStorage } = useHistory('bookings_history')
+const { recents, getRecFromStorage } = useRecents('bookings_recent')
 history.value = getHistoryFromStorage()
+recents.value = getRecFromStorage()
 const uniqueSemesters = ref<number[]>([])
 const filteredCourses = computed(() => {
-  return courseStore.courses.filter((course) =>
+  return courseStore.availableTutoringCourses.filter((course) =>
     course.c_display_name.toLowerCase().includes(search.value.toLowerCase())
   )
 })
@@ -39,11 +38,13 @@ const handleDelete = (index: number) => {
 
 const initSemesters = () => {
   uniqueSemesters.value = [
-    ...new Set(courseStore.courses.map((c) => c.semester))
+    ...new Set(courseStore.availableTutoringCourses.map((c) => c.semester))
   ]
 }
 onMounted(async () => {
+  await getDepartment()
   await getCourses()
+  await getAvailableTutoringCourses(departmentStore.department.dep_id)
   initSemesters()
 })
 </script>

@@ -1,70 +1,68 @@
 <script setup lang="ts">
-import { ref, defineAsyncComponent, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { type Course, type Teacher } from '@symfoititis-frontend-monorepo/interfaces'
-
-import { Page } from '@symfoititis-frontend-monorepo/ui' 
-import { Masterhead } from '@symfoititis-frontend-monorepo/ui' 
-import { History } from '@symfoititis-frontend-monorepo/ui' 
-import { NavHeader } from '@symfoititis-frontend-monorepo/ui' 
-import { Toasts } from '@symfoititis-frontend-monorepo/ui' 
+import { Page } from '@symfoititis-frontend-monorepo/ui'
+import { Skeleton } from '@symfoititis-frontend-monorepo/ui'
+import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
+import { History } from '@symfoititis-frontend-monorepo/ui'
+import { NavHeader } from '@symfoititis-frontend-monorepo/ui'
+import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import TeacherCard from '../components/TeacherCard.vue'
-
+import { useFetch} from '@symfoititis-frontend-monorepo/composables'
 import { useHistory } from '@symfoititis-frontend-monorepo/composables'
 import { useRecents } from '@symfoititis-frontend-monorepo/composables'
-import { useFetch } from '@symfoititis-frontend-monorepo/composables'
-
-import { useTutoringStore } from '@symfoititis-frontend-monorepo/stores' 
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores' 
+import { useStudentFetch } from '../composables/fetch'
+import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
+import { useDepartmentStore } from '@symfoititis-frontend-monorepo/stores'
+import { useTeacherStore } from '../stores/teachers'
 
 const router = useRouter()
 const route = useRoute()
-const c_id = ref<number>(parseInt(route.params.c_id))
+const displaySkeleton = ref<boolean>(true)
+const c_id = ref<number>(parseInt(route.params.c_id as string))
 const course = ref<Course>({
   c_id: 0,
   dep_id: 0,
   semester: 0,
   c_display_name: ''
 })
-const teachers: Teacher[] = [
-  { id: 1, first_name: "John", last_name: "Doe" },
-  { id: 2, first_name: "Jane", last_name: "Smith" },
-  { id: 3, first_name: "Emily", last_name: "Johnson" },
-  { id: 4, first_name: "Michael", last_name: "Brown" }
-];
-const teacherSection = ref<HTMLElement>()
-const selectedTeacher = ref<Teacher>({ id: -100, first_name: "", last_name: "" })
+const teacherSection = ref<Element>()
+const selectedTeacher = ref<Teacher>({ t_id: "", firstname: "", lastname: "" })
 const { history, getHistoryFromStorage, addCourseToStorage, deleteCourseFromStorage } = useHistory('bookings_history')
 const { addRecToStorage } = useRecents('bookings_recent')
 history.value = getHistoryFromStorage()
-const tutoringStore = useTutoringStore()
-const errorStore = useErrorStore()
-const { getTutoringCourses } = useFetch()
+const courseStore = useCourseStore()
+const teacherStore = useTeacherStore()
+const departmentStore = useDepartmentStore()
+const { getDepartment, getAvailableTutoringCourses } = useFetch()
+const { getTeachers } = useStudentFetch()
 
-const selectTeacher = (teacher: Teacher, e: MouseEvent) => {
+const selectTeacher = (teacher: Teacher, e: Event) => {
   if (!!teacherSection.value) {
     teacherSection.value.classList.remove('pf-m-expanded')
   }
-  if (selectedTeacher.value.id === teacher.id) {
-    selectedTeacher.value = { id: -100, first_name: "", last_name: "" }
+  if (selectedTeacher.value.t_id === teacher.t_id) {
+    selectedTeacher.value = { t_id: "", firstname: "", lastname: "" }
     return
   }
-  teacherSection.value = e.target.offsetParent
+  const target = e.target as HTMLElement
+  teacherSection.value = target.offsetParent as Element
   teacherSection.value.classList.add('pf-m-expanded')
   selectedTeacher.value = teacher
 }
+
 const saveCourse = () => {
-  course.value = tutoringStore.courses.find(
-    (c) => c.c_id == parseInt(route.params.c_id)
+  course.value = courseStore.courses.find(
+    (c: Course) => c.c_id == parseInt(route.params.c_id as string)
   ) || { c_id: 0, dep_id: 0, semester: 0, c_display_name: '' }
-  if (course.value.c_id > 0) {
+  if (course.value.c_id! > 0) {
     addCourseToStorage(course.value)
     history.value = getHistoryFromStorage()
     addRecToStorage(course.value);
-  } else {
-    errorStore.addError({status: 404, error: 'Course not Found'})
   }
 }
+
 const handleDelete = (index: number) => {
   const cid = deleteCourseFromStorage(index)
   if (cid < 0) {
@@ -75,22 +73,31 @@ const handleDelete = (index: number) => {
   }
   history.value = getHistoryFromStorage()
 }
+
 onMounted(async () => {
-  await getTutoringCourses()
-  c_id.value = parseInt(route.params.c_id)
+  displaySkeleton.value = true
+  c_id.value = parseInt(route.params.c_id as string)
+  await getDepartment()
+  await getAvailableTutoringCourses(departmentStore.department.dep_id)
+  await getTeachers(c_id.value)
   saveCourse()
+  displaySkeleton.value = false 
 })
-watch(route, (oldRoute, newRoute) => {
-  const cid = parseInt(route.params.c_id)
+
+watch(route, async (oldRoute, newRoute) => {
+  displaySkeleton.value = true 
+  const cid = parseInt(route.params.c_id as string)  
   if (c_id.value != cid) {
     c_id.value = cid
     saveCourse()
+    await getTeachers(c_id.value)
   }
+  displaySkeleton.value = false 
 })
 </script>
 
 <template>
-  <Toasts/>
+  <Toasts />
   <Page>
     <template v-slot:header>
       <Masterhead :selected="1" />
@@ -98,9 +105,12 @@ watch(route, (oldRoute, newRoute) => {
     </template>
     <template v-slot:main>
       <NavHeader navigation="tutoring" storageItem="bookings_history" :course="course" />
-      <section class="main-container">
-        <TeacherCard v-for="teacher in teachers" :teacher="teacher" :selectedTeacherId="selectedTeacher.id"
-          @select-teacher="selectTeacher" :key="teacher.id" />
+      <section v-if="!displaySkeleton" class="main-container">
+        <TeacherCard v-for="teacher in teacherStore.teachers" :teacher="teacher" :selectedTeacherId="selectedTeacher.t_id"
+          @select-teacher="selectTeacher" :key="teacher.t_id" />
+      </section>
+      <section v-else class="main-container">
+        <Skeleton />
       </section>
     </template>
   </Page>

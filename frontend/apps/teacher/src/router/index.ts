@@ -26,7 +26,7 @@ const router = createRouter({
       component: () => import('../views/AvailabilityView.vue'),
     },
   ],
-  scrollBehaviour() {
+  scrollBehavior() {
     return { top: 0 }
   }
 });
@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
     } else {
       await authStore.updateToken(420)
     }
-  } catch (error: Error | string) {
+  } catch (error: any) {
     if (typeof error === "string") {
       errorStore.addError({status: 500, error: error})
     } else if (typeof error === "object") {

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useCourseStore, useNoteStore, useErrorStore } from '@symfoititis-frontend-monorepo/stores' 
+import { useCourseStore, useNoteStore, useErrorStore } from '@symfoititis-frontend-monorepo/stores'
 import { useHistory, useRecents, useFetch } from '@symfoititis-frontend-monorepo/composables'
+import { type Course, type Note } from '@symfoititis-frontend-monorepo/interfaces'
 import Toasts from '../components/Toasts.vue';
 import Page from '../components/Page.vue';
 import Masterhead from '../components/Masterhead.vue';
@@ -12,8 +13,8 @@ import Subheader from '../components/Subheader.vue';
 
 const route = useRoute();
 const router = useRouter();
-const c_id = ref(parseInt(route.params.c_id));
-const course = ref({
+const c_id = ref<number>(parseInt(route.params.c_id as string));
+const course = ref<Course>({
   c_id: -100,
   dep_id: -100,
   semester: -100,
@@ -29,13 +30,18 @@ const { addRecToStorage } = useRecents('notes_recent');
 const { getCourses, getNotes } = useFetch();
 
 const saveCourse = () => {
-  course.value = courseStore.courses.find(c => c.c_id == parseInt(route.params.c_id)) || { c_id: -100, dep_id: -100, semester: -100, c_display_name: "default" };
-  if (course.value.c_id > 0) {
+  course.value = courseStore.courses.find((c: Course) => c.c_id == parseInt(route.params.c_id as string)) || {
+    c_id: -100,
+    dep_id: -100,
+    semester: -100,
+    c_display_name: "default" 
+  };
+  if (course.value.c_id! > 0) {
     addCourseToStorage(course.value);
     history.value = getHistoryFromStorage();
     addRecToStorage(course.value);
   } else {
-    errorStore.addError({status: 404, error: 'Course not found'});
+    errorStore.addError({ status: 404, error: 'Course not found' });
   }
 }
 
@@ -51,15 +57,15 @@ const handleDelete = (index: number) => {
 onMounted(async () => {
   await getCourses();
   saveCourse();
-  await getNotes(route.params.c_id);
+  await getNotes(route.params.c_id as string);
 });
 
 watch(route, async (newRoute, oldRoute) => {
-  const cid = parseInt(route.params.c_id);
+  const cid = parseInt(route.params.c_id as string);
   if (c_id.value != cid) {
     c_id.value = cid;
     saveCourse();
-    await getNotes(route.params.c_id);
+    await getNotes(route.params.c_id as string);
   }
 });
 </script>
@@ -70,67 +76,26 @@ watch(route, async (newRoute, oldRoute) => {
   <Page>
     <template v-slot:header>
       <Masterhead :selected="0" />
-      <History
-        to="notes"
-        :cid="c_id"
-        :history="history"
-        @delete-course="handleDelete"
-      />
+      <History to="notes" :cid="c_id" :history="history" @delete-course="handleDelete" />
     </template>
 
     <template v-slot:main>
-      <NavHeader
-        navigation="courses"
-        storageItem="notes_history"
-        :course="course"
-      />
+      <NavHeader navigation="courses" storageItem="notes_history" :course="course" />
 
       <div class="notes-container">
-        <transition-group
-          tag="ul"
-          name="notes-list"
-          class="notes-list"
-          id="theory-list"
-          appear
-        >
-          <Subheader
-            key="subheader"
-            title="Θεωρία"
-            transitionGroupKey="theory"
-          />
-          <li
-            v-for="note in noteStore.notes.filter(el => el.type === 'theory')"
-            :key="note.note_id"
-            class="notes"
-          >
-            <a
-              class="note-link"
-              :href="`${documents_url}/${c_id}/${note.note_filename}`"
-              target="_blank"
-            >
+        <transition-group tag="ul" name="notes-list" class="notes-list" id="theory-list" appear>
+          <Subheader key="subheader" title="Θεωρία" transitionGroupKey="theory" />
+          <li v-for="note in noteStore.notes.filter((el: Note) => el.type === 'theory')" :key="note.note_id" class="notes">
+            <a class="note-link" :href="`${documents_url}/${c_id}/${note.note_filename}`" target="_blank">
               {{ note.note_display_name }}
             </a>
           </li>
         </transition-group>
 
-        <transition-group
-          tag="ul"
-          name="notes-list"
-          class="notes-list"
-          id="lab-list"
-          appear
-        >
+        <transition-group tag="ul" name="notes-list" class="notes-list" id="lab-list" appear>
           <Subheader title="Εργαστήριο" key="lab" />
-          <li
-            v-for="note in noteStore.notes.filter(el => el.type === 'lab')"
-            :key="note.note_id"
-            class="notes"
-          >
-            <a
-              class="note-link"
-              :href="`${documents_url}/${c_id}/${note.note_filename}`"
-              target="_blank"
-            >
+          <li v-for="note in noteStore.notes.filter((el: Note) => el.type === 'lab')" :key="note.note_id" class="notes">
+            <a class="note-link" :href="`${documents_url}/${c_id}/${note.note_filename}`" target="_blank">
               {{ note.note_display_name }}
             </a>
           </li>
@@ -214,6 +179,7 @@ watch(route, async (newRoute, oldRoute) => {
     font-size: 0.9rem;
     margin-bottom: 0.8rem;
   }
+
   .note-link {
     padding: 0rem 0.8rem 0.5rem 0.8rem;
   }
@@ -223,10 +189,12 @@ watch(route, async (newRoute, oldRoute) => {
   .notes-list {
     margin: 5rem 2rem 0 2rem;
   }
+
   .notes {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
   }
+
   .note-link {
     padding: 0rem 0.5rem 0.5rem 0.5rem;
   }

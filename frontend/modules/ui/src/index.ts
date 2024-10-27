@@ -10,6 +10,6 @@ export { default as Recents } from './components/Recents.vue'
 export { default as SearchHeader } from './components/SearchHeader.vue'
 export { default as Subheader } from './components/Subheader.vue'
 export { default as Toasts } from './components/Toasts.vue'
-
+export { default as Skeleton } from './components/Skeleton.vue'
 export { default as CoursesView } from './views/CoursesView.vue'
 export { default as NotesView } from './views/NotesView.vue'

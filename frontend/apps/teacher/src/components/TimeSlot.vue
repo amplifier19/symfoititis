@@ -2,26 +2,26 @@
 import { ref, watch, defineProps, defineEmits } from 'vue';
 
 const props = defineProps<{
-  slotKey: number 
+  slotKey: number
   startTime: number
-  event: string
+  updateEvent: 'update-updatable-slot' | 'update-insertable-slot'
+  removeEvent: 'cancel-updatable-slot' | 'remove-insertable-slot'
 }>()
 
 const emit = defineEmits<{
-  (e: 'update-updatable-slot', slotKey: number, startTime: number)
-  (e: 'update-insertable-slot', slotKey: number, startTime: number)
+  (e: 'update-updatable-slot' | 'update-insertable-slot', slotKey: number, startTime: number):void
+  (e: 'cancel-updatable-slot' | 'remove-insertable-slot'):void
 }>()
 
-const startTime = ref(props.startTime);
+const startTime = ref<number>(props.startTime);
 const times = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
-watch(props, (newProps) => {
+watch(props, (newProps, oldProps) => { 
   startTime.value = props.startTime;
 });
 
 watch(startTime, (newTime, oldTime) => {
-  if (oldTime === newTime || startTime.value < 0 || startTime.value === props.startTime) return;
-  emit(props.event, props.slotKey, startTime.value);
+  emit(props.updateEvent, props.slotKey, startTime.value);
 });
 </script>
 
@@ -33,7 +33,7 @@ watch(startTime, (newTime, oldTime) => {
         {{ time }}:00 - {{ time + 1 }}:00
       </option>
     </select>
-    <slot></slot>
+    <span class="trash-icon" @click="emit(props.removeEvent)"><i class="fa fa-trash"></i></span>
   </div>
   <div class="border"></div>
 </template>
@@ -70,4 +70,20 @@ watch(startTime, (newTime, oldTime) => {
   width: 100%;
   border-top: var(--main-border);
 }
+
+.trash-icon {
+  position: absolute;
+  right: 2.5rem;
+  cursor: pointer;
+}
+
+.fa-trash {
+  font-size: 1rem;
+}
+@media screen and (max-width: 590px) {
+  .trash-icon {
+    right: 1.5rem;
+  }
+}
+
 </style>

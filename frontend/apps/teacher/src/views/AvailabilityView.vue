@@ -7,19 +7,11 @@ import { useRecents } from '@symfoititis-frontend-monorepo/composables';
 import { useHistory } from '@symfoititis-frontend-monorepo/composables';
 import { useFetch } from '@symfoititis-frontend-monorepo/composables';
 import { useCourseStore, useErrorStore } from '@symfoititis-frontend-monorepo/stores';
-import { type Course, type Day } from '@symfoititis-frontend-monorepo/interfaces';
+import { type Course } from '@symfoititis-frontend-monorepo/interfaces';
 
 const router = useRouter();
 const route = useRoute();
-const c_id = ref<number>(parseInt(route.params.c_id));
-const selectedDay = ref<Day>({
-  monthDay: -1,
-  weekDay: -1,
-  date: "",
-  av_id: -100,
-  cell_classes: [],
-  btn_classes: []
-});
+const c_id = ref<number>(parseInt(route.params.c_id as string));
 const course = ref<Course>({
   c_id: -100,
   dep_id: -100,
@@ -31,24 +23,25 @@ const { history, getHistoryFromStorage, addCourseToStorage, deleteCourseFromStor
 history.value = getHistoryFromStorage();
 const { addRecToStorage } = useRecents('bookings_recent');
 const courseStore = useCourseStore();
-const { getCourses } = useFetch();
+const errorStore = useErrorStore();
+const { getCourses, getUserInfo } = useFetch();
 
 const saveCourse = () => {
-  course.value = courseStore.courses.find(c => c.c_id == parseInt(route.params.c_id)) || {
+  course.value = courseStore.courses.find((c: Course) => c.c_id == parseInt(route.params.c_id as string)) || {
     c_id: -100,
     dep_id: -100,
     semester: -100,
     c_display_name: ""
   };
-  if (course.value.c_id > 0) {
+  if (course.value.c_id! > 0) {
     addCourseToStorage(course.value);
     history.value = getHistoryFromStorage();
     addRecToStorage(course.value);
   } else {
-    errorStore.addError({status: 404, error: 'Course not Found'})
+    errorStore.addError({ status: 404, error: 'Course not Found' })
   }
 };
-const handleDelete = (index) => {
+const handleDelete = (index: number) => {
   const cid = deleteCourseFromStorage(index);
   if (cid < 0) return;
   if (cid === c_id.value) {
@@ -58,37 +51,30 @@ const handleDelete = (index) => {
 };
 onMounted(async () => {
   await getCourses();
-  c_id.value = parseInt(route.params.c_id);
+  c_id.value = parseInt(route.params.c_id as string);
   saveCourse();
+  await getUserInfo()
 });
-watch(route, (newRoute, oldRoute) => {
-  const cid = parseInt(route.params.c_id);
+watch(route, async (newRoute, oldRoute) => {
+  const cid = parseInt(route.params.c_id as string);
   if (c_id.value !== cid) {
     c_id.value = cid;
     saveCourse();
+    await getUserInfo()
   }
 });
 </script>
 
 <template>
-  <Toasts/>
+  <Toasts />
   <Page>
     <template v-slot:header>
       <Masterhead :selected="1" />
-      <History
-        to="availability"
-        :cid="c_id"
-        :history="history"
-        @symfoititis-frontend-monorepodeleteCourse="handleDelete"
-      />
+      <History to="availability" :cid="c_id" :history="history" @delete-course="handleDelete" />
     </template>
 
     <template v-slot:main>
-      <NavHeader
-        navigation="tutoring"
-        storageItem="bookings_history"
-        :course="course"
-      />
+      <NavHeader navigation="tutoring" storageItem="bookings_history" :course="course" />
       <div class="main-wrapper">
         <Subheader title="Διαθεσιμότητα" />
         <section class="main-container">

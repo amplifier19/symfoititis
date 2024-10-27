@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import type { Course } from '../interfaces/Course'
+import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
 import { Subheader } from '@symfoititis-frontend-monorepo/ui'
 import Card from './Card.vue'
 

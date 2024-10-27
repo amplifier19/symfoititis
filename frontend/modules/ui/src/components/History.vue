@@ -2,7 +2,7 @@
 import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
 
 const emit = defineEmits<{
-  (e:'delete-course', index: number)
+  (e: 'delete-course', index: number): void
 }>()
 
 const props = defineProps<{ to: string; cid: number; history: Course[] }>()

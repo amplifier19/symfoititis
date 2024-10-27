@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Course } from '../interfaces/Course'
+import type { Course } from '@symfoititis-frontent-monorepo/interfaces'
 
 const props = defineProps<{
   course: Course
@@ -9,7 +9,7 @@ const props = defineProps<{
 const formattedCourseName = computed(() => {
   return props.course.c_display_name
     .split(' ')
-    .map(word => {
+    .map((word: string) => {
       const firstLetter = word[0];
       return firstLetter === firstLetter.toUpperCase() ? firstLetter : '';
     })

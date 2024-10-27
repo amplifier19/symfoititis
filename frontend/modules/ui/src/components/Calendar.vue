@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { ref, watch } from 'vue';
-import { useAvailabilityStore } from '@symfoititis-frontend-monorepo/stores';
-import type { Day } from '@symfoititis-frontend-monorepo/interfaces';
+import { type Day, type AvailabilitySlot } from '@symfoititis-frontend-monorepo/interfaces';
 
+const props = defineProps<{
+  availabilitySlots: AvailabilitySlot[]
+}>()
 const route = useRoute();
-const availabilityStore = useAvailabilityStore();
 const emit = defineEmits<{
-  (e:'select-date', day: Day)
+  (e: 'select-date', day: Day): void
+  (e: 'month-change'): void
 }>();
-
 const months = [
   "Ιανουάριος", "Φεβρουάριος", "Μάρτιος", "Απρίλιος", "Μάιος", "Ιούνιος",
   "Ιούλιος", "Αύγουστος", "Σεπτέμβριος", "Οκτώβριος", "Νοέμβριος", "Δεκέμβριος"
 ];
 const monthsDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
 const date = new Date();
-const year = ref(date.getFullYear());
-const month = ref(date.getMonth());
-const weeks = ref([[]]);
+const year = ref<number>(date.getFullYear());
+const month = ref<number>(date.getMonth());
+const weeks = ref<Day[][]>([[]]);
 
 const isLeap = () => {
   monthsDays[1] = (year.value % 4 === 0 && (year.value % 100 !== 0 || year.value % 400 === 0)) ? 29 : 28;
@@ -27,7 +27,7 @@ const isLeap = () => {
 isLeap();
 
 const isAvailable = (dateString: string) => {
-  return availabilityStore.availabilitySlots.some(slot => slot.date === dateString);
+  return props.availabilitySlots.some(slot => slot.date === dateString);
 };
 
 const formatDate = (day: number) => {
@@ -37,12 +37,11 @@ const formatDate = (day: number) => {
 };
 
 const initWeeks = () => {
-  emit("select-date", { monthDay: -1, weekDay: -1, date: '', av_id: -100, cell_classes: [], btn_classes: [] });
   weeks.value = [[]];
   const first = new Date(year.value, month.value, 1);
   const now = new Date();
   let week = 0;
-  
+
   for (let i = first.getDay() - 1, j = 1; i >= 0; i--, j++) {
     const prev = month.value - 1 >= 0 ? month.value - 1 : 11;
     weeks.value[week].push({
@@ -83,12 +82,11 @@ const initWeeks = () => {
       weeks.value[week][weeks.value[week].length - 1].btn_classes.push("notallowed-btn");
     }
 
-    if (isAvailable(formatedDate)) {
+    if (!isPast && isAvailable(formatedDate)) {
       weeks.value[week][weeks.value[week].length - 1].cell_classes.push("pf-m-selected");
     }
   }
 };
-
 initWeeks();
 
 const nextMonth = () => {
@@ -110,9 +108,20 @@ const selectDate = (day: any) => {
   emit("select-date", day);
 };
 
-watch(year, () => isLeap());
-watch(month, () => initWeeks());
-watch(route, () => initWeeks());
+watch(year, (newYear, oldYear) => isLeap())
+watch(month, (newMonth, oldMont) => {
+  initWeeks()
+  emit("select-date", { 
+    monthDay: -1,
+    weekDay: -1, 
+    date: '',
+    av_id: -100, 
+    cell_classes: [],
+    btn_classes: [] 
+  })
+})
+watch(route, (newRoute, oldRoute) => initWeeks())
+watch(props, (newProps, oldProps) => initWeeks())
 </script>
 
 <template>
@@ -242,5 +251,4 @@ watch(route, () => initWeeks());
 
 .notallowed-btn {
   pointer-events: none;
-}
-</style>
+} </style>

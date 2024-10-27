@@ -21,6 +21,27 @@ CREATE TABLE availability_events (
   FOREIGN KEY (av_id) REFERENCES availability_slots(av_id) ON DELETE CASCADE
 );
 
+-- Before insert on availability_slots, check if the slot exists at this date as unavailable.
+CREATE OR REPLACE FUNCTION before_insert_on_availability_slots()
+RETURNS TRIGGER AS $$
+BEGIN
+  PERFORM 1 FROM availability_slots
+  WHERE t_id = NEW.t_id AND date = NEW.date AND start_time = NEW.start_time AND state = 'UNAVAILABLE';
+  IF FOUND THEN
+    UPDATE availability_slots
+    SET state = 'AVAILABLE' 
+    WHERE t_id = NEW.t_id AND date = NEW.date AND start_time = NEW.start_time AND state = 'UNAVAILABLE';
+    RETURN NULL;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER before_insert_on_availability_slots_trigger
+BEFORE INSERT ON availability_slots
+FOR EACH ROW
+EXECUTE FUNCTION before_insert_on_availability_slots();
+
 -- After insert on availability_slots, insert new event.
 CREATE OR REPLACE FUNCTION after_insert_on_availability_slots()
 RETURNS TRIGGER AS $$

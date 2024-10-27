@@ -31,7 +31,7 @@ function _M.verify_jwt(host, realm, role, token_name)
     ngx.exit(ngx.HTTP_UNAUTHORIZED)
   end
   if has_role(role, res.realm_access.roles) then
-    ngx.req.set_header("X-Role", res.sub)
+    ngx.req.set_header("X-Role", role)
     if role == "student" or role == "teacher" then
       ngx.req.set_header("X-User-Id", res.sub)
       ngx.req.set_header("X-Department-Id", res.dep_id)

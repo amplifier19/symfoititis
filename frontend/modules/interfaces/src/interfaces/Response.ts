@@ -1,6 +1,6 @@
 export interface Response {
 	status: number
-	timestamp: string
+	timestamp?: string
 	data?: string
 	error?: string
 	path?: string

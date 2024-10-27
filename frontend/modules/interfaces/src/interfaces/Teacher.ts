@@ -1,5 +1,5 @@
 export interface Teacher {
-  id: number
-  first_name: string
-  last_name: string
+  t_id: string
+  firstname: string
+  lastname: string
 }

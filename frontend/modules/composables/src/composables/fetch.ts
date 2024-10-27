@@ -4,7 +4,6 @@ import { useDepartmentStore } from '@symfoititis-frontend-monorepo/stores'
 import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
 import { useNoteStore } from '@symfoititis-frontend-monorepo/stores'
-import { useTutoringStore } from '@symfoititis-frontend-monorepo/stores'
 
 export const useFetch = () => {
   const authStore = useAuthStore()
@@ -12,7 +11,6 @@ export const useFetch = () => {
   const departmentStore = useDepartmentStore()
   const courseStore = useCourseStore()
   const noteStore = useNoteStore()
-  const tutoringStore = useTutoringStore()
   const errorStore = useErrorStore()
 
   const getUserInfo = async () => {
@@ -23,7 +21,7 @@ export const useFetch = () => {
         getUniversity(),
         getDepartment(),
       ])
-    } catch (error: Error) {
+    } catch (error: any) {
       errorStore.addError(JSON.parse(error.message))
       return
     }
@@ -33,7 +31,7 @@ export const useFetch = () => {
     if (universityStore.university.uni_id > 0) return
     try {
       await universityStore.getUniversity()
-    } catch (error: Error) {
+    } catch (error: any) {
       errorStore.addError(JSON.parse(error.message))
       return
     }
@@ -43,7 +41,7 @@ export const useFetch = () => {
     if (departmentStore.department.dep_id > 0) return
     try {
       await departmentStore.getDepartment()
-    } catch (error: Error) {
+    } catch (error: any) {
       errorStore.addError(JSON.parse(error.message))
       return
     }
@@ -53,7 +51,17 @@ export const useFetch = () => {
     if (courseStore.courses.length > 0) return
     try {
       await courseStore.getCourses()
-    } catch (error: Error) {
+    } catch (error: any) {
+      errorStore.addError(JSON.parse(error.message))
+      return
+    }
+  }
+
+  const getAvailableTutoringCourses = async (dep_id: number) => {
+    if (courseStore.availableTutoringCourses.length > 0) return
+    try {
+      await courseStore.getAvailableTutoringCourseIds(dep_id)
+    } catch (error: any) {
       errorStore.addError(JSON.parse(error.message))
       return
     }
@@ -63,32 +71,21 @@ export const useFetch = () => {
     let cid
     try {
       cid = parseInt(c_id)
-    } catch (error: Error) {
-        errorStore.addError({status: 400, error: error.message})
-	return
+    } catch (error: any) {
+      errorStore.addError({ status: 400, error: error.message })
+      return
     }
     if (cid <= 0) {
-      errorStore.addError({status: 400, error: 'Course not found'})
+      errorStore.addError({ status: 400, error: 'Course not found' })
       return
     }
     try {
       await noteStore.getNotes(cid)
-    } catch (error: Error) {
+    } catch (error: any) {
       errorStore.addError(JSON.parse(error.message))
       return
     }
   }
 
-  const getTutoringCourses = async () => {
-    if (tutoringStore.courses.length > 0) {
-      return;
-    }
-    try {
-      await tutoringStore.getCourses()
-    } catch (error: Error) {
-      errorStore.addError(JSON.parse(error.message))
-    }
-  }
-
-  return { getUserInfo, getUniversity, getDepartment, getCourses, getNotes, getTutoringCourses }
+  return { getUserInfo, getUniversity, getDepartment, getCourses, getAvailableTutoringCourses, getNotes }
 }

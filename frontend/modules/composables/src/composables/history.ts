@@ -1,17 +1,18 @@
 import { ref } from 'vue';
+import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
 
-export const useHistory = (name) => {
+export const useHistory = (name: string) => {
   const itemName = name;
-  const history = ref([]);
+  const history = ref<Course[]>([]);
   const getHistoryFromStorage = () => {
-    return JSON.parse(localStorage.getItem(itemName)) || [];
+    return JSON.parse(localStorage.getItem(itemName)!) || [];
   };
   const getHistoryLength = () => {
-    return JSON.parse(localStorage.getItem(itemName))?.length || 0;
+    return JSON.parse(localStorage.getItem(itemName)!)?.length || 0;
   };
-  const addCourseToStorage = (course) => {
+  const addCourseToStorage = (course: Course) => {
     const hist = getHistoryFromStorage();
-    if (!hist.some((c) => c.c_id == course.c_id)) {
+    if (!hist.some((c: Course) => c.c_id == course.c_id)) {
       hist.push({
         c_id: course.c_id,
         c_display_name: course.c_display_name
@@ -22,7 +23,7 @@ export const useHistory = (name) => {
       }
     }
   };
-  const deleteCourseFromStorage = (index) => {
+  const deleteCourseFromStorage = (index: number) => {
     const hist = getHistoryFromStorage();
     if (index < 0 || index >= hist.length) return -1;
     const c_id = hist[index]?.c_id;

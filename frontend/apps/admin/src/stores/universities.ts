@@ -11,7 +11,7 @@ export const useUniStore = defineStore('universities', () => {
   })
 
   const getUniversities = async () => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/universities`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/universities`, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -29,7 +29,7 @@ export const useUniStore = defineStore('universities', () => {
   }
 
   const createUniversity = async (uni: University) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/university`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/university`, {
       method: 'POST',
       headers: {
 	"Content-Type": "application/json"
@@ -49,7 +49,7 @@ export const useUniStore = defineStore('universities', () => {
   }
 
   const updateUniversity = async (uni: University) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/university`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/university`, {
       method: 'PUT',
       headers: {
 	"Content-Type": "application/json"
@@ -69,7 +69,7 @@ export const useUniStore = defineStore('universities', () => {
   }
 
   const deleteUniversity = async (uni_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/university/${uni_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/university/${uni_id}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())

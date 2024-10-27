@@ -9,7 +9,7 @@ export const useFileStore = defineStore('files', () => {
   const setAttachments = (a: File[]) => (attachments.value = a)
 
   const getFiles = async (c_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/files/${c_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/files/${c_id}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -32,7 +32,7 @@ export const useFileStore = defineStore('files', () => {
     for (const file of attachments.value) {
       formData.append('files', file)
     }
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/files/upload/${c_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/files/upload/${c_id}`, {
       method: 'POST',
       body: formData
     })
@@ -54,7 +54,7 @@ export const useFileStore = defineStore('files', () => {
 
   const deleteFile = async (formData: { c_id: number; filename: string }) => {
     return await fetch(
-      `${import.meta.env.VITE_ADMIN_API_URL}/files/${formData.c_id}/${formData.filename}`,
+      `${import.meta.env.VITE_API_BASE}/education/files/${formData.c_id}/${formData.filename}`,
       {
         method: 'DELETE',
         headers: {

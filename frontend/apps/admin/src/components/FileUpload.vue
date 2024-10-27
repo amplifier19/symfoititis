@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import { useFileStore } from '../stores/files'
 
 const props = defineProps<{ c_id: number }>()
-const rootUrl = import.meta.env.VITE_ROOT_URL
+const rootUrl = import.meta.env.VITE_HOST
 const fileStore = useFileStore()
 const fileInput = ref<HTMLInputElement | null>(null)
 const drag = ref(false)

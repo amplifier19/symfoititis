@@ -13,7 +13,7 @@ export const useNoteStore = defineStore('notes', () => {
   })
 
   const getNotes = async (c_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/notes/${c_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/notes/${c_id}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -29,7 +29,7 @@ export const useNoteStore = defineStore('notes', () => {
   }
 
   const createNote = async (note: Note) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/note`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/note`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ export const useNoteStore = defineStore('notes', () => {
   }
 
   const updateNote = async (note: Note) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/note`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/note`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ export const useNoteStore = defineStore('notes', () => {
   }
 
   const deleteNote = async (note_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/note/${note_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/note/${note_id}`, {
       method: 'DELETE'
     })
       .then((response) => response.json())

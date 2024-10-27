@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useAuthStore } from '@symfoititis-frontend-monorepo/stores/'
+import { useAuthStore } from '@symfoititis-frontend-monorepo/stores'
 
-const rootUrl = import.meta.env.VITE_ROOT_URL
+const rootUrl = import.meta.env.VITE_HOST
 const authStore = useAuthStore()
 </script>
 

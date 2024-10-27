@@ -12,7 +12,7 @@ export const useDepStore = defineStore('departments', () => {
   })
 
   const getDepartments = async () => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/departments`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/departments`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -28,7 +28,7 @@ export const useDepStore = defineStore('departments', () => {
   }
 
   const createDepartment = async (dep: Department) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/department`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/department`, {
       method: 'POST',
       headers: {
 	"Content-Type": "application/json"
@@ -48,7 +48,7 @@ export const useDepStore = defineStore('departments', () => {
   }
 
   const updateDepartment = async (dep: Department) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/department`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/department`, {
       method: 'PUT',
       headers: {
 	"Content-Type": "application/json"
@@ -68,7 +68,7 @@ export const useDepStore = defineStore('departments', () => {
   }
 
   const deleteDepartment = async (dep_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/department/${dep_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/institutions/department/${dep_id}`, {
       method: 'DELETE',
     })
       .then((response) => response.json())

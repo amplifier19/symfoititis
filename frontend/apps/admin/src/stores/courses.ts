@@ -14,7 +14,7 @@ export const useCourseStore = defineStore('courses', () => {
   })
 
   const getCourses = async (dep_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/courses/${dep_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/courses/${dep_id}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -30,7 +30,7 @@ export const useCourseStore = defineStore('courses', () => {
   }
 
   const getCourse = async (c_id: number) => {
-    await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course/${c_id}`, {
+    await fetch(`${import.meta.env.VITE_API_BASE}/education/course/${c_id}`, {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -46,7 +46,7 @@ export const useCourseStore = defineStore('courses', () => {
   }
 
   const createCourse = async (course: Course) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/course`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ export const useCourseStore = defineStore('courses', () => {
   }
 
   const updateCourse = async (course: Course) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/course`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ export const useCourseStore = defineStore('courses', () => {
   }
 
   const deleteCourse = async (c_id: number) => {
-    return await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/course/${c_id}`, {
+    return await fetch(`${import.meta.env.VITE_API_BASE}/education/course/${c_id}`, {
       method: 'DELETE'
     })
       .then((response) => response.json())

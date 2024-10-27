@@ -6,7 +6,7 @@ const props = defineProps<{ note: Note }>()
 
 const errorStore = useErrorStore()
 
-const documents_url = import.meta.env.VITE_DOCUMENTS_API_URL
+const documents_url = import.meta.env.VITE_DOCUMENTS_BASE
 </script>
 
 <template>

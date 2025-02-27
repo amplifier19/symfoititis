@@ -1,68 +1,65 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { Page, Masterhead, History, NavHeader, Subheader, Toasts } from '@symfoititis-frontend-monorepo/ui';
-import DateTimePicker from '../components/DateTimePicker.vue';
-import { useRecents } from '@symfoititis-frontend-monorepo/composables';
-import { useHistory } from '@symfoititis-frontend-monorepo/composables';
-import { useFetch } from '@symfoititis-frontend-monorepo/composables';
-import { useCourseStore, useErrorStore } from '@symfoititis-frontend-monorepo/stores';
-import { type Course } from '@symfoititis-frontend-monorepo/interfaces';
+import { storeToRefs } from 'pinia'
 
-const router = useRouter();
-const route = useRoute();
-const c_id = ref<number>(parseInt(route.params.c_id as string));
+import { ref, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+import { Course } from '@symfoititis-frontend-monorepo/interfaces'
+
+import DateTimePicker from '../components/DateTimePicker.vue'
+import { Page, Masterhead, History, NavHeader, Subheader, Toasts } from '@symfoititis-frontend-monorepo/ui'
+
+import { useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
+
+import { useHistory, useRecents } from '@symfoititis-frontend-monorepo/composables'
+
+import { useCourseStore, useErrorStore } from '@symfoititis-frontend-monorepo/stores'
+
+const route = useRoute()
+const router = useRouter()
+
+const errorStore = useErrorStore()
+const courseStore = useCourseStore()
+const { courses } = storeToRefs(courseStore)
+
+const { getCourses } = useCoursesDataService() 
+
+const { addCourseToRecents } = useRecents('bookings_recent')
+const { history, addCourseToHistory, removeCourseFromHistory } = useHistory('bookings_history')
+
+const c_id = ref<number>(parseInt(route.params.c_id as string))
 const course = ref<Course>({
-  c_id: -100,
-  dep_id: -100,
-  semester: -100,
-  c_display_name: "",
-  description: ""
-});
-const { history, getHistoryFromStorage, addCourseToStorage, deleteCourseFromStorage } = useHistory('bookings_history');
-history.value = getHistoryFromStorage();
-const { addRecToStorage } = useRecents('bookings_recent');
-const courseStore = useCourseStore();
-const errorStore = useErrorStore();
-const { getCourses, getUserInfo } = useFetch();
+  c_id: -1, dep_id: -1, c_display_name: '', semester: -1
+})
 
 const saveCourse = () => {
-  course.value = courseStore.courses.find((c: Course) => c.c_id == parseInt(route.params.c_id as string)) || {
-    c_id: -100,
-    dep_id: -100,
-    semester: -100,
-    c_display_name: ""
-  };
-  if (course.value.c_id! > 0) {
-    addCourseToStorage(course.value);
-    history.value = getHistoryFromStorage();
-    addRecToStorage(course.value);
-  } else {
-    errorStore.addError({ status: 404, error: 'Course not Found' })
+  const res = courses.value.find((c: Course) => c.c_id === c_id.value)
+  if (!res) {
+    errorStore.addError('Course not found')
+    return
   }
-};
+  course.value = res
+  addCourseToHistory(course.value);
+  addCourseToRecents(course.value);
+}
+
 const handleDelete = (index: number) => {
-  const cid = deleteCourseFromStorage(index);
-  if (cid < 0) return;
+  const cid = removeCourseFromHistory(index)
   if (cid === c_id.value) {
-    router.push({ name: 'tutoring' });
+    router.push({ name: 'tutoring' })
   }
-  history.value = getHistoryFromStorage();
-};
+}
+
 onMounted(async () => {
-  await getCourses();
-  c_id.value = parseInt(route.params.c_id as string);
-  saveCourse();
-  await getUserInfo()
-});
-watch(route, async (newRoute, oldRoute) => {
-  const cid = parseInt(route.params.c_id as string);
-  if (c_id.value !== cid) {
-    c_id.value = cid;
-    saveCourse();
-    await getUserInfo()
-  }
-});
+  await getCourses()
+  c_id.value = parseInt(route.params.c_id as string)
+  saveCourse()
+})
+
+watch(route, (newRoute, oldRoute) => {
+  c_id.value = parseInt(route.params.c_id as string)
+  saveCourse()
+})
 </script>
 
 <template>

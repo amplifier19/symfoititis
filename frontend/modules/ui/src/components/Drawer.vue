@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
-import { useAuthStore } from '@symfoititis-frontend-monorepo/stores'
-import { useUniversityStore } from '@symfoititis-frontend-monorepo/stores'
-import { useDepartmentStore } from '@symfoititis-frontend-monorepo/stores'
-import { useFetch } from '@symfoititis-frontend-monorepo/composables'
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@symfoititis-frontend-monorepo/stores';
+import { AuthAdapterService } from '@symfoititis-frontend-monorepo/core/services';
 
-const authStore = useAuthStore()
-const universityStore = useUniversityStore()
-const departmentStore = useDepartmentStore()
-const { getUserInfo } = useFetch()
+const authAdapterService = AuthAdapterService.getAuthAdapterFactory()
+const { profile, university, department } = storeToRefs(useUserStore())
 
 const signOut = () => {
-  authStore.logout()
+  authAdapterService.logout()
 }
-onBeforeMount(async () => {
-  await getUserInfo()
-})
 </script>
 
 <template>
@@ -26,14 +19,14 @@ onBeforeMount(async () => {
       </div>
       <div class="item-container">
         <section class="drawer-item" id="username">
-          {{ authStore.profile.username }}
+          {{ profile.username }}
         </section>
         <section class="drawer-item" id="uni-dep-info">
           <span>
-            {{ universityStore.university.uni_display_name }}
+            {{ university.uni_display_name }}
           </span>
           <span>
-            {{ departmentStore.department.dep_display_name }}
+            {{ department.dep_display_name }}
           </span>
         </section>
       </div>

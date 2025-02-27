@@ -1,24 +1,27 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
+const props = defineProps<{
+  title: string
+  displaySearch: boolean
+  search?: string
+}>()
+
 const emit = defineEmits<{
   (e: 'clear-search'): void
 }>()
-const props = defineProps<{
-  title: string
-  search: string
-}>()
+
 const search = ref<string>("")
 
 watch(props, (newProps, oldProps) => {
-  search.value = props.search
-});
+  search.value = props.search || ""
+})
 </script>
 
 <template>
   <div class="search-container">
-    <span>{{props.title}}</span>
-    <div class="search-group">
+    <span>{{ props.title }}</span>
+    <div v-if="props.displaySearch" class="search-group">
       <div class="search-main">
         <slot></slot>
         <div v-if="!search" class="icon-container" id="search-icon-container" aria-label="Clear input">
@@ -53,7 +56,6 @@ watch(props, (newProps, oldProps) => {
   color: var(--white);
   font-family: 'Geologica-SemiBold';
   font-size: 1.15rem;
-  font-weight: 800;
 }
 
 .search-group {

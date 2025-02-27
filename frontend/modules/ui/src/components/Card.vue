@@ -1,28 +1,32 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Course } from '@symfoititis-frontent-monorepo/interfaces'
+import { Course } from '@symfoititis-frontend-monorepo/interfaces'
 
 const props = defineProps<{
   course: Course
   link: string
+  bookingId?: number
 }>()
+
 const formattedCourseName = computed(() => {
   return props.course.c_display_name
     .split(' ')
     .map((word: string) => {
       const firstLetter = word[0];
-      return firstLetter === firstLetter.toUpperCase() ? firstLetter : '';
+      return firstLetter === firstLetter.toUpperCase() ? firstLetter : ''
     })
-   .join('');
+   .join('')
 })
 </script>
 
 <template>
-  <RouterLink :to="{ name: props.link, params: { c_id: course.c_id } }">
+  <RouterLink :to="{ name: props.link, params: { c_id: course.c_id, b_id: props.bookingId } }">
     <div class="pf-v5-c-card pf-m-hoverable-raised">
+      <slot name="card-header"></slot>
       <span class="pf-v5-c-card__body">
         {{ formattedCourseName  }}
       </span>
+      <slot name="card-footer"></slot>
     </div>
   </RouterLink>
   <span class="pf-v5-c-card__title">
@@ -31,6 +35,13 @@ const formattedCourseName = computed(() => {
 </template>
 
 <style scoped>
+.pf-v5-c-card{
+    position: relative;
+    /* justify-content: space-around !important;*/
+}
+.pf-v5-c-card__body{
+    padding: 0rem;
+}
 .pf-v5-c-card.pf-m-hoverable-raised::before,
 .pf-v5-c-card.pf-m-selectable-raised::before,
 .pf-v5-c-card.pf-m-non-selectable-raised::before {

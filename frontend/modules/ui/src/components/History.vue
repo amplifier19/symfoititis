@@ -5,7 +5,11 @@ const emit = defineEmits<{
   (e: 'delete-course', index: number): void
 }>()
 
-const props = defineProps<{ to: string; cid: number; history: Course[] }>()
+const props = defineProps<{
+  to: string
+  cid: number
+  history: Course[]
+}>()
 </script>
 
 <template>
@@ -55,8 +59,8 @@ const props = defineProps<{ to: string; cid: number; history: Course[] }>()
 .pf-v5-c-nav__item {
   white-space: nowrap;
   margin: 0rem 0.4rem;
-  border: var(--main-border); 
-  border-top-right-radius: 14px; 
+  border: var(--main-border);
+  border-top-right-radius: 14px;
 }
 
 .current-nav-item {

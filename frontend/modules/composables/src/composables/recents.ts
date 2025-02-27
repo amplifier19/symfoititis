@@ -1,23 +1,28 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
 import type { Course } from "@symfoititis-frontend-monorepo/interfaces"
 
 export const useRecents = (name: string) => {
-  const itemName = name;
-  const recents = ref<Course[]>([]);
-  const getRecFromStorage = () => {
-    return JSON.parse(localStorage.getItem(itemName)!) || [];
-  };
-  const addRecToStorage = (course: Course) => {
-    const recs = getRecFromStorage();
-    if (recs.some((c: Course) => c.c_id == course.c_id)) return;
-    recs.unshift({
-      c_id: course.c_id,
-      c_display_name: course.c_display_name
-    });
-    if (recs.length > 6) {
-      recs.splice(6, recs.length - 6);
+  const itemName = name
+
+  const getRecentsFromStorage = () => {
+    return JSON.parse(localStorage.getItem(itemName)!) || []
+  }
+
+  const saveRecentsToStorage = () => {
+    localStorage.setItem(itemName, JSON.stringify(recents.value))
+  }
+  const recents = ref<Course[]>(
+    getRecentsFromStorage()
+  )
+
+  const addCourseToRecents = (course: Course) => {
+    const courseDoesNotExist = !recents.value.some((c: Course) => c.c_id == course.c_id)
+    if (courseDoesNotExist) {
+      const recs = getRecentsFromStorage().slice(0, 6)
+      recents.value = [course, ...recs]
+      saveRecentsToStorage()
     }
-    localStorage.setItem(itemName, JSON.stringify(recs));
-  };
-  return { recents, getRecFromStorage, addRecToStorage };
-};
+  }
+
+  return { recents, addCourseToRecents }
+}

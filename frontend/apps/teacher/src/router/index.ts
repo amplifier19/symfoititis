@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '@symfoititis-frontend-monorepo/stores'
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
+import { useUserDataService } from '@symfoititis-frontend-monorepo/core/services';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,31 +24,27 @@ const router = createRouter({
       name: 'availability',
       component: () => import('../views/AvailabilityView.vue'),
     },
+    {
+      path: '/bookings',
+      name: 'bookings',
+      component: () => import('../views/BookingsView.vue'),
+    },
+    {
+      path: '/booking/:c_id/:b_id',
+      name: 'booking',
+      component: () => import('../views/ChatView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
   }
-});
+})
 
 router.beforeEach(async (to, from, next) => {
-  const errorStore = useErrorStore()
-  try {
-    const authStore = useAuthStore()
-    if (Object.keys(authStore.keycloak).length === 0) {
-      authStore.keycloakCreate()
-      await authStore.keycloakInit()
-      await authStore.updateToken(0)
-    } else {
-      await authStore.updateToken(420)
-    }
-  } catch (error: any) {
-    if (typeof error === "string") {
-      errorStore.addError({status: 500, error: error})
-    } else if (typeof error === "object") {
-      errorStore.addError(JSON.parse(error.message))
-    }
-  }
+  const { initAuthAdapter, loadUser } = useUserDataService()
+  await initAuthAdapter()
+  loadUser()
   next()
 })
 
-export default router;
+export default router

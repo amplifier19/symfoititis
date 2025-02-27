@@ -15,7 +15,7 @@ const router = useRouter()
 
 const alphabet = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'
 
-const { getHistoryFromStorage, deleteCourseFromStorage } = useHistory(props.storageItem)
+const { getHistoryFromStorage, removeCourseFromHistory } = useHistory(props.storageItem)
 
 const handleNavigation = () => {
   router.push({ name: props.navigation })
@@ -24,7 +24,7 @@ const handleNavigation = () => {
 const handleDelete = () => {
   const history = getHistoryFromStorage()
   const idx = history.findIndex((c: Course) => c.c_id == props.course.c_id)
-  deleteCourseFromStorage(idx)
+  removeCourseFromHistory(idx)
   router.push({ name: props.navigation })
 }
 </script>

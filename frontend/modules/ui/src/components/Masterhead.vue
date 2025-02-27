@@ -7,12 +7,15 @@ import { useHistory } from '@symfoititis-frontend-monorepo/composables'
 const props = defineProps<{
   selected: number
 }>()
+
 const navItems = [
   { name: 'Σημειώσεις', link: 'courses', class: 'notes', sidebox: 'left', history: 'notes_history' },
   { name: 'Ιδιαίτερα', link: 'tutoring', class: 'tutoring', sidebox: 'right', history: 'bookings_history' }
 ]
-const { getHistoryLength } = useHistory(navItems[Math.abs(props.selected - 1)].history)
-const sideboxContent = getHistoryLength()
+
+const { history } =  useHistory(navItems[Math.abs(props.selected - 1)].history)
+
+const sideboxContent = history.value.length
 const drawerNew = ref<boolean>(false)
 const drawerOld = ref<boolean>(false)
 const clickedOutside = ref<boolean>(false)
@@ -25,6 +28,7 @@ const initNavItems = () => {
   })
 }
 initNavItems()
+
 const toggleDrawer = () => {
   if (clickedOutside.value) {
     drawerNew.value = drawerOld.value
@@ -33,6 +37,7 @@ const toggleDrawer = () => {
   drawerNew.value = !drawerNew.value
   clickedOutside.value = false
 }
+
 const closeDrawer = () => {
   drawerOld.value = drawerNew.value
   drawerNew.value = false
@@ -63,7 +68,9 @@ const closeDrawer = () => {
       </ul>
     </nav>
     <span class="icons-container">
-      <img class="side-icon" id="logo-icon-white" src="/svg/icon-white.svg" alt="logo-icon-white" />
+      <RouterLink :to="{ name: 'bookings'}">
+        <img class="side-icon" id="logo-icon-white" src="/svg/icon-white.svg" alt="logo-icon-white" />
+      </RouterLink>
       <img @click="toggleDrawer" class="side-icon" id="profile-icon" src="/svg/profile-icon.svg" alt="profile-icon" />
     </span>
   </header>

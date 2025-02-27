@@ -3,9 +3,9 @@ import { ref } from 'vue'
 import { type Response } from '@symfoititis-frontend-monorepo/interfaces'
 
 export const useErrorStore = defineStore('error', () => {
-  const errors = ref<Response[]>([])
+  const errors = ref<any[]>([])
 
-  const addError = (err: Response) => {
+  const addError = (err: any) => {
     errors.value.push(err)
   }
 

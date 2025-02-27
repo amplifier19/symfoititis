@@ -1,37 +1,43 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useAuthStore, useDepartmentStore, useResponseStore } from '@symfoititis-frontend-monorepo/stores'
-import { type AvailabilitySlot, type Day } from '@symfoititis-frontend-monorepo/interfaces'
+
+import { useUserStore } from '@symfoititis-frontend-monorepo/stores'
+
+import { AvailabilitySlot, Day } from '@symfoititis-frontend-monorepo/interfaces'
 
 export const useAvailabilityStore = defineStore("availabilityStore", () => {
-  const departmentStore = useDepartmentStore()
-  const authStore = useAuthStore()
-  const responseStore = useResponseStore()
+  const userStore = useUserStore()
   const selectedDay = ref<Day>()
   const selectedDate = ref<string>('')
   const availabilitySlots = ref<AvailabilitySlot[]>([])
   const cancelableAvailabilitySlotIds = ref<number[]>([])
-  const filteredByDateAvailabilitySlots = computed (() => {
+  const availabilityPreferences = ref<AvailabilitySlot[]>([])
+  const updatableAvailabilitySlots = ref<AvailabilitySlot[]>([])
+  const insertableAvailabilitySlots = ref<AvailabilitySlot[]>([])
+
+  const filteredByDateAvailabilitySlots = computed(() => {
     return availabilitySlots.value.filter(slot => {
       return (slot.date === selectedDate.value && !cancelableAvailabilitySlotIds.value.includes(slot.av_id!))
+    })
   })
-  })
-  const filteredInsertableAvailabilitySlots = computed (() => {
+  const filteredInsertableAvailabilitySlots = computed(() => {
     return insertableAvailabilitySlots.value.filter(slot => slot.start_time > 0)
   })
-  const updatableAvailabilitySlots = ref<AvailabilitySlot[]>([])
-  const insertableAvailabilitySlots = ref<AvailabilitySlot[]>([]);
-  const availabilityPreferences = ref<AvailabilitySlot[]>([])
 
   const updateUpdatableSlot = (slotKey: number, startTime: number) => {
     const i = availabilitySlots.value.findIndex((slot) => slot.av_id === slotKey)
     if (i < 0) return
     const j = updatableAvailabilitySlots.value.findIndex((slot) => slot.av_id === slotKey)
-    if (j < 0 && availabilitySlots.value[i].start_time != startTime) {
-      updatableAvailabilitySlots.value.push(availabilitySlots.value[i]) 
-    } else if (j >= 0 && availabilitySlots.value[i].start_time != startTime) {
+    const modifiedAndNotInUpdatableList = availabilitySlots.value[i].start_time != startTime && j < 0
+    const modifiedAndExistsInUpdatableList = availabilitySlots.value[i].start_time != startTime && j >= 0
+    const notModifiedAndExistsInUpdatableList = availabilitySlots.value[i].start_time === startTime && j >= 0
+    if (modifiedAndNotInUpdatableList) {
+      const slot = availabilitySlots.value[i]
+      slot.start_time = startTime
+      updatableAvailabilitySlots.value.push(slot)
+    } else if (modifiedAndExistsInUpdatableList) {
       updatableAvailabilitySlots.value[j].start_time = startTime
-    } else if (j >= 0 && availabilitySlots.value[i].start_time === startTime) {
+    } else if (notModifiedAndExistsInUpdatableList) {
       updatableAvailabilitySlots.value.splice(j, 1)
     }
   }
@@ -44,9 +50,9 @@ export const useAvailabilityStore = defineStore("availabilityStore", () => {
 
   const addInsertableSlot = async (c_id: number) => {
     insertableAvailabilitySlots.value = [...insertableAvailabilitySlots.value, {
-      t_id: authStore.profile.id!,
+      t_id: userStore.profile.id!,
       c_id: c_id,
-      dep_id: departmentStore.department.dep_id,
+      dep_id: userStore.department.dep_id,
       date: selectedDate.value,
       week_day: selectedDay.value!.weekDay,
       start_time: -1,
@@ -97,87 +103,6 @@ export const useAvailabilityStore = defineStore("availabilityStore", () => {
     cancelableAvailabilitySlotIds.value = []
   }
 
-  const getAvailabilitySlots = async (cid: number) => {
-    await fetch(`${import.meta.env.VITE_API_BASE}/tutoring/availability/${cid}`, {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then((data) => {
-        if (!!data?.error) {
-          throw new Error(JSON.stringify(data))
-        }
-        availabilitySlots.value = data.data
-      })
-      .catch((err: any) => {
-        throw new Error(err.message)
-      })
-  }
-
-  const addAvailabilitySlots = async () => {
-    if (filteredInsertableAvailabilitySlots.value.length === 0) return
-    await fetch(`${import.meta.env.VITE_API_BASE}/tutoring/availability`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json' },
-      body: JSON.stringify(filteredInsertableAvailabilitySlots.value)
-    })
-      .then(response => response.json())
-      .then((data) => {
-        if (!!data?.error) {
-          throw new Error(JSON.stringify(data))
-        }
-        insertableAvailabilitySlots.value = []
-        responseStore.addResponse(data)
-      })
-      .catch((err: any) => {
-        throw new Error(err.message)
-      })
-  }
-
-  const updateAvailabilitySlots = async () => {
-    if (updatableAvailabilitySlots.value.length === 0) return
-    await fetch(`${import.meta.env.VITE_API_BASE}/tutoring/availability`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updatableAvailabilitySlots.value)
-    })
-      .then(response => response.json())
-      .then((data) => {
-        if (!!data?.error) {
-          throw new Error(JSON.stringify(data))
-        }
-        updatableAvailabilitySlots.value = []
-        responseStore.addResponse(data)
-      })
-      .catch((err: any) => {
-        throw new Error(err.message)
-      })
-  }
-
-  const cancelAvailabilitySlots = async () => {
-    if (cancelableAvailabilitySlotIds.value.length === 0) return
-    await fetch(`${import.meta.env.VITE_API_BASE}/tutoring/availability`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(cancelableAvailabilitySlotIds.value)
-    })
-      .then(response => response.json())
-      .then((data) => {
-        if (!!data?.error) {
-          throw new Error(JSON.stringify(data))
-        }
-        cancelableAvailabilitySlotIds.value = []
-        responseStore.addResponse(data)
-      })
-      .catch((err: any) => {
-        throw new Error(err.message)
-      })
-  }
-
   return {
     availabilitySlots,
     filteredByDateAvailabilitySlots,
@@ -186,10 +111,6 @@ export const useAvailabilityStore = defineStore("availabilityStore", () => {
     updatableAvailabilitySlots,
     cancelableAvailabilitySlotIds,
     availabilityPreferences,
-    getAvailabilitySlots,
-    addAvailabilitySlots,
-    updateAvailabilitySlots,
-    cancelAvailabilitySlots,
     updateUpdatableSlot,
     cancelUpdatableSlot,
     addInsertableSlot,

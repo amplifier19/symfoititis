@@ -1,35 +1,46 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
 import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
 
 export const useHistory = (name: string) => {
-  const itemName = name;
-  const history = ref<Course[]>([]);
+  const itemName = name
+
   const getHistoryFromStorage = () => {
-    return JSON.parse(localStorage.getItem(itemName)!) || [];
-  };
-  const getHistoryLength = () => {
-    return JSON.parse(localStorage.getItem(itemName)!)?.length || 0;
-  };
-  const addCourseToStorage = (course: Course) => {
-    const hist = getHistoryFromStorage();
-    if (!hist.some((c: Course) => c.c_id == course.c_id)) {
-      hist.push({
-        c_id: course.c_id,
-        c_display_name: course.c_display_name
-      });
-      localStorage.setItem(itemName, JSON.stringify(hist));
-      if (hist.length > 15) {
-        deleteCourseFromStorage(0);
-      }
+    const hist = JSON.parse(localStorage.getItem(itemName)!) || []
+    const end = hist.length
+    const start = end - 7 >= 0 ? end - 7 : 0
+    return hist.slice(start, end)
+  }
+
+  const saveHistoryToStorage = () => {
+    localStorage.setItem(itemName, JSON.stringify(history.value))
+  }
+
+  const history = ref<Course[]>(
+    getHistoryFromStorage()
+  )
+
+  const addCourseToHistory = (course: Course) => {
+    const courseDoesNotExists = !history.value.some((c: Course) => c.c_id == course.c_id)
+    if (courseDoesNotExists) {
+      history.value = [
+        ...getHistoryFromStorage(),
+        course 
+      ]
+      saveHistoryToStorage()
     }
-  };
-  const deleteCourseFromStorage = (index: number) => {
-    const hist = getHistoryFromStorage();
-    if (index < 0 || index >= hist.length) return -1;
-    const c_id = hist[index]?.c_id;
-    hist.splice(index, 1);
-    localStorage.setItem(itemName, JSON.stringify(hist));
-    return c_id;
-  };
-  return { history, getHistoryFromStorage, getHistoryLength, addCourseToStorage, deleteCourseFromStorage };
-};
+  }
+
+  const removeCourseFromHistory = (index: number) => {
+    const course = history.value[index]
+    if (!!course) {
+      const left = history.value.slice(0, index)
+      const right = history.value.slice(index + 1, history.value.length)
+      history.value = [...left, ...right]
+      saveHistoryToStorage()
+      return course.c_id
+    }
+    return -1
+  }
+
+  return { history, getHistoryFromStorage, addCourseToHistory, removeCourseFromHistory }
+}

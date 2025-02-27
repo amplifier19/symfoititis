@@ -21,6 +21,9 @@
       "@symfoititis-frontend-monorepo/interfaces": [
         "modules/interfaces/src/index.ts"
       ],
+      "@symfoititis-frontend-monorepo/core/services": [
+        "modules/core/services/src/index.ts"
+      ],
       "@symfoititis-frontend-monorepo/stores": ["modules/stores/src/index.ts"],
       "@symfoititis-frontend-monorepo/ui": ["modules/ui/src/index.ts"]
     }

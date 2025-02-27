@@ -1,22 +1,37 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAvailabilityStore } from '../stores/availability'
-import { useTeacherFetch } from '../composables/fetch'
-import type { Day } from '@symfoititis-frontend-monorepo/interfaces'
+import { ref, computed, watch } from 'vue'
+
 import TimeSlot from './TimeSlot.vue'
+
+import { Day } from '@symfoititis-frontend-monorepo/interfaces'
+
+import { useAvailabilityStore } from '../stores/availability'
+
+import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
+
+
 
 const props = defineProps<{
   selectedDay: Day
 }>()
+
 const route = useRoute()
+
 const availabilityStore = useAvailabilityStore()
-const { saveAvailabilityChanges } = useTeacherFetch()
+
+const availabilityDataService = AvailabilityDataService.getAvailabilityDataFactory()
+
+const cid = ref<nuber>(parseInt(route.params.c_id as string))
 const weekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
 
 watch(props, (newDate, oldDate) => {
   availabilityStore.handleDateChange(props.selectedDay)
   availabilityStore.getAvailabilityPreferences(props.selectedDay.weekDay)
+})
+
+watch(route, async (oldRoute, newRoute) => {
+  cid.value = parseInt(route.params.c_id as string)
 })
 </script>
 
@@ -62,7 +77,7 @@ watch(props, (newDate, oldDate) => {
     <li v-for="(slot, idx) in availabilityStore.filteredByDateAvailabilitySlots" class="time-slot">
       <TimeSlot @update-updatable-slot="availabilityStore.updateUpdatableSlot"
         @cancel-updatable-slot="availabilityStore.cancelUpdatableSlot(slot.av_id!)" :slotKey="slot.av_id!"
-        :startTime="slot.start_time" updateEvent="update-updatable-slot" removeEvent="cancel-updatable-slot" />
+        :startTime="slot.start_time" :state="slot.state" updateEvent="update-updatable-slot" removeEvent="cancel-updatable-slot" />
     </li>
     <li v-for="(slot, idx) in availabilityStore.insertableAvailabilitySlots" class="time-slot">
       <TimeSlot @update-insertable-slot="availabilityStore.updateInsertableSlot"
@@ -70,7 +85,7 @@ watch(props, (newDate, oldDate) => {
         :startTime="slot.start_time" updateEvent="update-insertable-slot" removeEvent="remove-insertable-slot" />
     </li>
     <li>
-      <button @click="availabilityStore.addInsertableSlot(parseInt(route.params.c_id as string))"
+      <button @click="availabilityStore.addInsertableSlot(cid)"
         class="pf-v5-c-button pf-m-link add-time-slot-btn" type="button">
         Προσθήκη χρονοθυρίδας
         <span class="pf-v5-c-button__icon pf-m-end">
@@ -85,7 +100,7 @@ watch(props, (newDate, oldDate) => {
         availabilityStore.updatableAvailabilitySlots.length > 0 ||
         availabilityStore.cancelableAvailabilitySlotIds.length > 0
       "
-       @click="saveAvailabilityChanges(parseInt(route.params.c_id as string))"
+       @click="availabilityDataService.saveAvailabilityChanges(cid)"
         class="regular-text booking-btn" id="book-btn">
         <span>ΑΠΟΘΗΚΕΥΣΗ</span>
       </div>

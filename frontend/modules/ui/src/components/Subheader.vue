@@ -1,12 +1,13 @@
 <script setup lang="ts">
+
 const props = defineProps<{ 
   title: string; 
   transitionGroupKey?: string 
-}>();
+}>()
 </script>
 
 <template>
-  <h2 :key="props.transitionGroupKey">{{ props.title }}</h2>
+  <h2 :key="props.transitionGroupKey || 1">{{ props.title }}</h2>
 </template>
 
 <style scoped>

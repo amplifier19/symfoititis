@@ -4,6 +4,7 @@ import { ref, watch, defineProps, defineEmits } from 'vue';
 const props = defineProps<{
   slotKey: number
   startTime: number
+  state?: string 
   updateEvent: 'update-updatable-slot' | 'update-insertable-slot'
   removeEvent: 'cancel-updatable-slot' | 'remove-insertable-slot'
 }>()
@@ -27,13 +28,17 @@ watch(startTime, (newTime, oldTime) => {
 
 <template>
   <div class="time-picker-container">
-    <select v-model="startTime" class="time-select" name="start-time" id="start-time">
+    <select v-if="props.state != 'BOOKED'" v-model="startTime" class="time-select" name="start-time" id="start-time">
       <option disabled value="-1">--:-- - --:--</option>
       <option v-for="time in times" :key="time" :value="time" :selected="time === startTime">
         {{ time }}:00 - {{ time + 1 }}:00
       </option>
     </select>
-    <span class="trash-icon" @click="emit(props.removeEvent)"><i class="fa fa-trash"></i></span>
+    <span v-else class="booked-time">
+        {{ startTime }}:00 - {{ startTime + 1 }}:00
+    </span>
+    <span v-if="props.state != 'BOOKED'" class="icon" id="trash-icon" @click="emit(props.removeEvent)"><i class="fa fa-trash"></i></span>
+    <span v-else class="icon" id="check-icon">Booked</span>
   </div>
   <div class="border"></div>
 </template>
@@ -44,6 +49,7 @@ watch(startTime, (newTime, oldTime) => {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   width: 100%;
   margin: 1rem 0;
 }
@@ -61,9 +67,8 @@ watch(startTime, (newTime, oldTime) => {
   width: 50%;
 }
 
-.trash-icon {
-  margin-left: 1rem;
-  font-size: 1.3rem;
+.booked-time {
+  color: var(--orange);
 }
 
 .border {
@@ -71,17 +76,30 @@ watch(startTime, (newTime, oldTime) => {
   border-top: var(--main-border);
 }
 
-.trash-icon {
+.icon {
   position: absolute;
   right: 2.5rem;
+  margin-left: 1rem;
+  font-size: 1.3rem;
+}
+
+#trash-icon {
   cursor: pointer;
 }
 
-.fa-trash {
+#check-icon {
+  color: var(--orange);
+  font-size: 1rem;
+  right: 1.2rem;
+  pointer-events: none;
+}
+
+.fa {
   font-size: 1rem;
 }
+
 @media screen and (max-width: 590px) {
-  .trash-icon {
+  .icon {
     right: 1.5rem;
   }
 }

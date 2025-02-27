@@ -1,43 +1,31 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+
 import { SearchHeader, Page, Masterhead, History, Recents, Gallery, Toasts } from '@symfoititis-frontend-monorepo/ui'
+
 import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
+
+import { useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
+
 import { useRecents } from '@symfoititis-frontend-monorepo/composables'
 import { useHistory } from '@symfoititis-frontend-monorepo/composables'
-import { useFetch } from '@symfoititis-frontend-monorepo/composables'
-import { type Course } from '@symfoititis-frontend-monorepo/interfaces'
 
-const search = ref<string>('')
 const courseStore = useCourseStore()
-const { getCourses } = useFetch()
-const { recents, getRecFromStorage } = useRecents('bookings_recent')
-const { history, getHistoryFromStorage, deleteCourseFromStorage } = useHistory('bookings_history')
-recents.value = getRecFromStorage()
-history.value = getHistoryFromStorage()
-const uniqueSemesters = ref<number[]>([])
-const filteredCourses = computed(() => {
-  return courseStore.courses.filter((course: Course) =>
-    course.c_display_name.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
+const { search, uniqueSemesters, filteredCourses } = storeToRefs(courseStore)
+
+const { getCourses } = useCoursesDataService()
+
+const { recents } = useRecents('bookings_recent')
+const { history, removeCourseFromHistory } = useHistory('bookings_history')
 
 const clearSearch = () => {
   search.value = ''
 }
 
-const handleDelete = (index: number) => {
-  deleteCourseFromStorage(index)
-  history.value = getHistoryFromStorage()
-}
-
-const initSemesters = () => {
-  uniqueSemesters.value = [...new Set<number>(courseStore.courses.map((c: Course) => c.semester))]
-}
-
 onMounted(async () => {
   await getCourses()
-  initSemesters()
-});
+})
 </script>
 
 <template>
@@ -49,12 +37,13 @@ onMounted(async () => {
         to="availability"
         :cid="-100"
         :history="history"
-        @delete-course="handleDelete"
+        @delete-course="removeCourseFromHistory"
       />
     </template>
     <template v-slot:main>
       <SearchHeader
         title="Ιδιαίτερα"
+        :display-search="true"
         :search="search"
         @clear-search="clearSearch"
       >

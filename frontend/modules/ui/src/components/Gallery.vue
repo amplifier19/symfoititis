@@ -5,16 +5,19 @@ import { Subheader } from '@symfoititis-frontend-monorepo/ui'
 import Card from './Card.vue'
 
 const props = defineProps<{ uniqueSemesters: number[]; filteredCourses: Course[]; link: string }>()
+
 const alphabet = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'
 
 const semCourses = (semester: number) => {
   return props.filteredCourses.filter((course: Course) => course.semester == semester)
 }
+
 const beforeEnter = (element: Element) => {
   const el = element as HTMLElement
   el.style.opacity = '0'
   el.style.transform = 'translateY(60px)'
 }
+
 const enter = (element: Element, done: gsap.Callback) => {
   const el = element as HTMLElement
   gsap.to(el, {

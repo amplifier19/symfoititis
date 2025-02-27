@@ -1,16 +1,27 @@
 <script setup lang="ts">
-import { ref, watch, onBeforeMount } from 'vue';
-import { useRoute } from 'vue-router';
-import TimePicker from './TimePicker.vue';
-import { Calendar } from '@symfoititis-frontend-monorepo/ui';
-import  { type Teacher, type Day } from "@symfoititis-frontend-monorepo/interfaces"
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
+import { ref, watch, onBeforeMount } from 'vue'
+
+import { type Teacher, type Day } from "@symfoititis-frontend-monorepo/interfaces"
+
 import { useAvailabilityStore } from '../stores/availability'
-import { useStudentFetch } from '../composables/fetch'
+import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
+
+import TimePicker from './TimePicker.vue'
+import { Calendar } from '@symfoititis-frontend-monorepo/ui'
+
+const route = useRoute();
 
 const props = defineProps<{
   teacher: Teacher
 }>()
-const route = useRoute();
+
+const availabilityStore = useAvailabilityStore()
+const { availabilitySlots } = storeToRefs(availabilityStore)
+
+const availabilityDataService = AvailabilityDataService.getAvailabilityDataFactory()
+
 const selectedDay = ref<Day>({
   monthDay: -1,
   weekDay: -1,
@@ -18,31 +29,30 @@ const selectedDay = ref<Day>({
   av_id: -100,
   cell_classes: [],
   btn_classes: []
-});
-const { getAvailabilitySlots } = useStudentFetch()
-const availabilityStore = useAvailabilityStore()
+})
+const c_id = ref<number>(parseInt(route.params.c_id as string))
 
 const selectDate = (day: Day) => {
-  selectedDay.value = day;
-};
+  selectedDay.value = day
+}
 
 onBeforeMount(async () => {
-  await getAvailabilitySlots(parseInt(route.params.c_id as string), props.teacher.t_id);
-});
-
-watch(route, async (newRoute, oldRoute) => {
-  await getAvailabilitySlots(parseInt(route.params.c_id as string), props.teacher.t_id);
-});
+  await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacher.t_id, false)
+})
 
 watch(props, async (newProps, oldProps) => {
-  await getAvailabilitySlots(parseInt(route.params.c_id as string), props.teacher.t_id);
-});
+  await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacher.t_id, false)
+})
+
+watch(route, (newRoute, oldRoute) => {
+  c_id.value = parseInt(route.params.c_id as string)
+})
 </script>
 
 <template>
   <div class="date-time-pick-container">
-    <Calendar @select-date="selectDate" :availabilitySlots="availabilityStore.availabilitySlots"/>
-    <TimePicker :selectedDay="selectedDay" />
+    <Calendar @select-date="selectDate" :availabilitySlots="availabilitySlots" />
+    <TimePicker :selectedDay="selectedDay" :teacherId="props.teacher.t_id" />
   </div>
 </template>
 

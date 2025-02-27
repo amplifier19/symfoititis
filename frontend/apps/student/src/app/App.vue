@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue'
 import { RouterView } from 'vue-router';
 </script>
 
@@ -6,5 +7,4 @@ import { RouterView } from 'vue-router';
   <RouterView />
 </template>
 
-<style scoped lang="css">
-</style>
+<style scoped lang="css"></style>

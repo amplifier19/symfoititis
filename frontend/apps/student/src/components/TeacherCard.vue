@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue';
-import { type Teacher } from '@symfoititis-frontend-monorepo/interfaces';
+import { ref, defineAsyncComponent } from 'vue'
+import { type Teacher } from '@symfoititis-frontend-monorepo/interfaces'
 
-const DateTimePicker = defineAsyncComponent(() => import('./DateTimePicker.vue'));
 const props = defineProps<{
   teacher: Teacher
   selectedTeacherId: string
-}>();
+}>()
+
 const emit = defineEmits<{
   (e: 'select-teacher', teacher: Teacher, event: Event):void
 }>()
 
+const expandableDiv = ref<HTMLElement>()
+const DateTimePicker = defineAsyncComponent(() => import('./DateTimePicker.vue'))
+
 const handleSelectTeacher = (event: Event) => {
-  emit('select-teacher', props.teacher, event);
-};
+  emit('select-teacher', props.teacher, event)
+}
 </script>
 
 <template>
-  <div class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width">
+  <div ref="expandableDiv" class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width">
     <section @click="handleSelectTeacher" class="pf-v5-c-expandable-section__toggle">
       <span class="regular-text pf-v5-c-expandable-section__toggle-text toogle-item">
         {{ props.teacher.firstname }} {{ props.teacher.lastname }}

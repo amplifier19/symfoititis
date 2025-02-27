@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { useTeacherFetch } from '../composables/fetch'
-import { useAvailabilityStore } from '../stores/availability'
-import type { Day } from '@symfoititis-frontend-monorepo/interfaces';
-import { Calendar } from '@symfoititis-frontend-monorepo/ui';
-import TimePicker from './TimePicker.vue';
+import { useRoute } from 'vue-router'
+import { ref, onMounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
 
-const route = useRoute();
-const { getAvailabilitySlots } = useTeacherFetch()
-const availabilityStore = useAvailabilityStore ()
+import TimePicker from './TimePicker.vue'
+import { Calendar } from '@symfoititis-frontend-monorepo/ui'
+
+import { Day } from '@symfoititis-frontend-monorepo/interfaces'
+
+import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
+
+import { useAvailabilityStore } from '../stores/availability'
+
+const route = useRoute()
+
+const availabilityDataService = AvailabilityDataService.getAvailabilityDataFactory()
+
+const availabilityStore = useAvailabilityStore()
+const { availabilitySlots } = storeToRefs(availabilityStore)
+
+const cid = ref<number>(parseInt(route.params.c_id as string))
 const selectedDay = ref<Day>({
   monthDay: -1,
   weekDay: -1,
@@ -23,19 +33,20 @@ const selectDate = (day: Day) => {
   selectedDay.value = day;
 }
 
-onBeforeMount(async () => {
-  await getAvailabilitySlots(parseInt(route.params.c_id as string));
+onMounted(async () => {
+  cid.value = parseInt(route.params.c_id as string)
+  await availabilityDataService.getAvailabilitySlots(cid.value)
 })
 
 watch(route, async (oldRoute, newRoute) => {
-  if (oldRoute.params.c_id === newRoute.params.c_id) return
-  await getAvailabilitySlots(parseInt(route.params.c_id as string));
+  cid.value = parseInt(route.params.c_id as string)
+  await availabilityDataService.getAvailabilitySlots(cid.value)
 })
 </script>
 
 <template>
   <div class="date-time-pick-container">
-    <Calendar @select-date="selectDate" :availabilitySlots="availabilityStore.availabilitySlots" />
+    <Calendar @select-date="selectDate" :availabilitySlots="availabilitySlots" />
     <TimePicker :selectedDay="selectedDay" />
   </div>
 </template>

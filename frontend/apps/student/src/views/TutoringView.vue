@@ -1,67 +1,54 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
-import { SearchHeader } from '@symfoititis-frontend-monorepo/ui'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+
 import { Page } from '@symfoititis-frontend-monorepo/ui'
-import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
+import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import { History } from '@symfoititis-frontend-monorepo/ui'
 import { Recents } from '@symfoititis-frontend-monorepo/ui'
 import { Gallery } from '@symfoititis-frontend-monorepo/ui'
-import { Toasts } from '@symfoititis-frontend-monorepo/ui'
-import { useCourseStore, useDepartmentStore } from '@symfoititis-frontend-monorepo/stores'
+import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
+import { SearchHeader } from '@symfoititis-frontend-monorepo/ui'
+
+import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
+
+import { useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
+
 import { useRecents } from '@symfoititis-frontend-monorepo/composables'
 import { useHistory } from '@symfoititis-frontend-monorepo/composables'
-import { useFetch } from '@symfoititis-frontend-monorepo/composables'
 
-const search = ref<string>('')
+const { getCourses, getAvailableTutoringCourseIds } = useCoursesDataService()
+
 const courseStore = useCourseStore()
-const departmentStore = useDepartmentStore();
-const { getCourses, getAvailableTutoringCourses, getDepartment } = useFetch();
-const { history, getHistoryFromStorage, deleteCourseFromStorage } = useHistory('bookings_history')
-const { recents, getRecFromStorage } = useRecents('bookings_recent')
-history.value = getHistoryFromStorage()
-recents.value = getRecFromStorage()
-const uniqueSemesters = ref<number[]>([])
-const filteredCourses = computed(() => {
-  return courseStore.availableTutoringCourses.filter((course) =>
-    course.c_display_name.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
+const { search, uniqueSemesters, filteredAvailableTutoringCourses } = storeToRefs(courseStore)
+
+const { recents } = useRecents('bookings_recent')
+const { history, removeCourseFromHistory } = useHistory('bookings_history')
 
 const clearSearch = () => {
   search.value = ''
 }
 
-const handleDelete = (index: number) => {
-  const cid = deleteCourseFromStorage(index);
-  history.value = getHistoryFromStorage();
-};
-
-const initSemesters = () => {
-  uniqueSemesters.value = [
-    ...new Set(courseStore.availableTutoringCourses.map((c) => c.semester))
-  ]
-}
 onMounted(async () => {
-  await getDepartment()
   await getCourses()
-  await getAvailableTutoringCourses(departmentStore.department.dep_id)
-  initSemesters()
+  await getAvailableTutoringCourseIds()
 })
 </script>
 
 <template>
-  <Toasts/>
+  <Toasts />
   <Page>
     <template v-slot:header>
       <Masterhead :selected="1" />
-      <History to="availability" :cid="-100" :history="history" @delete-course="handleDelete" />
+      <History to="availability" :cid="-100" :history="history" @delete-course="removeCourseFromHistory" />
     </template>
     <template v-slot:main>
-      <SearchHeader title="Ιδιαίτερα" :search="search" @clear-search="clearSearch">
+      <SearchHeader title="Ιδιαίτερα" :display-search="true" :search="search" @clear-search="clearSearch">
         <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε ένα μάθημα" />
       </SearchHeader>
-      <Recents v-if="search.length == 0 && recents?.length > 0" link="availability" :recentCourses="recents" />
-      <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredCourses" link="availability" />
+      <Recents v-if="!search && recents.length > 0" link="availability" :recentCourses="recents" />
+      <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredAvailableTutoringCourses"
+        link="availability" />
     </template>
   </Page>
 </template>

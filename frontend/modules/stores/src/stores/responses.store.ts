@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { type Response } from '@symfoititis-frontend-monorepo/interfaces'
+import { Response } from '@symfoititis-frontend-monorepo/interfaces'
 
 export const useResponseStore = defineStore('responses', () => {
   const responses = ref<Response[]>([])

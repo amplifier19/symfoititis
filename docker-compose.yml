@@ -1,0 +1,165 @@
+services:
+  institutions-db:
+    container_name: institutions-db
+    build:
+      context: ./databases/institutions-db
+    image: ${INSTITUTIONS_DB_IMAGE}:${INSTITUTIONS_DB_IMAGE_TAG}
+    environment:
+      - POSTGRES_USER=${INSTITUTIONS_PG_USER}
+      - POSTGRES_PASSWORD=${INSTITUTIONS_PG_PASSWORD}
+      - POSTGRES_DB=${INSTITUTIONS_PG_DB}
+      - SERVICE_USER=${INSTITUTIONS_SERVICE_USER}
+      - SERVICE_PASSWORD=${INSTITUTIONS_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5431:5432"
+    volumes:
+      - ${HOST_PATH}/institutions-db/data:/var/lib/postgresql/data
+  education-db:
+    container_name: education-db
+    build:
+      context: ./databases/education-db
+    image: ${EDUCATION_DB_IMAGE}:${EDUCATION_DB_IMAGE_TAG}
+    environment:
+      - POSTGRES_USER=${EDUCATION_PG_USER}
+      - POSTGRES_PASSWORD=${EDUCATION_PG_PASSWORD}
+      - POSTGRES_DB=${EDUCATION_PG_DB}
+      - SERVICE_USER=${EDUCATION_SERVICE_USER}
+      - SERVICE_PASSWORD=${EDUCATION_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5433:5432"
+    volumes:
+      - ${HOST_PATH}/education-db/data:/var/lib/postgresql/data
+  tutoring-db:
+    container_name: tutoring-db
+    build:
+      context: ./databases/tutoring-db
+    image: ${TUTORING_DB_IMAGE}:${TUTORING_DB_IMAGE_TAG}
+    environment:
+      - POSTGRES_USER=${TUTORING_PG_USER}
+      - POSTGRES_PASSWORD=${TUTORING_PG_PASSWORD}
+      - POSTGRES_DB=${TUTORING_PG_DB}
+      - SERVICE_USER=${TUTORING_SERVICE_USER}
+      - SERVICE_PASSWORD=${TUTORING_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5434:5432"
+    volumes:
+      - ${HOST_PATH}/tutoring-db/data:/var/lib/postgresql/data
+  keycloak-db:
+    container_name: keycloak-db
+    build:
+      context: ./databases/keycloak-db
+    image: ${KEYCLOAK_DB_IMAGE}:${KEYCLOAK_DB_IMAGE_TAG}
+    environment:
+      - POSTGRES_USER=${KEYCLOAK_PG_USER}
+      - POSTGRES_PASSWORD=${KEYCLOAK_PG_PASSWORD}
+      - POSTGRES_DB=${KEYCLOAK_PG_DB}
+      - SERVICE_USER=${KEYCLOAK_SERVICE_USER}
+      - SERVICE_PASSWORD=${KEYCLOAK_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - "5435:5432"
+    volumes:
+      - ${HOST_PATH}/keycloak-db/data:/var/lib/postgresql/data
+  chat-db:
+    container_name: chat-db
+    build: 
+      context: ./databases/chat-db
+    image: ${CHAT_DB_IMAGE}:${CHAT_DB_IMAGE_TAG}
+    environment:
+      - POSTGRES_USER=${CHAT_PG_USER}
+      - POSTGRES_PASSWORD=${CHAT_PG_PASSWORD}
+      - POSTGRES_DB=${CHAT_PG_DB}
+      - SERVICE_USER=${CHAT_SERVICE_USER}
+      - SERVICE_PASSWORD=${CHAT_SERVICE_PASSWORD}
+    command: postgres -c config_file=/etc/postgresql.conf
+    ports:
+      - 5436:5432
+    volumes:
+      - ${HOST_PATH}/chat-db/data:/var/lib/postgresql/data
+  ingress-gateway:
+    container_name: ingress-gateway 
+    build:
+      context: ./proxies/ingress-gateway
+      additional_contexts: 
+        lua-modules: ./proxies/lua-modules
+      target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
+      - DISCOVERY_HOST=${DISCOVERY_HOST}
+    image: ${INGRESS_GATEWAY_IMAGE}:${INGRESS_GATEWAY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - 80:80
+  student-proxy:
+    container_name: student-proxy
+    build:
+      context: ./proxies/student-proxy
+      additional_contexts: 
+        lua-modules: ./proxies/lua-modules
+      target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
+    image: ${STUDENT_PROXY_IMAGE}:${STUDENT_PROXY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - 9081:80
+  teacher-proxy:
+    container_name: teacher-proxy
+    build:
+      context: ./proxies/teacher-proxy
+      additional_contexts: 
+        lua-modules: ./proxies/lua-modules
+      target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
+    image: ${TEACHER_PROXY_IMAGE}:${TEACHER_PROXY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - 9082:80
+  admin-proxy:
+    container_name: admin-proxy
+    build:
+      context: ./proxies/admin-proxy
+      additional_contexts: 
+        lua-modules: ./proxies/lua-modules
+      target: ${BUILD_TARGET} 
+      args: 
+        - LUA_VERSION=${LUA_VERSION}
+        - LUA_PACKAGE=${LUA_PACKAGE}
+        - LUA_MODULES_PATH=${LUA_MODULES_PATH}
+        - NGINX_PATH=${NGINX_PATH}
+    environment:
+      - LUA_PATH=${LUA_PATH}
+    image: ${ADMIN_PROXY_IMAGE}:${ADMIN_PROXY_IMAGE_TAG}
+    command: /bin/sh -c "source /etc/profile && nginx -g 'daemon off;'"
+    ports:
+      - 9083:80
+  rabbitmq:
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    image: ${RABBITMQ_IMAGE}:${RABBITMQ_IMAGE_TAG}
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ${HOST_PATH}/rabbitmq/mnesia:/var/lib/rabbitmq/mnesia

@@ -15,16 +15,22 @@ public class Teacher {
     @NotNull
     @NotBlank
     private String lastname;
+
+    @NotNull
+    @NotBlank
+    private String email;
     public Teacher() {}
 
     public Teacher(
             String t_id,
             String firstname,
-            String lastname
+            String lastname,
+            String email
     ) {
         this.t_id = t_id;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.email = email;
     }
 
     public Teacher(String firstname, String lastname) {
@@ -56,4 +62,13 @@ public class Teacher {
     public String getLastname() {
         return lastname;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }

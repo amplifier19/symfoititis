@@ -1,13 +1,18 @@
 package gr.symfoititis.tutoring.services;
 
+import gr.symfoititis.common.entities.ChatRoom;
 import gr.symfoititis.common.exceptions.*;
+import gr.symfoititis.email.services.EmailService;
 import gr.symfoititis.student.services.StudentService;
+import gr.symfoititis.tutoring.config.RabbitmqConfig;
 import gr.symfoititis.tutoring.dao.BookingsDao;
 import gr.symfoititis.common.entities.Booking;
 import gr.symfoititis.common.entities.Teacher;
 import gr.symfoititis.common.entities.Student;
 import gr.symfoititis.teacher.services.TeacherService;
-import org.springframework.jdbc.BadSqlGrammarException;
+import gr.symfoititis.tutoring.records.AvailabilitySlot;
+import jakarta.validation.Valid;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +23,35 @@ public class BookingsService {
     private final BookingsDao bookingsDao;
     private final TeacherService teacherService;
     private final StudentService studentService;
-    public BookingsService (BookingsDao bookingsDao, TeacherService teacherService, StudentService studentService) {
+    private final AvailabilityService availabilityService;
+    private final EmailService emailService;
+    private final RabbitTemplate rabbitTemplate;
+    private final RabbitmqConfig rabbitmqConfig;
+    public BookingsService (
+            BookingsDao bookingsDao,
+            TeacherService teacherService,
+            StudentService studentService,
+            AvailabilityService availabilityService,
+            EmailService emailService,
+            RabbitTemplate rabbitTemplate,
+            RabbitmqConfig rabbitmqConfig
+    ) {
         this.bookingsDao = bookingsDao;
         this.teacherService = teacherService;
         this.studentService = studentService;
+        this.availabilityService = availabilityService;
+        this.emailService = emailService;
+        this.rabbitTemplate = rabbitTemplate;
+        this.rabbitmqConfig = rabbitmqConfig;
     }
-
+    private Booking getBooking(Integer av_id) {
+        Booking booking = bookingsDao.getBooking(av_id).orElseThrow(() -> new NotFoundException("Booking not found"));
+        Teacher teacher = teacherService.getTeacher(booking.getT_id());
+        Student student = studentService.getStudent(booking.getS_id());
+        attachStudentInfo(booking, student);
+        attachTeacherInfo(booking, teacher);
+        return booking;
+    }
     public List<Booking> getBookings (String id, String role) {
         return switch (role) {
             case "student" -> {
@@ -32,10 +60,7 @@ public class BookingsService {
                 for (String t_id : teacherIds) {
                     Teacher teacher = teacherService.getTeacher(t_id);
                     for (Booking booking : bookings) {
-                        if (booking.getT_id().equals(t_id)) {
-                            booking.setTeacher_firstname(teacher.getFirstname());
-                            booking.setTeacher_lastname(teacher.getLastname());
-                        }
+                        attachTeacherInfo(booking, teacher);
                     }
                 }
                 yield bookings;
@@ -46,9 +71,7 @@ public class BookingsService {
                 for (String s_id : studentIds) {
                     Student student = studentService.getStudent(s_id);
                     for (Booking booking : bookings) {
-                        if (booking.getS_id().equals(student.getS_id())) {
-                            booking.setStudent_name(student.getUsername());
-                        }
+                        attachStudentInfo(booking, student);
                     }
                 }
                 yield bookings;
@@ -57,15 +80,13 @@ public class BookingsService {
         };
     }
 
-    public void addBooking (Booking booking) {
-        try {
-            bookingsDao.addBooking(booking);
-        } catch (BadSqlGrammarException e) {
-            if ("65001".equals(e.getSQLException().getSQLState())) {
-                throw new NotFoundException("This slot is not available for booking");
-            }
-            throw new InternalServerErrorException("Sql grammar error");
-        }
+    public void addBookings (List<Integer> availabilityIds, Integer dep_id, String s_id) {
+        List<AvailabilitySlot> slots = availabilityService.getAvailabilitySlotsByIds(availabilityIds, dep_id);
+        List<@Valid ChatRoom> chatRooms = bookingsDao.addBookings(slots, s_id);
+        rabbitTemplate.convertAndSend(rabbitmqConfig.getDirectExchangeName(), rabbitmqConfig.getRoutingKey(), chatRooms);
+        Booking booking = getBooking(slots.get(0).av_id());
+        emailService.sendBookingEmailNotificationToStudent(booking);
+//        emailService.sendBookingEmailNotificationToTeacher();
     }
 
     public void cancelBooking (Integer b_id, String id, String role) {
@@ -80,7 +101,14 @@ public class BookingsService {
         }
     }
 
-    public Teacher retrieveTeacher (String t_id) {
-        return teacherService.getTeacher(t_id);
+    private void attachStudentInfo (Booking booking, Student student) {
+        booking.setStudent_name(student.getUsername());
+        booking.setStudent_email(student.getEmail());
+    }
+
+    private void attachTeacherInfo(Booking booking, Teacher teacher) {
+        booking.setTeacher_firstname(teacher.getFirstname());
+        booking.setTeacher_lastname(teacher.getLastname());
+        booking.setTeacher_email(teacher.getEmail());
     }
 }

@@ -11,6 +11,9 @@ public class Student {
     @NotNull
     @NotBlank
     private String username;
+    @NotNull
+    @NotBlank
+    private String email;
     @PositiveOrZero
     private Integer tokens;
 
@@ -21,15 +24,18 @@ public class Student {
             @NotBlank
             String s_id,
             String username,
+            String email,
             Integer tokens
     ) {
         this.s_id = s_id;
         this.username = username;
+        this.email = email;
         this.tokens = tokens;
     }
 
-    public Student(String username) {
+    public Student(String username, String email) {
         this.username = username;
+        this.email = email;
     }
 
     public String getS_id() {
@@ -44,6 +50,13 @@ public class Student {
         return username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public void setUsername(String username) {
         this.username = username;
     }

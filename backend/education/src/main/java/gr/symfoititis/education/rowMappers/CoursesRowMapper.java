@@ -13,8 +13,7 @@ public class CoursesRowMapper implements RowMapper<Course> {
                 rs.getInt("c_id"),
                 rs.getInt("dep_id"),
                 rs.getInt ("semester"),
-                rs.getString ("c_display_name"),
-                rs.getString ("description")
+                rs.getString ("c_display_name")
         );
     }
 }

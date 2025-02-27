@@ -10,8 +10,13 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class AvailabilityDaoImpl implements AvailabilityDao {
@@ -19,15 +24,43 @@ public class AvailabilityDaoImpl implements AvailabilityDao {
     public AvailabilityDaoImpl (JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
     @Override
     public List<AvailabilitySlot> getAvailabilitySlots(Integer dep_id, Integer c_id, String t_id) {
-        String sql = "SELECT * FROM availability_slots WHERE dep_id = ? AND c_id = ?  AND t_id = ? AND state = 'AVAILABLE'";
-        return jdbcTemplate.query(sql, new AvailabilitySlotRowMapper(), dep_id, c_id, t_id);
+        String sql = """
+            SELECT * FROM availability_slots
+            WHERE dep_id = ?
+            AND c_id = ?
+            AND t_id = ?
+            AND date >= ?
+            AND ( state = 'AVAILABLE' OR state = 'BOOKED' )
+            GROUP BY av_id, date
+            ORDER BY start_time
+        """;
+        return jdbcTemplate.query(sql, new AvailabilitySlotRowMapper(), dep_id, c_id, t_id, Date.valueOf(LocalDate.now().minusDays(15)));
     }
 
-    public Optional<AvailabilitySlot> getAvailabilitySlot(Integer av_id, Integer dep_id) {
-        String sql = "SELECT * FROM availability_slots WHERE av_id = ? AND dep_id = ? AND state = 'AVAILABLE'";
-        return jdbcTemplate.query(sql, new AvailabilitySlotRowMapper(), av_id, dep_id).stream().findFirst();
+    @Override
+    public List<AvailabilitySlot> getTeacherAvailabilitySlots(Integer dep_id, Integer c_id, String t_id) {
+        String sql = """
+            SELECT * FROM availability_slots
+            WHERE dep_id = ?
+            AND c_id = ?
+            AND t_id = ?
+            AND date > ?
+            AND state = 'AVAILABLE'
+            GROUP BY av_id, date
+            ORDER BY start_time
+        """;
+        return jdbcTemplate.query(sql, new AvailabilitySlotRowMapper(), dep_id, c_id, t_id, Date.valueOf(LocalDate.now()));
+    }
+
+    public List<AvailabilitySlot> getAvailabilitySlotsByIds(List<Integer> availabilityIds, Integer dep_id) {
+        String sql = "SELECT * FROM availability_slots WHERE av_id IN (" +
+                availabilityIds.stream().map(id -> "?").collect(Collectors.joining(", ")) +
+                ") AND dep_id = ? AND state = 'AVAILABLE'";
+        Object[] params = Stream.concat(availabilityIds.stream(), Stream.of(dep_id)).toArray();
+        return jdbcTemplate.query(sql, new AvailabilitySlotRowMapper(), params);
     }
 
     @Override
@@ -70,27 +103,26 @@ public class AvailabilityDaoImpl implements AvailabilityDao {
     @Override
     public int[] updateAvailabilitySlots(List<AvailabilitySlot> availabilitySlots) {
         String sql = """
-            UPDATE availability_slots SET
-                date = ?,
-                week_day = ?,
-                start_time = ?
+            UPDATE availability_slots
+            SET start_time = ?
             WHERE av_id = ?
             AND dep_id = ?
             AND c_id = ?
             AND t_id = ?
-            AND state = 'AVAILABLE'
+            AND date = ?
+            AND week_day = ?
         """;
         return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
                         AvailabilitySlot slot = availabilitySlots.get(i);
-                        ps.setDate(1, Date.valueOf(slot.date()));
-                        ps.setInt(2, slot.week_day());
-                        ps.setInt(3, slot.start_time());
-                        ps.setInt(4, slot.av_id());
-                        ps.setInt(5, slot.dep_id());
-                        ps.setInt(6, slot.c_id());
-                        ps.setString(7, slot.t_id());
+                        ps.setInt(1, slot.start_time());
+                        ps.setInt(2, slot.av_id());
+                        ps.setInt(3, slot.dep_id());
+                        ps.setInt(4, slot.c_id());
+                        ps.setString(5, slot.t_id());
+                        ps.setDate(6, Date.valueOf(slot.date()));
+                        ps.setInt(7, slot.week_day());
                     }
                     @Override
                     public int getBatchSize() {

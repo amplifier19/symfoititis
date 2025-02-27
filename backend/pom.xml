@@ -23,12 +23,14 @@
 	</developers>
 	<modules>
 		<module>common</module>
+		<module>chat</module>
 		<module>tutoring</module>
         <module>institutions</module>
 		<module>education</module>
         <module>student</module>
         <module>teacher</module>
-    </modules>
+		<module>email</module>
+	</modules>
 	<scm>
 		<connection/>
 		<developerConnection/>

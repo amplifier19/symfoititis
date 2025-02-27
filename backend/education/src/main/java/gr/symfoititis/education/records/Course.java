@@ -15,6 +15,5 @@ public record Course(
         Integer semester,
         @NotNull
         @NotBlank
-        String c_display_name,
-        String description
+        String c_display_name
 ) {}

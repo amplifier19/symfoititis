@@ -53,7 +53,8 @@ public class StudentService {
             String id = (String) properties.get("id");
             if (!id.equals(s_id)) throw new InternalServerErrorException("Fetched wrong user");
             String username = (String) properties.get("username");
-            return new Student(username);
+            String email = (String) properties.get("email");
+            return new Student(username, email);
         } catch (JsonProcessingException e) {
             throw new InternalServerErrorException("User deserialization from Json failed");
         }

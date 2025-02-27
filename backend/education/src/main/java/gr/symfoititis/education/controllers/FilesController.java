@@ -3,6 +3,7 @@ package gr.symfoititis.education.controllers;
 import gr.symfoititis.education.services.FilesService;
 import gr.symfoititis.common.records.Response;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,51 @@ public class FilesController {
         isAdmin(role);
         filesService.deleteFile (c_id, filename);
         String message = String.format("Successfully deleted %s", filename);
+        return ResponseEntity.ok(new Response(200, message));
+    }
+
+//
+    @GetMapping("/objects/{c_id}")
+    ResponseEntity<Response> listObjectsByCourseId(
+            @Positive
+            @PathVariable(value="c_id", required=true)
+            int c_id
+    ) {
+       List<String> objects = filesService.listObjectsByCourseId(c_id);
+       return ResponseEntity.ok(new Response(200, objects));
+    }
+
+    @GetMapping("/object/generateUrl")
+    ResponseEntity<Response> generateObjectPresignedUrl() {
+        String url = filesService.generateObjectPresignedUrl();
+        return ResponseEntity.ok(new Response(200, url));
+    }
+
+    @PostMapping("/objects/{c_id}")
+    ResponseEntity<Response> uploadObjects (
+            @Positive
+            @PathVariable(value="c_id", required=true)
+            int c_id,
+            @NotNull
+            @NotEmpty
+            @RequestParam("files") MultipartFile[] files
+    ) {
+        List<String> filenames = filesService.uploadObjects(c_id, files);
+        return ResponseEntity.ok(new Response (200, filenames));
+    }
+
+    @DeleteMapping("/object/{c_id}/{objectName}")
+    ResponseEntity<Response> deleteFile (
+            @Positive
+            @PathVariable(value="c_id", required=true)
+            int c_id,
+            @NotNull
+            @NotBlank
+            @PathVariable(value="objectName", required=true)
+            String objectName
+    ) {
+        filesService.deleteObject(c_id, objectName);
+        String message = String.format("Successfully deleted %s", objectName);
         return ResponseEntity.ok(new Response(200, message));
     }
 }

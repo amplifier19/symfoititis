@@ -30,14 +30,14 @@ public class CoursesDaoImpl implements CoursesDao {
 
     @Override
     public void addCourse(Course course) {
-        String sql = "INSERT INTO courses(dep_id, semester, c_display_name, description) VALUES(?, ?, ?, ?)";
-        jdbcTemplate.update(sql, course.dep_id(), course.semester(), course.c_display_name(), course.description());
+        String sql = "INSERT INTO courses(dep_id, semester, c_display_name) VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, course.dep_id(), course.semester(), course.c_display_name());
     }
 
     @Override
     public int updateCourse(Course course) {
-        String sql = "UPDATE courses SET dep_id = ?, semester = ?, c_display_name = ?, description = ? WHERE c_id = ?";
-        return jdbcTemplate.update(sql, course.dep_id(), course.semester(), course.c_display_name(), course.description(), course.c_id());
+        String sql = "UPDATE courses SET dep_id = ?, semester = ?, c_display_name = ? WHERE c_id = ?";
+        return jdbcTemplate.update(sql, course.dep_id(), course.semester(), course.c_display_name(), course, course.c_id());
     }
 
     @Override

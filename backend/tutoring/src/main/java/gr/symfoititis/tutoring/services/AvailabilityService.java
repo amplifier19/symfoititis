@@ -1,8 +1,7 @@
 package gr.symfoititis.tutoring.services;
 
 import gr.symfoititis.common.entities.Teacher;
-import gr.symfoititis.common.exceptions.BadRequestException;
-import gr.symfoititis.common.exceptions.NotFoundException;
+import gr.symfoititis.common.exceptions.*;
 import gr.symfoititis.teacher.services.TeacherService;
 import gr.symfoititis.tutoring.dao.AvailabilityDao;
 import gr.symfoititis.tutoring.records.AvailabilitySlot;
@@ -23,14 +22,16 @@ public class AvailabilityService {
         this.teacherService = teacherService;
     }
 
-    public List<AvailabilitySlot> getAvailabilitySlots(Integer dep_id, Integer c_id, String t_id) {
-        return availabilityDao.getAvailabilitySlots(dep_id, c_id, t_id);
+    public List<AvailabilitySlot> getAvailabilitySlots(String role, Integer dep_id, Integer c_id, String t_id) {
+        return switch (role) {
+            case "student" -> availabilityDao.getTeacherAvailabilitySlots(dep_id, c_id, t_id);
+            case "teacher" -> availabilityDao.getAvailabilitySlots(dep_id, c_id, t_id);
+            default -> throw new ForbiddenException("Invalid role");
+        };
     }
 
-    public AvailabilitySlot getAvailabilitySlot(Integer av_id, Integer dep_id) {
-        return availabilityDao.getAvailabilitySlot(av_id, dep_id).orElseThrow(() ->
-                new NotFoundException("Availability slot not found")
-        );
+    public List<AvailabilitySlot> getAvailabilitySlotsByIds (List<Integer> availabilityIds, Integer dep_id) {
+        return availabilityDao.getAvailabilitySlotsByIds(availabilityIds, dep_id);
     }
 
     public List<Teacher> getAvailableTeachers(Integer dep_id, Integer c_id) {
@@ -64,7 +65,7 @@ public class AvailabilityService {
             if (slot.av_id() == null) {
                 throw new BadRequestException("Availability slot id cannot be null");
             }
-            if (slot.dep_id() != dep_id) {
+            if (!slot.dep_id().equals(dep_id)) {
                 throw new BadRequestException("Invalid Department id");
             }
             if (!slot.t_id().equals(t_id)) {
@@ -74,7 +75,6 @@ public class AvailabilityService {
         availabilityDao.updateAvailabilitySlots(availabilitySlots);
     }
 
-    @Transactional
     public void deleteAvailabilitySlots(List<Integer> availabilitySlotIds, Integer dep_id, String t_id) {
         availabilityDao.deleteAvailabilitySlots(availabilitySlotIds, dep_id, t_id);
     }

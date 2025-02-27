@@ -14,6 +14,7 @@ public class BookingsRowMapper implements RowMapper<Booking> {
         return new Booking(
                rs.getInt("b_id"),
                rs.getInt("av_id"),
+               rs.getInt("c_id"),
                rs.getString("s_id"),
                rs.getString("room"),
                BookingState.valueOf(rs.getString("state")),

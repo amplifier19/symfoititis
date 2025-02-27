@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static gr.symfoititis.common.utils.RoleValidation.isStudent;
-import static gr.symfoititis.common.utils.RoleValidation.isTeacher;
+import static gr.symfoititis.common.utils.RoleValidation.*;
 
 @Validated
 @RestController
@@ -42,40 +41,11 @@ public class AvailabilityController {
             @PathVariable(value = "t_id", required = true)
             String t_id
     ) {
-        isStudent(role);
+        isStudentOrTeacher(role);
         try {
             @Positive
             int departmentId = Integer.parseInt(dep_id);
-            List<@Valid AvailabilitySlot> availabilitySlots = availabilityService.getAvailabilitySlots(departmentId, c_id, t_id);
-            return ResponseEntity.ok(new Response(200, availabilitySlots));
-        } catch (NumberFormatException ex) {
-            throw new BadRequestException("Department id cannot be parsed to integer");
-        }
-    }
-
-    @GetMapping("/availability/{c_id}")
-    ResponseEntity<Response> getAvailabilitySlots(
-            @NotNull
-            @NotBlank
-            @RequestHeader("X-Role")
-            String role,
-            @NotNull
-            @NotBlank
-            @RequestHeader("X-User-Id")
-            String t_id,
-            @NotNull
-            @NotBlank
-            @RequestHeader("X-Department-Id")
-            String dep_id,
-            @Positive
-            @PathVariable(value = "c_id", required = true)
-            int c_id
-    ) {
-        isTeacher(role);
-        try {
-            @Positive
-            int departmentId = Integer.parseInt(dep_id);
-            List<@Valid AvailabilitySlot> availabilitySlots = availabilityService.getAvailabilitySlots(departmentId, c_id, t_id);
+            List<@Valid AvailabilitySlot> availabilitySlots = availabilityService.getAvailabilitySlots(role, departmentId, c_id, t_id);
             return ResponseEntity.ok(new Response(200, availabilitySlots));
         } catch (NumberFormatException ex) {
             throw new BadRequestException("Department id cannot be parsed to integer");
@@ -148,7 +118,7 @@ public class AvailabilityController {
             @RequestHeader("X-Department-Id")
             String dep_id,
             @NotNull
-            @Size(min=1, max=12)
+            @Size(min=1, max=15)
             @RequestBody
             List<@Valid AvailabilitySlot> availabilitySlots
     ) {
@@ -179,7 +149,7 @@ public class AvailabilityController {
             @RequestHeader("X-Department-Id")
             String dep_id,
             @NotNull
-            @Size(min=1, max=12)
+            @Size(min=1, max=15)
             @RequestBody
             List<@Valid AvailabilitySlot> availabilitySlots
     ) {
@@ -210,7 +180,7 @@ public class AvailabilityController {
             @RequestHeader("X-Department-Id")
             String dep_id,
             @NotNull
-            @Size(min=1, max=12)
+            @Size(min=1, max=15)
             @RequestBody
             List<@NotNull @Positive Integer> availabilitySlotIds
     ) {

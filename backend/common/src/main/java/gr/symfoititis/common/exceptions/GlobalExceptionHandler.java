@@ -2,18 +2,20 @@ package gr.symfoititis.common.exceptions;
 
 import gr.symfoititis.common.records.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import java.sql.SQLException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -44,6 +46,23 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 Objects.requireNonNull(ex.getRequest()).getURI().toString());
         return new ResponseEntity<>(errorResponse, ex.getStatusCode());
+    }
+
+    @ExceptionHandler(UncategorizedSQLException.class)
+    public ResponseEntity<ErrorResponse> handleUncategorizedSqlException (UncategorizedSQLException e, HttpServletRequest request) {
+        SQLException sqlException = e.getSQLException();
+        StringBuilder responseMessage = new StringBuilder();
+        if (sqlException != null){
+            String message = sqlException.getMessage();
+            String pattern = "(?i)ERROR:\\s*(.*?)\\s*Where:";
+            Pattern regex = Pattern.compile(pattern);
+            Matcher matcher = regex.matcher(message);
+            if (matcher.find()) {
+                responseMessage.append(matcher.group(1).trim());
+            }
+        }
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), responseMessage.toString(), request.getRequestURI());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadRequestException.class)

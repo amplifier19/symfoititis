@@ -1,12 +1,14 @@
 package gr.symfoititis.tutoring.controllers;
 
 import gr.symfoititis.common.entities.Booking;
+import gr.symfoititis.common.entities.Student;
 import gr.symfoititis.common.exceptions.BadRequestException;
 import gr.symfoititis.common.records.Response;
-import gr.symfoititis.tutoring.services.AvailabilityService;
+import gr.symfoititis.student.services.StudentService;
 import gr.symfoititis.tutoring.services.BookingsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,11 @@ import static gr.symfoititis.common.utils.RoleValidation.*;
 @Validated
 @RestController
 public class BookingsController {
+    private final StudentService studentService;
     private final BookingsService bookingsService;
-    private final AvailabilityService availabilityService;
-    public BookingsController(BookingsService bookingsService, AvailabilityService availabilityService) {
+    public BookingsController(BookingsService bookingsService, StudentService studentService) {
         this.bookingsService = bookingsService;
-        this.availabilityService = availabilityService;
+        this.studentService = studentService;
     }
 
     @GetMapping("/bookings")
@@ -44,7 +46,7 @@ public class BookingsController {
     }
 
     @PostMapping("/booking")
-    ResponseEntity<Response> addBooking (
+    ResponseEntity<Response> addBookings (
             @NotNull
             @NotBlank
             @RequestHeader("X-Department-Id")
@@ -57,20 +59,16 @@ public class BookingsController {
             @NotBlank
             @RequestHeader("X-Role")
             String role,
-            @Valid
+            @NotEmpty
             @RequestBody
-            Booking booking
+            List <@NotNull @Positive Integer> availabilityIds
     ) {
         isStudent(role);
         try {
             @Positive
             int departmentId = Integer.parseInt(dep_id);
-            if (!s_id.equals(booking.getS_id())) {
-                throw new BadRequestException("Invalid student id");
-            }
-            availabilityService.getAvailabilitySlot(booking.getAv_id(), departmentId);
-            bookingsService.addBooking(booking);
-            String message = "Booking has been added successfully.";
+            bookingsService.addBookings(availabilityIds, departmentId, s_id);
+            String message = String.format("Successfully added %d bookings", availabilityIds.size());
             return ResponseEntity.ok(new Response(200, message));
         } catch (NumberFormatException ex) {
             throw new BadRequestException("Department id cannot be parsed to integer");
@@ -91,6 +89,7 @@ public class BookingsController {
             @RequestHeader("X-Role")
             String role
     ) {
+        isStudentOrTeacher(role);
         bookingsService.cancelBooking(b_id, id, role);
         String message = String.format("Booking %d has been successfully cancelled.", b_id);
         return ResponseEntity.ok(new Response(200, message));

@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface AvailabilityDao {
     List<AvailabilitySlot> getAvailabilitySlots (Integer dep_id, Integer c_id, String t_id);
-    Optional<AvailabilitySlot> getAvailabilitySlot (Integer av_id, Integer dep_id);
+    List<AvailabilitySlot> getTeacherAvailabilitySlots (Integer dep_id, Integer c_id, String t_id);
+    List<AvailabilitySlot> getAvailabilitySlotsByIds (List<Integer> av_id, Integer dep_id);
     List<String> getAvailableTeacherIds (Integer dep_id, Integer c_id);
     List<Integer> getAvailableTutoringCourseIds (Integer dep_id);
     void addAvailabilitySlots (List<AvailabilitySlot> availabilitySlots);

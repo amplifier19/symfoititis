@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e 
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$POSTGRES_DB" <<-EOSQL
+        CREATE USER ${SERVICE_USER} WITH PASSWORD '${SERVICE_PASSWORD}';
+        GRANT SELECT, INSERT, UPDATE ON TABLE chat_rooms TO ${SERVICE_USER};
+        GRANT SELECT, INSERT, UPDATE ON TABLE chat_messages TO ${SERVICE_USER};
+EOSQL
+

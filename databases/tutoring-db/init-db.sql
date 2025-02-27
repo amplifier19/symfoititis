@@ -57,13 +57,15 @@ AFTER INSERT ON availability_slots
 FOR EACH ROW
 EXECUTE FUNCTION after_insert_on_availability_slots();
 
--- Before state update on availability_slots, check state change
+-- Before update on availability_slots, check state on start_time or state change
 CREATE OR REPLACE FUNCTION before_update_on_availability_slots()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.state = 'UNAVAILABLE' AND OLD.state = 'BOOKED' THEN
-    -- Bad Request
-    RAISE EXCEPTION USING ERRCODE = '65002';
+    RAISE EXCEPTION 'Slot at %:00 cannot be removed because it has been booked', OLD.start_time;
+  END IF;
+  IF NEW.start_time <> OLD.start_time AND OLD.state = 'BOOKED' THEN
+    RAISE EXCEPTION 'Start time cannot be updated to %:00 because it has been booked at %:00', NEW.start_time, OLD.start_time;
   END IF;
   RETURN NEW;
 END;
@@ -98,7 +100,7 @@ CREATE TABLE bookings (
   b_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   av_id INT NOT NULL,
   s_id VARCHAR(36) NOT NULL,
-  room VARCHAR(36) UNIQUE NOT NULL,
+  room VARCHAR(36) NOT NULL,
   state booking_status_enum DEFAULT 'ACTIVE' NOT NULL,
   FOREIGN KEY (av_id) REFERENCES availability_slots(av_id) ON DELETE CASCADE
 );
@@ -120,8 +122,7 @@ BEGIN
   SET state = 'BOOKED'
   WHERE av_id = NEW.av_id AND state = 'AVAILABLE';
   IF NOT FOUND THEN
-    -- Confilct 
-    RAISE EXCEPTION USING ERRCODE = '65001';
+    RAISE EXCEPTION 'The slot at %:00 may have been already booked';
   END IF;
   RETURN NEW;
 END;

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useAuthStore } from '@symfoititis-frontend-monorepo/stores'
+import { useUserDataService } from '@symfoititis-frontend-monorepo/core/services'
 
+const { logout } = useUserDataService()
 const rootUrl = import.meta.env.VITE_HOST
-const authStore = useAuthStore()
+
 </script>
 
 <template>
@@ -23,7 +24,7 @@ const authStore = useAuthStore()
       </RouterLink>
     </div>
     <div class="pf-v5-c-masthead__content">
-      <button @click="authStore.logout()" class="pf-v5-c-button pf-m-tertiary" type="button">
+      <button @click="logout()" class="pf-v5-c-button pf-m-tertiary" type="button">
         Logout
       </button>
     </div>

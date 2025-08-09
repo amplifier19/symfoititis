@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, watch, computed, onBeforeUnmount } from 'vue'
 
 import { Course, Booking } from '@symfoititis-frontend-monorepo/interfaces'
 
 import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
 import { useBookingsDataService, useChatDataService, useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
 
-import { useBookingStore } from '@symfoititis-frontend-monorepo/stores'
-import { useChatStore } from '@symfoititis-frontend-monorepo/stores'
+import { useBookingStore, useChatStore } from '@symfoititis-frontend-monorepo/stores'
 import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 
 import { Page } from '@symfoititis-frontend-monorepo/ui'
@@ -22,13 +21,11 @@ const route = useRoute()
 
 const { getCourses } = useCoursesDataService()
 const { getBookings, cancelBooking } = useBookingsDataService()
-const { connectToStompServer, getMessages } = useChatDataService()
+const { connectToStompServer, getMessages, getChatStats } = useChatDataService()
 const availabilityDataService = AvailabilityDataService.getAvailabilityDataFactory()
 
-const chatStore = useChatStore()
 const courseStore = useCourseStore()
 const bookingStore = useBookingStore()
-const { connected, messages } = storeToRefs(chatStore)
 const { courses } = storeToRefs(courseStore)
 const { bookings } = storeToRefs(bookingStore)
 
@@ -43,7 +40,6 @@ const booking = computed(() => {
 
 const b_id = ref<number>(parseInt(route.params.b_id as string))
 const c_id = ref<number>(parseInt(route.params.c_id as string))
-const displaySkeleton = ref<boolean>(false)
 
 const handleBookingCancelation = async () => {
   await cancelBooking(b_id.value)
@@ -54,6 +50,7 @@ onMounted(async () => {
   await getCourses()
   await getBookings()
   await getMessages(c_id.value, booking.value.s_id)
+  getChatStats()
   connectToStompServer()
 })
 
@@ -61,38 +58,21 @@ watch(route, (newRoute, oldRoute) => {
   c_id.value = parseInt(route.params.c_id as string)
   b_id.value = parseInt(route.params.b_id as string)
 })
+
 </script>
 
 <template>
-  <Toasts />
+  <!-- <Toasts /> -->
   <Page>
     <template v-slot:header>
-      <Masterhead :selected="1" />
+      <Masterhead :selected="2" />
     </template>
     <template v-slot:main>
       <NavHeader navigation="bookings" storageItem="bookings_history" :course="course" />
-      <section class="main-container">
-      <Chat :booking="booking" :chatMessages="chatStore.messages" />
-      </section>
+      <Chat :booking="booking" />
     </template>
   </Page>
 </template>
 
 <style scoped>
-.main-container {
-  margin: 6rem auto;
-  width: calc(100% - 9rem);
-}
-
-@media screen and (max-width: 1800px) {
-  .main-container {
-    width: calc(100% - 8rem);
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .main-container {
-    width: 100%;
-  }
-}
 </style>

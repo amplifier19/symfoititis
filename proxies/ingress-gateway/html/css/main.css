@@ -25,7 +25,7 @@
     --white: #FFFFFA;
     --black: #4D4D4D;
     --gray: #666666;
-    --main-border: 2px solid var(--orange);
+    --main-border: 1.5px solid var(--orange);
 }
 
 body {

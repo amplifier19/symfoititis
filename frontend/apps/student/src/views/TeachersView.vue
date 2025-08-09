@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { Course, Teacher } from '@symfoititis-frontend-monorepo/interfaces'
 
-import { useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
+import { useChatDataService, useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
 import { TeachersDataService } from '../core/services/teachers/teachers-data.service'
 
 import { useTeacherStore } from '../stores/teachers'
@@ -18,15 +18,14 @@ import TeacherCard from '../components/TeacherCard.vue'
 import { Page } from '@symfoititis-frontend-monorepo/ui'
 import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import { History } from '@symfoititis-frontend-monorepo/ui'
-import { Skeleton } from '@symfoititis-frontend-monorepo/ui'
 import { NavHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
 
 const route = useRoute()
 const router = useRouter()
 
-const teacherDataService = TeachersDataService.getTeachersDataFactory()
-const { getCourses, getAvailableTutoringCourseIds } = useCoursesDataService()
+const { addCourseToRecents } = useRecents('bookings_recent')
+const { history, addCourseToHistory, removeCourseFromHistory } = useHistory('bookings_history')
 
 const errorStore = useErrorStore()
 const courseStore = useCourseStore()
@@ -34,14 +33,13 @@ const teacherStore = useTeacherStore()
 const { courses } = storeToRefs(courseStore)
 const { teachers } = storeToRefs(teacherStore)
 
-const { addCourseToRecents } = useRecents('bookings_recent')
-const { history, addCourseToHistory, removeCourseFromHistory } = useHistory('bookings_history')
+const teacherDataService = TeachersDataService.getTeachersDataFactory()
+const { getCourses, getAvailableTutoringCourseIds } = useCoursesDataService()
 
 const course = ref<Course>({
   c_id: -1, dep_id: -1, c_display_name: '', semester: -1
 })
 const teacherSection = ref<Element>()
-const displaySkeleton = ref<boolean>(true)
 const c_id = ref<number>(parseInt(route.params.c_id as string))
 const selectedTeacher = ref<Teacher>({ t_id: "", firstname: "", lastname: "" })
 
@@ -59,10 +57,10 @@ const selectTeacher = (teacher: Teacher, e: Event) => {
   selectedTeacher.value = teacher
 }
 
-const handleDelete = (index: number) => {
-  const cid = removeCourseFromHistory(index);
+const handleDelete = (courseId: number) => {
+  const cid = removeCourseFromHistory(courseId);
   if (cid === c_id.value) {
-    router.push({ name: 'courses' })
+    router.push({ name: 'tutoring' })
   }
 }
 
@@ -78,21 +76,17 @@ const saveCourse = () => {
 }
 
 onMounted(async () => {
-  displaySkeleton.value = true
   c_id.value = parseInt(route.params.c_id as string)
   await getCourses()
   await getAvailableTutoringCourseIds()
   await teacherDataService.getTeachers(c_id.value)
-  displaySkeleton.value = false
   saveCourse()
 })
 
 watch(route, async (oldRoute, newRoute) => {
-  displaySkeleton.value = true
   c_id.value = parseInt(route.params.c_id as string)
   selectedTeacher.value = { t_id: "", firstname: "", lastname: "" }
   await teacherDataService.getTeachers(c_id.value)
-  displaySkeleton.value = false
   saveCourse()
 })
 </script>
@@ -104,34 +98,23 @@ watch(route, async (oldRoute, newRoute) => {
       <Masterhead :selected="1" />
       <History to="availability" :cid="c_id" :history="history" @delete-course="handleDelete" />
     </template>
-    <template v-slot:main>
+
+    <template v-slot:subheader>
       <NavHeader navigation="tutoring" storageItem="bookings_history" :course="course" />
-      <section v-if="!displaySkeleton" class="main-container">
-        <TeacherCard v-for="teacher in teachers" :teacher="teacher" :selectedTeacherId="selectedTeacher.t_id"
-          @select-teacher="selectTeacher" :key="teacher.t_id" />
-      </section>
-      <section v-else class="main-container">
-        <Skeleton />
+    </template>
+
+    <template v-slot:main>
+      <section class="teachers-wrapper wrapper">
+        <div class="teacher-container content-width">
+          <TeacherCard v-for="teacher in teachers" :teacher="teacher" 
+            :selectedTeacherId="selectedTeacher.t_id"
+            @select-teacher="selectTeacher" :key="teacher.t_id" 
+          />
+        </div>
       </section>
     </template>
   </Page>
 </template>
 
 <style scoped>
-.main-container {
-  margin: 6rem auto;
-  width: calc(100% - 9rem);
-}
-
-@media screen and (max-width: 1800px) {
-  .main-container {
-    width: calc(100% - 8rem);
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .main-container {
-    width: 100%;
-  }
-}
 </style>

@@ -26,22 +26,20 @@ const enter = (element: Element, done: gsap.Callback) => {
 </script>
 
 <template>
-  <div class="gallery-container">
-    <Subheader title="Προβλήθηκαν Πρόσφατα" />
-    <transition-group tag="div" class="gallery" @beforeEnter="beforeEnter" @enter="enter" appear>
-      <div v-for="(course, index) in props.recentCourses" :key="course.c_id" class="card-container"
-        :data-index="index">
-        <Card :course="course" :link="props.link" />
-      </div>
-    </transition-group>
-  </div>
+  <section class="gallery-wrapper wrapper">
+    <div class="gallery-container content-width">
+      <Subheader title="Προβλήθηκαν Πρόσφατα" />
+      <transition-group tag="div" class="gallery" @beforeEnter="beforeEnter" @enter="enter" appear>
+        <div v-for="(course, index) in props.recentCourses" :key="course.c_id" class="card-container"
+          :data-index="index">
+          <Card :course="course" :link="props.link" />
+        </div>
+      </transition-group>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-.gallery-container {
-  margin-top: 6rem;
-}
-
 .gallery-container>h2 {
   color: var(--orange);
 }
@@ -49,8 +47,8 @@ const enter = (element: Element, done: gsap.Callback) => {
 .gallery {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  padding: 0 auto;
   justify-items: center;
+  padding: 0 auto;
 }
 
 .card-container {
@@ -62,17 +60,9 @@ const enter = (element: Element, done: gsap.Callback) => {
   .gallery {
     grid-template-columns: repeat(6, 1fr);
   }
-
-  .gallery-container {
-    margin-top: 5rem;
-  }
 }
 
 @media screen and (max-width: 1300px) {
-  .gallery-container {
-    margin-top: 4rem;
-  }
-
   .gallery {
     grid-template-columns: repeat(5, 1fr);
   }

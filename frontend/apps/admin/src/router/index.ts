@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useUserDataService } from '@symfoititis-frontend-monorepo/core/services'
 
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
-import { useAuthStore } from '@symfoititis-frontend-monorepo/stores'
+import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,19 +35,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const errorStore = useErrorStore()
-  try {
-    const authStore = useAuthStore()
-    if (Object.keys(authStore.keycloak).length === 0) {
-      authStore.keycloakCreate()
-      await authStore.keycloakInit()
-      await authStore.updateToken(0)
-    } else {
-      await authStore.updateToken(420)
-    }
-  } catch (error: Error) {
-    errorStore.addError(JSON.parse(error.message))
-  }
+  const { initAuthAdapter } = useUserDataService()
+  await initAuthAdapter()
   next()
 })
 

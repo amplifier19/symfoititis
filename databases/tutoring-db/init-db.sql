@@ -122,7 +122,7 @@ BEGIN
   SET state = 'BOOKED'
   WHERE av_id = NEW.av_id AND state = 'AVAILABLE';
   IF NOT FOUND THEN
-    RAISE EXCEPTION 'The slot at %:00 may have been already booked';
+    RAISE EXCEPTION 'The slot at %:00 may have been already booked', NEW.start_time;
   END IF;
   RETURN NEW;
 END;

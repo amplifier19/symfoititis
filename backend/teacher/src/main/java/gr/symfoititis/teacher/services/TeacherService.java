@@ -1,5 +1,4 @@
 package gr.symfoititis.teacher.services;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +9,8 @@ import gr.symfoititis.common.utils.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,8 +21,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Validated
 @Service
+@Validated
+@EnableCaching
 public class TeacherService {
     @Value("${auth.teacher.admin.base_url}")
     private String adminBaseUrl;
@@ -36,6 +38,7 @@ public class TeacherService {
         return bookings.stream().map(Booking::getT_id).collect(Collectors.toSet());
     }
 
+    @Cacheable("teacher")
     public @Valid Teacher getTeacher (String t_id) {
         if (jwtUtil.isTokenExpired(accessToken)) {
             accessToken = jwtUtil.retrieveNewToken();

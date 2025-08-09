@@ -2,7 +2,7 @@
 import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
 
 const emit = defineEmits<{
-  (e: 'delete-course', index: number): void
+  (e: 'delete-course', c_id: number): void
 }>()
 
 const props = defineProps<{
@@ -13,24 +13,24 @@ const props = defineProps<{
 </script>
 
 <template>
-  <nav class="pf-v5-c-nav pf-m-horizontal pf-m-scrollable" aria-labe l="Global">
-    <transition-group tag="ul" name="history-list" class="pf-v5-c-nav__list" role="list" appear>
-      <li class="pf-v5-c-nav__item" v-for="(course, index) in props.history" :key="course.c_id"
-        :class="course.c_id == props.cid ? 'current-nav-item' : ''" :data-index="index">
+  <section class="history-wrapper">
+    <transition-group tag="ul" name="history-list" class="history-container" appear>
+      <li class="history-item" v-for="(course, index) in props.history" 
+        :key="course.c_id"
+        :class="course.c_id == props.cid ? 'current-history-item' : ''" 
+        :data-index="index">
+
         <RouterLink class="history-link" :to="{ name: props.to, params: { c_id: course.c_id } }">
           {{ course.c_display_name }}
         </RouterLink>
-        <i @click="emit('delete-course', index)" class="fa fa-close"></i>
+
+        <i @click="emit('delete-course', course.c_id!)" class="fa fa-close"></i>
       </li>
     </transition-group>
-  </nav>
+  </section>
 </template>
 
 <style scoped>
-.pf-v5-c-nav {
-  position: relative;
-}
-
 .history-list-leave-to {
   opacity: 0;
   transform: scale(0.5);
@@ -45,65 +45,61 @@ const props = defineProps<{
   transition: all 0.3s ease;
 }
 
-.pf-v5-c-nav {
-  margin-top: 0.4rem;
+.history-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
   background-color: var(--white);
+  min-height: clamp(50px, 3vw, 60px);
+  overflow-x: auto;
 }
 
-.pf-v5-c-nav__list {
-  scroll-snap-type: none !important;
-  scrollbar-width: auto !important;
-  font-size: 0.95rem;
+.history-container {
+  display: flex;
+  flex-direction: row;
+  font-size: .95rem;
 }
 
-.pf-v5-c-nav__item {
-  white-space: nowrap;
+.history-item {
   margin: 0rem 0.4rem;
+  padding: 0.5rem 0.9rem;
   border: var(--main-border);
   border-top-right-radius: 14px;
+  white-space: nowrap;
 }
 
-.current-nav-item {
+.current-history-item {
   background-color: var(--orange);
 }
 
-.current-nav-item a,
-.current-nav-item i {
+.current-history-item a,
+.current-history-item i {
   color: var(--white) !important;
 }
 
 .history-link {
-  padding: 0.5rem 0.9rem;
   color: var(--gray);
 }
 
 .fa-close {
   cursor: pointer;
   color: var(--orange);
-  padding: 0.5rem 0.5rem 0rem 0rem;
-}
-
-.pf-v5-c-nav__scroll-button {
-  padding: 0px !important;
-}
-
-.pf-v5-c-nav__scroll-button::before {
-  border: none;
-}
-
-.pf-v5-c-nav__list {
-  padding: 0.5rem 0;
+  padding-left: .9rem;
 }
 
 @media screen and (max-width: 1800px) {
-  .pf-v5-c-nav>ul {
+  .history-container {
     font-size: 0.85rem;
   }
 }
 
 @media screen and (max-width: 1300px) {
-  .pf-v5-c-nav>ul {
+  .history-container {
     font-size: 0.8rem;
+  }
+
+  .history-item {
+    padding: 0.3rem 0.7rem;
   }
 }
 </style>

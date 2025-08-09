@@ -8,10 +8,10 @@ import Modal from '../components/Modal.vue'
 import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import { type Response } from '@symfoititis-frontend-monorepo/interfaces'
 
-import { useUniStore } from '../stores/universities'
-import { useDepStore } from '../stores/departments'
+import { useUniStore } from '../stores/universities.store'
+import { useDepStore } from '../stores/departments.store'
+import { useErrorStore } from '@symfoititis-frontend-monorepo/stores' 
 import { useDisplayModal } from '../stores/displayModal'
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
 
 import { useModal } from '../composables/modal'
 import { useFetch } from '../composables/fetchService'
@@ -21,7 +21,7 @@ const depStore = useDepStore()
 const modalStore = useDisplayModal()
 const errorStore = useErrorStore()
 
-const { createUniversity, updateUniversity, deleteUniversity, updateDepartment, deleteDepartment } =
+const { getUniversities, getDepartments, createUniversity, updateUniversity, deleteUniversity, updateDepartment, deleteDepartment } =
   useFetch()
 
 const {
@@ -34,16 +34,8 @@ const {
 } = useModal()
 
 onMounted(async () => {
-  try {
-    if (uniStore.universities.length == 0) {
-      await uniStore.getUniversities()
-    }
-    if (depStore.departments.length == 0) {
-      await depStore.getDepartments()
-    }
-  } catch (err: string) {
-    errorStore.addError(JSON.parse(err.message))
-  }
+  await getUniversities()
+  await getDepartments()
 })
 </script>
 

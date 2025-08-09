@@ -12,7 +12,7 @@ import { SearchHeader } from '@symfoititis-frontend-monorepo/ui'
 
 import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 
-import { useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
+import { useChatDataService, useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
 
 import { useRecents } from '@symfoititis-frontend-monorepo/composables'
 import { useHistory } from '@symfoititis-frontend-monorepo/composables'
@@ -44,7 +44,7 @@ onMounted(async () => {
     </template>
     <template v-slot:main>
       <SearchHeader title="Ιδιαίτερα" :display-search="true" :search="search" @clear-search="clearSearch">
-        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε ένα μάθημα" />
+        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε μάθημα" />
       </SearchHeader>
       <Recents v-if="!search && recents.length > 0" link="availability" :recentCourses="recents" />
       <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredAvailableTutoringCourses"

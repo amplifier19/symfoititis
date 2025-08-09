@@ -21,69 +21,45 @@ const formattedCourseName = computed(() => {
 
 <template>
   <RouterLink :to="{ name: props.link, params: { c_id: course.c_id, b_id: props.bookingId } }">
-    <div class="pf-v5-c-card pf-m-hoverable-raised">
+    <div class="card-container">
       <slot name="card-header"></slot>
-      <span class="pf-v5-c-card__body">
+      <span class="course-name">
         {{ formattedCourseName  }}
       </span>
       <slot name="card-footer"></slot>
     </div>
   </RouterLink>
-  <span class="pf-v5-c-card__title">
+  <span class="course-description">
     <h2>{{ props.course.c_display_name }}</h2>
   </span>
 </template>
 
 <style scoped>
-.pf-v5-c-card{
-    position: relative;
-    /* justify-content: space-around !important;*/
-}
-.pf-v5-c-card__body{
-    padding: 0rem;
-}
-.pf-v5-c-card.pf-m-hoverable-raised::before,
-.pf-v5-c-card.pf-m-selectable-raised::before,
-.pf-v5-c-card.pf-m-non-selectable-raised::before {
-  background-color: transparent;
-}
-
-.pf-v5-c-card.pf-m-hoverable-raised:hover {
+.card-container:hover {
   background-image: url('/svg/hover_course_card.svg');
 }
 
-.card-link {
-  display: block;
-  width: max-content;
-  height: auto;
-  margin: 0 auto;
-}
-
-.pf-v5-c-card {
-  background-color: var(--white);
-  box-shadow: none;
-  background-image: url('/svg/course-icon.svg');
-  background-repeat: no-repeat;
-  color: var(--orange) !important;
-  width: 6vw;
-  height: 6vw;
-  max-width: 8.5rem;
-  max-height: 8.5rem;
-  min-width: 7.5rem;
-  min-height: 7.5rem;
+.card-container{
+  height: clamp(7.5rem, 6vw, 8.5rem);
+  width: clamp(7.5rem, 6vw, 8.5rem);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: auto;
+  position: relative;
+  background-color: var(--white);
+  background-image: url('/svg/course-icon.svg');
+  background-repeat: no-repeat;
+  color: var(--orange); 
+
 }
 
-.pf-v5-c-card__body {
+.course-name {
   color: var(--orange);
   font-size: 1.5rem;
   flex-grow: 0;
 }
 
-.pf-v5-c-card__title {
+.course-description {
   width: 8.5rem;
   display: flex;
   justify-content: center;
@@ -92,44 +68,42 @@ const formattedCourseName = computed(() => {
   font-size: 0.95rem;
 }
 
-.pf-v5-c-card__title > h2 {
+.course-description > h2 {
   font-weight: 500;
 }
 
 @media screen and (max-width: 1800px) {
-  .pf-v5-c-card {
-    width: 7vw;
-    height: 7vw;
-    min-width: 6.5rem;
-    min-height: 6.5rem;
+  .card-container {
+    height: clamp(6.5rem, 7vw, 8.5rem);
+    width: clamp(6.5rem, 7vw, 8.5rem);
   }
 
-  .pf-v5-c-card__title {
+  .course-description {
     width: 6.5rem;
     margin: 0.8rem auto 1rem auto;
   }
 
-  .pf-v5-c-card__body {
+  .course-name {
     font-size: 1.1rem;
   }
 
-  .pf-v5-c-card__title {
+  .course-description {
     font-size: 0.85rem;
   }
 }
 
 @media screen and (max-width: 1300px) {
-  .pf-v5-c-card {
-    min-width: 5.5rem;
-    min-height: 5.5rem;
+  .card-container {
+    height: clamp(5.5rem, 7vw, 8.5rem);
+    width: clamp(5.5rem, 7vw, 8.5rem);
   }
 
-  .pf-v5-c-card__title {
+  .course-description {
     width: 5.5rem;
     margin: 0.6rem auto 1rem auto;
   }
 
-  .pf-v5-c-card__title {
+  .course-description {
     font-size: 0.8rem;
   }
 }
@@ -140,12 +114,12 @@ const formattedCourseName = computed(() => {
     min-height: 5rem;
   }
 
-  .pf-v5-c-card__title {
+  .course-description {
     width: 5rem;
     margin: 0.6rem auto 1rem auto;
   }
 
-  .pf-v5-c-card__title {
+  .course-description {
     font-size: 0.8rem;
   }
 }

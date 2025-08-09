@@ -43,8 +43,8 @@ const saveCourse = () => {
   addCourseToRecents(course.value);
 }
 
-const handleDelete = (index: number) => {
-  const cid = removeCourseFromHistory(index)
+const handleDelete = (courseId: number) => {
+  const cid = removeCourseFromHistory(courseId)
   if (cid === c_id.value) {
     router.push({ name: 'tutoring' })
   }
@@ -70,46 +70,20 @@ watch(route, (newRoute, oldRoute) => {
       <History to="availability" :cid="c_id" :history="history" @delete-course="handleDelete" />
     </template>
 
-    <template v-slot:main>
+    <template v-slot:subheader>
       <NavHeader navigation="tutoring" storageItem="bookings_history" :course="course" />
-      <div class="main-wrapper">
-        <Subheader title="Διαθεσιμότητα" />
-        <section class="main-container">
-          <div class="date-time-pick-container">
-            <DateTimePicker />
-          </div>
-        </section>
-      </div>
+    </template>
+
+    <template v-slot:main>
+      <section class="availability-wrapper wrapper">
+        <div class="availability-container content-width">
+          <Subheader title="Διαθεσιμότητα" />
+          <DateTimePicker />
+        </div>
+      </section>
     </template>
   </Page>
 </template>
 
 <style scoped>
-.main-wrapper {
-  margin-top: 6rem;
-}
-
-.main-container {
-  margin: 0 auto;
-  width: calc(100% - 9rem);
-}
-
-.date-time-pick-container {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-@media screen and (max-width: 1800px) {
-  .main-container {
-    width: calc(100% - 8rem);
-  }
-}
-
-@media screen and (max-width: 550px) {
-  .main-container {
-    width: 100%;
-  }
-}
 </style>

@@ -6,9 +6,12 @@ export const useHistory = (name: string) => {
 
   const getHistoryFromStorage = () => {
     const hist = JSON.parse(localStorage.getItem(itemName)!) || []
-    const end = hist.length
-    const start = end - 7 >= 0 ? end - 7 : 0
-    return hist.slice(start, end)
+    return hist
+  }
+
+  const getHistorySize = (itemName: string) => {
+    const hist = JSON.parse(localStorage.getItem(itemName)!) || []
+    return hist.length
   }
 
   const saveHistoryToStorage = () => {
@@ -22,25 +25,22 @@ export const useHistory = (name: string) => {
   const addCourseToHistory = (course: Course) => {
     const courseDoesNotExists = !history.value.some((c: Course) => c.c_id == course.c_id)
     if (courseDoesNotExists) {
-      history.value = [
-        ...getHistoryFromStorage(),
-        course 
-      ]
+      history.value = getHistoryFromStorage().toSpliced(6, Infinity, course)
       saveHistoryToStorage()
     }
   }
 
-  const removeCourseFromHistory = (index: number) => {
-    const course = history.value[index]
+  const removeCourseFromHistory = (c_id: number) => {
+    const copy = getHistoryFromStorage() 
+    const index = copy.findIndex((c: Course) => c.c_id == c_id) 
+    const course = copy[index]
     if (!!course) {
-      const left = history.value.slice(0, index)
-      const right = history.value.slice(index + 1, history.value.length)
-      history.value = [...left, ...right]
+      history.value = copy.toSpliced(index, 1)
       saveHistoryToStorage()
       return course.c_id
     }
     return -1
   }
 
-  return { history, getHistoryFromStorage, addCourseToHistory, removeCourseFromHistory }
+  return { history, getHistoryFromStorage, getHistorySize, addCourseToHistory, removeCourseFromHistory }
 }

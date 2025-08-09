@@ -8,8 +8,7 @@ import { useBookingsDataService } from '@symfoititis-frontend-monorepo/core/serv
 import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
 
 import { useAvailabilityStore } from '../stores/availability'
-
-import RefreshButton from 'modules/ui/src/components/RefreshButton.vue'
+import { RefreshButton, Loading } from '@symfoititis-frontend-monorepo/ui'
 
 const route = useRoute()
 
@@ -32,10 +31,13 @@ const selectedDay = ref<Day>(props.selectedDay)
 const selectedAvailabilitySlotIds = ref<number[]>([])
 const selectedDate = ref<string>(props.selectedDay.date)
 const c_id = ref<number>(parseInt(route.params.c_id as string))
+const loading = ref<boolean>(false)
 const weekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
 
 const handleRefresh = async () => {
+  loading.value = true
   await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacherId, true)
+  loading.value = false 
 }
 
 const addTimeSlot = (event: MouseEvent, av_id: number) => {
@@ -61,8 +63,10 @@ const clearStyles = () => {
 }
 
 const bookSlots = async () => {
+  loading.value = true
   await addBookings(selectedAvailabilitySlotIds.value)
   clearStyles()
+  loading.value = false
   selectedAvailabilitySlotIds.value = []
   await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacherId, true)
 }
@@ -79,29 +83,34 @@ watch(route, (newRoute, oldRoute) => {
 </script>
 
 <template>
-  <ul ref="timeSlotList" v-if="filteredAvailabilitySlots.length > 0" class="time-picker">
-    <li class="regular-text date-prompt">
-      <span>{{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}</span>
-      <RefreshButton @refresh="handleRefresh" />
-    </li>
-    <li v-for="slot in filteredAvailabilitySlots" @click="addTimeSlot($event, slot.av_id!)">
-      <span class="pf-v5-c-button pf-m-tertiary time-slot" type="button">
-        {{ slot.start_time }}:00 - {{ slot.start_time + 1 }}:00
-      </span>
-    </li>
-    <div v-if="selectedAvailabilitySlotIds.length > 0" @click="bookSlots" class="regular-text booking-btn"
-      id="book-btn">
-      <span>ΚΡΑΤΗΣΗ</span>
-    </div>
-    <div v-else class="regular-text booking-btn" id="choose-time-btn">
-      <span>ΕΠΕΛΕΞΕ ΩΡΑ</span>
-    </div>
-  </ul>
-  <div v-else-if="!selectedDay.date" class="time-picker time-picker-prompt">
-    <span>Επελεξε μια διαθεσιμη ημερομηνια </span> <i class="fa fa-circle"></i>
+  <div v-if="loading" class="time-picker-container">
+    <Loading />
   </div>
-  <div v-else class="time-picker time-picker-prompt">
-    <span>Απ' οτι φαινεται ο συμφοιτητης ειναι αρκετα busy. Επελεξε αλλη ημερομηνια</span>
+  <div v-else class="time-picker-container">
+    <ul ref="timeSlotList" v-if="filteredAvailabilitySlots.length > 0" class="time-picker">
+      <li class="regular-text date-prompt">
+        <span class="date-prompt-text">{{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}</span>
+        <RefreshButton @refresh="handleRefresh" />
+      </li>
+      <li v-for="slot in filteredAvailabilitySlots" @click="addTimeSlot($event, slot.av_id!)">
+        <span class="pf-v5-c-button pf-m-tertiary time-slot" type="button">
+          {{ slot.start_time }}:00 - {{ slot.start_time + 1 }}:00
+        </span>
+      </li>
+      <div v-if="selectedAvailabilitySlotIds.length > 0" @click="bookSlots" class="regular-text booking-btn"
+        id="book-btn">
+        <span>ΚΡΑΤΗΣΗ</span>
+      </div>
+      <div v-else class="regular-text booking-btn" id="choose-time-btn">
+        <span>ΕΠΕΛΕΞΕ ΩΡΑ</span>
+      </div>
+    </ul>
+    <div v-else-if="!selectedDay.date" class="time-picker time-picker-prompt">
+      <span>Επελεξε μια διαθεσιμη ημερομηνια </span> <i class="fa fa-circle"></i>
+    </div>
+    <div v-else class="time-picker time-picker-prompt">
+      <span>Απ' οτι φαινεται ο συμφοιτητης ειναι αρκετα busy. Επελεξε αλλη ημερομηνια</span>
+    </div>
   </div>
 </template>
 
@@ -112,18 +121,28 @@ watch(route, (newRoute, oldRoute) => {
   margin-top: 10px;
 }
 
+/* 👇 outer wrapper shrink-wraps its contents */
+.time-picker-container {
+  display: inline-block;     /* shrink to fit its child */
+  width: fit-content;        /* or: width: max-content; */
+  max-width: 100%;           /* guard against viewport overflow */
+  flex: 0 0 auto;            /* if it's inside a flex parent, don't stretch */
+}
+
+/* 👇 inner list sizes to its content (no fixed width) */
 .time-picker {
   margin: 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 450px;
+  align-items: stretch;
+  width: fit-content;        /* key: shrink to the widest child */
   min-height: 353px;
   height: max-content;
 }
 
-.time-picker>li {
-  width: 100%;
+/* children don't force full width */
+.time-picker > li {
+  width: auto;
 }
 
 .date-prompt {
@@ -134,16 +153,21 @@ watch(route, (newRoute, oldRoute) => {
   align-items: center;
 }
 
-.time-picker>li:last-of-type {
+/* keep spacing */
+.time-picker > li:last-of-type {
   margin-bottom: 2.5rem;
 }
 
+/* buttons size by their text, not container */
 .time-slot {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 60px;
   margin-bottom: 0.25rem;
+  padding: 0 1rem;
+  width: max-content;        /* intrinsic width */
+  white-space: nowrap;       /* avoid wrapping that would change width */
 }
 
 .time-slot,
@@ -153,8 +177,9 @@ watch(route, (newRoute, oldRoute) => {
   color: var(--black);
 }
 
+/* remove forced full-width from PF button */
 .pf-v5-c-button {
-  width: 100%;
+  width: auto;
 }
 
 .booking-btn {
@@ -166,6 +191,7 @@ watch(route, (newRoute, oldRoute) => {
   height: 60px;
   color: var(--orange);
   margin-top: auto;
+  align-self: center;        /* center the CTA within shrink-wrapped list */
 }
 
 #book-btn {
@@ -173,7 +199,7 @@ watch(route, (newRoute, oldRoute) => {
   cursor: pointer;
 }
 
-#book-btn>span {
+#book-btn > span {
   margin-bottom: 12px;
   font-family: 'Geologica-Medium';
 }
@@ -188,11 +214,13 @@ watch(route, (newRoute, oldRoute) => {
   color: white;
 }
 
+/* prompts also shrink to content */
 .time-picker-prompt {
-  margin: 24px;
+  margin: 24px auto;
   color: var(--orange);
   border: 2.5px dashed var(--orange);
-  width: 450px;
+  width: fit-content;        /* was 450px */
+  max-width: 100%;           /* keep responsive */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,7 +232,7 @@ watch(route, (newRoute, oldRoute) => {
 @media screen and (max-width: 1300px) {
   .time-slot {
     font-size: 0.9rem;
-    padding: 0;
+    padding: 0 0.75rem;
   }
 
   .date-prompt {

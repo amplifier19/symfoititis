@@ -33,6 +33,15 @@ public class ChatMessage {
     @NotBlank
     private String content;
     private Timestamp created_at;
+    private String receipt_id;
+
+    public void setReceipt_id(String receipt_id) {
+        this.receipt_id = receipt_id;
+    }
+
+    public String getReceipt_id() {
+        return receipt_id;
+    }
 
     public ChatMessage () {}
 

@@ -22,10 +22,17 @@ public class CoursesDaoImpl implements CoursesDao {
         String sql = "SELECT * FROM courses c WHERE c.dep_id = ? ORDER BY c.semester";
         return jdbcTemplate.query(sql, new CoursesRowMapper(), dep_id);
     }
+
     @Override
     public Optional<Course> getCourse(Integer c_id, Integer dep_id) {
         String sql = "SELECT * FROM courses c WHERE c.c_id = ? AND c.dep_id = ?";
         return jdbcTemplate.query (sql, new CoursesRowMapper(), c_id, dep_id).stream().findFirst();
+    }
+
+    @Override
+    public Optional<Course> getCourse(Integer c_id) {
+        String sql = "SELECT * FROM courses WHERE c_id = ?";
+        return jdbcTemplate.query (sql, new CoursesRowMapper(), c_id).stream().findFirst();
     }
 
     @Override
@@ -37,7 +44,7 @@ public class CoursesDaoImpl implements CoursesDao {
     @Override
     public int updateCourse(Course course) {
         String sql = "UPDATE courses SET dep_id = ?, semester = ?, c_display_name = ? WHERE c_id = ?";
-        return jdbcTemplate.update(sql, course.dep_id(), course.semester(), course.c_display_name(), course, course.c_id());
+        return jdbcTemplate.update(sql, course.dep_id(), course.semester(), course.c_display_name(), course.c_id());
     }
 
     @Override

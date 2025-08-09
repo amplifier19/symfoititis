@@ -1,5 +1,6 @@
 export interface ChatMessage {
     message_id?: number
+    receipt_id?: string
     room: string
     dep_id: number
     c_id: number
@@ -9,4 +10,5 @@ export interface ChatMessage {
     type: string
     content: string
     created_at?: string
+    state?: 'pending' | 'sent' | 'read' | 'error'
 }

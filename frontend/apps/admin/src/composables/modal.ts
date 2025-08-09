@@ -1,10 +1,10 @@
 import { ref } from 'vue'
 
-import { useUniStore } from '../stores/universities'
-import { useDepStore } from '../stores/departments'
-import { useCourseStore } from '../stores/courses'
-import { useNoteStore } from '../stores/notes'
-import { useFileStore } from '../stores/files'
+import { useUniStore } from '../stores/universities.store'
+import { useDepStore } from '../stores/departments.store'
+import { useCourseStore } from '../stores/courses.store'
+import { useNoteStore } from '../stores/notes.store'
+import { useFileStore } from '../stores/files.store'
 import { useDisplayModal } from '../stores/displayModal'
 
 import type { Modal } from '../interfaces/Modal'
@@ -112,7 +112,7 @@ export const useModal = () => {
       ],
       buttons: [{ text: 'Remove', classes: ['pf-v5-c-button', 'pf-m-tritary'] }]
     }
-    uniStore.current_uni = uni
+    uniStore.currentUniversity = uni
     modalStore.setDisplay(true)
   }
 
@@ -220,7 +220,7 @@ export const useModal = () => {
       ],
       buttons: [{ text: 'Remove', classes: ['pf-v5-c-button', 'pf-m-tritary'] }]
     }
-    depStore.current_dep = dep
+    depStore.currentDepartment = dep
     modalStore.setDisplay(true)
   }
 
@@ -336,7 +336,7 @@ export const useModal = () => {
       ],
       buttons: [{ text: 'Remove', classes: ['pf-v5-c-button', 'pf-m-tritary'] }]
     }
-    courseStore.current_course = course
+    courseStore.currentCourse = course
     modalStore.setDisplay(true)
   }
 
@@ -391,7 +391,6 @@ export const useModal = () => {
   }
 
   const activateNoteEditModal = (note: Note) => {
-    console.log(note.note_filename)
     modal.value = {
       title: 'Edit Note',
       icon: 'fa fa-edit',
@@ -480,7 +479,7 @@ export const useModal = () => {
       ],
       buttons: [{ text: 'Remove', classes: ['pf-v5-c-button', 'pf-m-tritary'] }]
     }
-    noteStore.current_note = note
+    noteStore.currentNote = note
     modalStore.setDisplay(true)
   }
 

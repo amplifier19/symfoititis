@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
-import { useDepStore } from '../stores/departments'
+import { useDepStore } from '../stores/departments.store'
 
 import type { University as UniversityInterface } from '@symfoititis-frontend-monorepo/interfaces'
 

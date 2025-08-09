@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCourseStore } from '../stores/courses'
+import { useCourseStore } from '../stores/courses.store'
 import { type Course } from '@symfoititis-frontend-monorepo/interfaces'
 
 const props = defineProps<{ course: Course }>()

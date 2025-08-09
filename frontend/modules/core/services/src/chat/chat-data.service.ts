@@ -1,13 +1,14 @@
 import { storeToRefs } from 'pinia'
 
-import Stomp from 'webstomp-client'
+import Stomp, { Frame } from 'webstomp-client'
 import SockJS from 'sockjs-client/dist/sockjs'
+import { v4 as uuidv4 } from 'uuid'
 
-import { ChatMessage } from '@symfoititis-frontend-monorepo/interfaces'
+import { ChatMessage, ReadReceipt } from '@symfoititis-frontend-monorepo/interfaces'
 
 import { ChatApiService } from "./chat-api.service"
 
-import { useUserStore, useChatStore, useErrorStore, useFileStore } from "@symfoititis-frontend-monorepo/stores"
+import { useUserStore, useChatStore, useErrorStore, useFileStore, useResponseStore } from "@symfoititis-frontend-monorepo/stores"
 
 export const useChatDataService = () => {
     const chatApiService = ChatApiService.getChatApiFactory()
@@ -16,13 +17,26 @@ export const useChatDataService = () => {
     const userStore = useUserStore()
     const fileStore = useFileStore()
     const errorStore = useErrorStore()
+    const responseStore = useResponseStore()
     const { profile } = storeToRefs(userStore)
-    const { stompClient, connected, connectionInitiated, messages, sendCount, fetchCount, offset, currentCourseId } = storeToRefs(chatStore)
+    const { 
+        stompClient,
+        connected, 
+        connectionInitiated, 
+        messages, 
+        chatStats, 
+        fetchCount, 
+        offset, 
+        currentCourseId, 
+        currentRoom,
+        trackers
+     } = storeToRefs(chatStore)
 
-
-    const getMessages = async (c_id: number, participant_id: string) => {
+    const getMessages = async (c_id: number, participant_id: string, loadNextBatch?: boolean) => {
         try {
-            if (offset.value > 0 && currentCourseId.value != c_id) {
+            if (currentCourseId.value === c_id) {
+                if (!loadNextBatch) return
+            } else {
                 offset.value = 0
                 fetchCount.value = 0
                 messages.value = []
@@ -34,30 +48,92 @@ export const useChatDataService = () => {
                 return
             }
             messages.value = [...data.data.reverse(), ...messages.value]
-            fetchCount.value = data.data.length
-            offset.value = offset.value + 16
+            fetchCount.value += data.data.length
+            offset.value += 16
             currentCourseId.value = c_id
         } catch (err) {
             errorStore.addError(err)
         }
     }
 
+    const getChatStats = async () => {
+        try {
+            const response = await chatApiService.getChatStats() 
+            const data = await response.json()
+            if (!!data.error) {
+                errorStore.addError(data)
+                return
+            }
+            chatStats.value = data.data
+            // let unreadCount = 0
+            // let str = ''
+            // for (let unreadMessage of data.data) {
+            //     unreadCount += unreadMessage.unread_count
+            // }
+            // if (unreadCount == 0) {
+            //     return
+            // } else if (unreadCount == 1) {
+            //     str = 'Έχεις 1 νέο μήνυμα' 
+            // } else if (unreadCount > 1) {
+            //     str = 'Έχεις ' + unreadCount + ' νέα μηνύματα' 
+            // }
+            // if (str.length > 0) {
+            //     responseStore.addResponse(str)
+            // }
+            // fetchedUnread.value = true
+        } catch (err) {
+            errorStore.addError(err)
+        }
+    }
+
+    const onAckReceived = (payload: {body: string}) => {
+        const ack = JSON.parse(payload.body)
+        const t = trackers.value.get(ack.receipt_id);
+        if (t) {
+            t.onAck(ack.message_id);
+            chatStore.updateMessageId(ack.receipt_id, ack.message_id)
+            chatStore.updateMessageState(ack.receipt_id, 'sent')
+        }
+    }
+
+    const onReadReceiptReceived = (payload: {body: string}) => {
+        const receipt = JSON.parse(payload.body)
+        const idx = chatStats.value.findIndex((m) => m.room == receipt.room)
+        if (idx >= 0) {
+            chatStats.value = chatStats.value.toSpliced(idx, 1, {
+                room: receipt.room,
+                myUnreadCount: 0,
+                otherLastReadMessageId: receipt.message_id,
+            })
+        }
+    }
+
     const onMessageReceived = (payload: { body: string }) => {
         const message = JSON.parse(payload.body)
-        messages.value.push(message)
-        sendCount.value ++
+        messages.value = [...messages.value, message]
+        if (currentRoom.value == message.room) {
+            readMessages(message)
+        } else {
+            const idx = chatStats.value.findIndex((m) => m.room == message.room)
+            if (idx >= 0 ) {
+                chatStats.value[idx].myUnreadCount++ 
+            } 
+        }
     }
 
     const onConnected = () => {
-        stompClient.value!.subscribe(`/user/${profile.value.id}/queue/messages`, onMessageReceived)
-        connected.value = true
+        if (stompClient.value) {
+            stompClient.value!.subscribe(`/user/${profile.value.id}/queue/ack`, onAckReceived)
+            stompClient.value!.subscribe(`/user/${profile.value.id}/queue/read`, onReadReceiptReceived)
+            stompClient.value!.subscribe(`/user/${profile.value.id}/queue/messages`, onMessageReceived)
+            connected.value = true
+        }
     }
 
     const onError = () => {
-        const err = 'Error while attempting websocket connection'
-        errorStore.addError(err)
         connected.value = false
         connectionInitiated.value = false
+        connectToStompServer()
     }
 
     const connectToStompServer = () => {
@@ -67,6 +143,69 @@ export const useChatDataService = () => {
             protocols: ['v10.stomp', 'v11.stomp', 'v12.stomp'],
         })
         stompClient.value.connect({}, onConnected, onError)
+    }
+
+    const sendMessage = (message: ChatMessage) => {
+        connectToStompServer()
+        const receipt_id = uuidv4()
+        message.receipt_id = receipt_id
+
+        return new Promise<void>((resolve, reject) => {
+          let acked = false;
+
+           const cleanup = () => {
+            clearTimeout(ackTimer);
+            trackers.value.delete(receipt_id);
+          };     
+
+          const ackTimer = window.setTimeout(() => {
+            cleanup();
+            chatStore.updateMessageState(receipt_id, 'error')
+            reject('ACK timeout');
+          }, 5000);
+      
+          const maybeResolve = () => {
+            if (acked) {
+              cleanup();
+              resolve();
+            }
+          }
+          const tracker = {
+            message,
+            onAck() {
+              clearTimeout(ackTimer);
+              acked = true;
+              maybeResolve()
+            },
+            onError(err: Error) {
+              cleanup();
+              chatStore.updateMessageState(receipt_id, 'error')
+              reject(err);
+            }
+          };
+          trackers.value.set(receipt_id, tracker);
+          stompClient.value!.send(
+            '/app/send',
+            JSON.stringify(message),
+            { 'content-type':'application/json', receipt: receipt_id }
+          );
+          messages.value.push(message)
+          chatStore.updateMessageState(receipt_id, 'pending')
+        });
+    }
+
+    const readMessages = (message: ChatMessage) => {
+        connectToStompServer()
+        const receipt: ReadReceipt = {
+            receipt_id: message.receipt_id!,
+            message_id: message.message_id!,
+            room: message.room,
+            sender_id: profile.value.id!,
+            recipient_id: message.sender_id
+        } 
+        stompClient.value!.send('/app/read', JSON.stringify(receipt), {
+            'content-type': 'application/json'
+        })
     }
 
     const uploadAttachments = async (roomId: string) => {
@@ -101,14 +240,5 @@ export const useChatDataService = () => {
         }
     }
 
-    const sendMessage = (message: ChatMessage) => {
-        connectToStompServer()
-        stompClient.value!.send('/app/send', JSON.stringify(message), {
-            'content-type': 'application/json',
-        })
-        chatStore.messages.push(message)
-        chatStore.sendCount++
-    }
-
-    return { connected, connectToStompServer, getMessages, uploadAttachments, generatePresignedUrl, sendMessage }
+    return { connected, connectToStompServer, getMessages, getChatStats, readMessages, uploadAttachments, generatePresignedUrl, sendMessage }
 }

@@ -31,7 +31,8 @@ const enter = (element: Element, done: gsap.Callback) => {
 </script>
 
 <template>
-  <div v-for="semester in uniqueSemesters" :key="semester" class="gallery-container">
+  <section class="gallery-wrapper wrapper">
+  <div v-for="semester in uniqueSemesters" :key="semester" class="gallery-container content-width">
     <Subheader :title="`${alphabet[semester - 1]}' Εξάμηνο`" />
     <transition-group tag="div" name="gallery" class="gallery" @before-enter="beforeEnter" @enter="enter" appear>
       <div v-for="(course, index) in semCourses(semester)" :key="course.c_id" class="card-container"
@@ -40,11 +41,13 @@ const enter = (element: Element, done: gsap.Callback) => {
       </div>
     </transition-group>
   </div>
+  </section>
 </template>
 
 <style scoped>
-.gallery-container {
-  margin-top: 6rem;
+.gallery-wrapper {
+  display: flex;
+  flex-direction: column;
 }
 
 .gallery {
@@ -63,22 +66,12 @@ const enter = (element: Element, done: gsap.Callback) => {
   .gallery {
     grid-template-columns: repeat(6, 1fr);
   }
-
-  .gallery-container {
-    margin-top: 5rem;
-  }
-
 }
 
 @media screen and (max-width: 1300px) {
-  .gallery-container {
-    margin-top: 4rem;
-  }
-
   .gallery {
     grid-template-columns: repeat(5, 1fr)
   }
-
 }
 
 @media screen and (max-width: 800px) {

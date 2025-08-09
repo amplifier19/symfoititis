@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { useFileStore } from '../stores/files'
+import { useFileStore } from '../stores/files.store'
 
 const props = defineProps<{ c_id: number }>()
 const rootUrl = import.meta.env.VITE_HOST

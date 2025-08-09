@@ -56,6 +56,5 @@ watch(route, async (oldRoute, newRoute) => {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
 }
 </style>

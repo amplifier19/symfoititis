@@ -1,5 +1,5 @@
 export interface Note {
-  note_id: number
+  note_id?: number
   c_id: number
   type: 'theory' | 'lab'
   note_display_name: string

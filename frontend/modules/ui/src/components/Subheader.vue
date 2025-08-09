@@ -12,10 +12,10 @@ const props = defineProps<{
 
 <style scoped>
 h2 {
-  font-family: 'Geologica-Medium';
-  margin-bottom: 3rem;
+  height: clamp(50px, 5vw, 125px); 
+  line-height: clamp(50px, 5vw, 125px); 
   font-size: 1.15rem;
-  font-weight: 800;
+  font-family: 'Geologica-Medium';
 }
 
 @media screen and (max-width: 1800px) {
@@ -26,7 +26,6 @@ h2 {
 
 @media screen and (max-width: 1300px) {
   h2 {
-    margin-bottom: 2rem;
     font-size: 1rem;
   }
 }

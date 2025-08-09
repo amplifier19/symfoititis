@@ -1,57 +1,59 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+function setRealVh() {
+const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--real-vh', `${vh}px`);
+}
+
+window.addEventListener('resize', setRealVh);
+window.addEventListener('orientationchange', setRealVh);
+setRealVh();
+</script>
 
 <template>
-  <div class="wrapper">
-    <slot name="header"></slot>
+  <slot name="header"></slot>
 
-    <main>
-      <section class="pf-v5-c-page__main-section">
-        <slot name="main"></slot>
-      </section>
-    </main>
-  </div>
+  <section id="page-wrapper">
+    <slot name="subheader"></slot>
+    <slot name="main"></slot>
+  </section>
 </template>
 
-<style scoped>
-.wrapper {
-  position: relative;
-  width: 100vw;
-  background-color: var(--white);
+<style>
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--white, white);
+  overflow: hidden;
+}
+
+#root {
   display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--white);
+}
+
+#page-wrapper {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  background-color: var(--white);
   flex-direction: column;
 }
 
-main {
-  min-height: 100vh;
-  background-color: var(--white);
-  display: flex;
+.wrapper {
+  display: flex; 
   justify-content: center;
+  align-items: center;
 }
 
-.pf-v5-c-page__main-section {
-  margin: 5vh auto;
-  padding: 0rem;
-  background-color: var(--white);
-  flex-grow: 0;
-  min-height: fit-content;
-  width: 1490px;
-}
-
-@media screen and (max-width: 1800px) {
-  .pf-v5-c-page__main-section {
-    width: 1210px;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .pf-v5-c-page__main-section {
-    width: 800px;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .pf-v5-c-page__main-section {
-    width: 95%;
-  }
+.content-width {
+  width: clamp(350px, 70vw, 1500px);
 }
 </style>

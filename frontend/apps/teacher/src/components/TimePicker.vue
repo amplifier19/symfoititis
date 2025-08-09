@@ -10,8 +10,6 @@ import { useAvailabilityStore } from '../stores/availability'
 
 import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
 
-
-
 const props = defineProps<{
   selectedDay: Day
 }>()
@@ -22,7 +20,7 @@ const availabilityStore = useAvailabilityStore()
 
 const availabilityDataService = AvailabilityDataService.getAvailabilityDataFactory()
 
-const cid = ref<nuber>(parseInt(route.params.c_id as string))
+const cid = ref<number>(parseInt(route.params.c_id as string))
 const weekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
 
 watch(props, (newDate, oldDate) => {

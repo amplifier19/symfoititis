@@ -3,6 +3,7 @@ package gr.symfoititis.chat.services;
 import gr.symfoititis.chat.dao.ChatMessageDao;
 import gr.symfoititis.chat.dao.ChatRoomDao;
 import gr.symfoititis.chat.entities.ChatMessage;
+import gr.symfoititis.chat.records.ChatStats;
 import gr.symfoititis.common.entities.ChatRoom;
 import gr.symfoititis.common.exceptions.ForbiddenException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -21,7 +22,7 @@ public class ChatService {
         this.chatMessageDao = chatMessageDao;
     }
 
-    @RabbitListener(queues = "booking-chat")
+    @RabbitListener(queues = "chatRoomsQueue")
     public void consumeMessageFromRabbitmq(List<ChatRoom> chatRooms) {
         for (ChatRoom chatRoom : chatRooms) {
             if (chatRoomDao.getChatRoom(chatRoom.getRoom()).isEmpty()) {
@@ -57,6 +58,16 @@ public class ChatService {
         if (chatRoom.isEmpty()) {
             throw new ForbiddenException("No suitable chat room found");
         }
-        return chatMessageDao.addMessage(chatMessage);
+        int messageId = chatMessageDao.addMessage(chatMessage);
+        chatMessageDao.incrementUnreadCount(messageId, roomId, chatMessage.getRecipient_id());
+        return messageId;
+    }
+
+    public List<ChatStats> getChatStats(String userId) {
+        return chatMessageDao.getChatStats(userId);
+    }
+
+    public void readMessages(Integer messageId, String room, String participant_id) {
+        chatMessageDao.readMessages(messageId, room, participant_id);
     }
 }

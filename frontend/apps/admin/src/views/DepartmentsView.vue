@@ -8,33 +8,23 @@ import Table from '../components/Table.vue'
 import Department from '../components/Department.vue'
 import Modal from '../components/Modal.vue'
 
-import { useDepStore } from '../stores/departments'
-import { useUniStore } from '../stores/universities'
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
 import { useDisplayModal } from '../stores/displayModal'
+import { useDepStore } from '../stores/departments.store'
+import { useUniStore } from '../stores/universities.store'
 
 import { useModal } from '../composables/modal'
 import { useFetch } from '../composables/fetchService'
 
-const depStore = useDepStore()
 const uniStore = useUniStore()
+const depStore = useDepStore()
 const modalStore = useDisplayModal()
-const errorStore = useErrorStore()
 
 const { modal, activateDepAddModal, activateDepEditModal, activateDepRemoveModal } = useModal()
-const { createDepartment, updateDepartment, deleteDepartment } = useFetch()
+const { getUniversities, getDepartments, createDepartment, updateDepartment, deleteDepartment } = useFetch()
 
 onMounted(async () => {
-  try {
-    if (uniStore.universities.length == 0) {
-      await uniStore.getUniversities()
-    }
-    if (depStore.departments.length == 0) {
-      await depStore.getDepartments()
-    }
-  } catch (err: any) {
-    errorStore.addError(JSON.parse(err.message))
-  }
+  await getUniversities()
+  await getDepartments()
 })
 </script>
 

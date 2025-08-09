@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie'
 export class AuthAdapterService {
   private readonly MODE = import.meta.env.MODE
   private readonly AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE
-  private readonly API_BASE_URL = import.meta.env.VITE_API_BASE
+  private readonly BASE_URL = import.meta.env.VITE_BASE
   private readonly REALM = import.meta.env.VITE_KC_REALM
   private readonly CLIENT_ID = import.meta.env.VITE_KC_CLIENT_ID
   private readonly TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME
@@ -19,15 +19,12 @@ export class AuthAdapterService {
   )
 
   private cookieRest
-  private cookieDocs
 
   public constructor() {
     if (this.MODE === "development") {
       this.cookieRest = new Cookies("Cookie", { path: `/rest/${this.REALM}`, sameSite: "lax" })
-      this.cookieDocs = new Cookies("Cookie", { path: `/${this.REALM}/documents`, sameSite: "lax" })
     } else {
       this.cookieRest = new Cookies("Cookie", { path: `/rest/${this.REALM}`, secure: true, sameSite: "lax" })
-      this.cookieDocs = new Cookies("Cookie", { path: `/${this.REALM}/documents`, secure: true, sameSite: "lax" })
     }
     this.initAuthCallbacks()
   }
@@ -53,7 +50,7 @@ export class AuthAdapterService {
     this.keycloak.clearToken()
     this.keycloak.logout(
       {
-        redirectUri: this.API_BASE_URL
+        redirectUri: this.BASE_URL
       }
     )
   }
@@ -81,11 +78,9 @@ export class AuthAdapterService {
 
   private setCookies() {
     this.cookieRest.set(this.TOKEN_NAME, this.keycloak.token || "")
-    this.cookieDocs.set(this.TOKEN_NAME, this.keycloak.token || "")
   }
 
   private removeCookies() {
     this.cookieRest.remove(this.TOKEN_NAME)
-    this.cookieDocs.remove(this.TOKEN_NAME)
   }
 }

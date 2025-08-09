@@ -2,6 +2,7 @@ package gr.symfoititis.tutoring.services;
 
 import gr.symfoititis.common.entities.ChatRoom;
 import gr.symfoititis.common.exceptions.*;
+import gr.symfoititis.education.records.Course;
 import gr.symfoititis.email.services.EmailService;
 import gr.symfoititis.student.services.StudentService;
 import gr.symfoititis.tutoring.config.RabbitmqConfig;
@@ -11,7 +12,6 @@ import gr.symfoititis.common.entities.Teacher;
 import gr.symfoititis.common.entities.Student;
 import gr.symfoititis.teacher.services.TeacherService;
 import gr.symfoititis.tutoring.records.AvailabilitySlot;
-import jakarta.validation.Valid;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,7 @@ import java.util.Set;
 
 @Service
 public class BookingsService {
+
     private final BookingsDao bookingsDao;
     private final TeacherService teacherService;
     private final StudentService studentService;
@@ -27,6 +28,7 @@ public class BookingsService {
     private final EmailService emailService;
     private final RabbitTemplate rabbitTemplate;
     private final RabbitmqConfig rabbitmqConfig;
+
     public BookingsService (
             BookingsDao bookingsDao,
             TeacherService teacherService,
@@ -44,6 +46,7 @@ public class BookingsService {
         this.rabbitTemplate = rabbitTemplate;
         this.rabbitmqConfig = rabbitmqConfig;
     }
+
     private Booking getBooking(Integer av_id) {
         Booking booking = bookingsDao.getBooking(av_id).orElseThrow(() -> new NotFoundException("Booking not found"));
         Teacher teacher = teacherService.getTeacher(booking.getT_id());
@@ -52,6 +55,7 @@ public class BookingsService {
         attachTeacherInfo(booking, teacher);
         return booking;
     }
+
     public List<Booking> getBookings (String id, String role) {
         return switch (role) {
             case "student" -> {
@@ -80,13 +84,22 @@ public class BookingsService {
         };
     }
 
+    private Course getBookingCourse(Integer c_id) {
+        return (Course) rabbitTemplate.convertSendAndReceive(
+                rabbitmqConfig.getExchange(),
+                rabbitmqConfig.getCoursesRequestKey(),
+                c_id
+        );
+    }
+
     public void addBookings (List<Integer> availabilityIds, Integer dep_id, String s_id) {
         List<AvailabilitySlot> slots = availabilityService.getAvailabilitySlotsByIds(availabilityIds, dep_id);
-        List<@Valid ChatRoom> chatRooms = bookingsDao.addBookings(slots, s_id);
-        rabbitTemplate.convertAndSend(rabbitmqConfig.getDirectExchangeName(), rabbitmqConfig.getRoutingKey(), chatRooms);
+        List<ChatRoom> chatRooms = bookingsDao.addBookings(slots, s_id);
+        rabbitTemplate.convertAndSend(rabbitmqConfig.getExchange(), rabbitmqConfig.getChatRoomsKey(), chatRooms);
         Booking booking = getBooking(slots.get(0).av_id());
-        emailService.sendBookingEmailNotificationToStudent(booking);
-//        emailService.sendBookingEmailNotificationToTeacher();
+        Course course = getBookingCourse(booking.getC_id());
+        emailService.sendBookingEmailNotificationToStudent(booking, course.c_display_name());
+        emailService.sendBookingEmailNotificationToTeacher(booking, course.c_display_name());
     }
 
     public void cancelBooking (Integer b_id, String id, String role) {

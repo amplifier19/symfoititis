@@ -30,26 +30,22 @@ const selectDate = (day: Day) => {
 </script>
 
 <template>
-<div class="program-container">
+  <section class="wrapper">
+
+<div class="program-container content-width">
   <Subheader title="Πρόγραμμα" />
-  <section class="main-container">
   <div class="date-time-pick-container">
     <Calendar @select-date="selectDate" :booking="true" :bookings="props.bookings" />
     <BookingList :bookings="bookingsFilteredByDate" :selectedDay="selectedDay" />
   </div>
-  </section>
 </div>
+  </section>
 </template>
 
 <style scoped>
-.program-container {
-  margin-top: 6rem;
-}
-
 .date-time-pick-container {
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  justify-content: space-evenly; 
 }
 </style>

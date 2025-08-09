@@ -17,6 +17,24 @@ export class ChatApiService {
         )
     }
 
+    public getChatStats = () => {
+        return fetch(
+            `${this.API_BASE_URL}/chat/stats`,
+            {
+                method: 'GET'
+            }
+        )
+    }
+
+    public readMessages = (room: string, messageId: number) => {
+        return fetch(
+            `${this.API_BASE_URL}/chat/messages/read/${room}/${messageId}`,
+            {
+                method: 'PUT'
+            }
+        )
+    }
+
     public uploadAttachments = (roomId: string, formData: FormData) => {
         return fetch(
             `${this.API_BASE_URL}/chat/objects/${roomId}`,

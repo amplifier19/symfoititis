@@ -23,6 +23,7 @@ public class BucketController {
         this.chatService = chatService;
     }
 
+    // TODO: Cache the url for 20 minutes
     @GetMapping("/object/{roomId}/{objectName}/generateUrl")
     ResponseEntity<Response> generateObjectPresignedUrl(
             @NotNull

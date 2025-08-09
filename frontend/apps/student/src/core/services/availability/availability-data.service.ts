@@ -16,8 +16,8 @@ export class AvailabilityDataService {
         return this.instance
     }
 
-    public getAvailabilitySlots = async (cid: number, tid: string, refresh: boolean) => {
-        if (!refresh && tid === this.teacherId && cid === this.courseId) return
+    public getAvailabilitySlots = async (cid: number, tid: string, force: boolean) => {
+        if (!force && tid === this.teacherId && cid === this.courseId) return
         try {
             const response = await this.availabilityApiService.getAvailabilitySlots(cid, tid)
             const data = await response.json()

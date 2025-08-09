@@ -38,17 +38,23 @@ onMounted(async () => {
       <History to="notes" :cid="-100" :history="history" @delete-course="removeCourseFromHistory" />
     </template>
 
-    <template v-slot:main>
+    <template v-slot:subheader>
       <SearchHeader title="Σημειώσεις" :display-search="true" :search="search" @clear-search="clearSearch">
-        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε ένα μάθημα" />
+        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε μάθημα" />
       </SearchHeader>
+    </template>
+
+    <template v-slot:main>
       <Recents v-if="!search && recents.length > 0" :recentCourses="recents" link="notes" />
       <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredCourses" link="notes" />
     </template>
   </Page>
 </template>
 
-<style scoped>
+<style>
+h2:first-of-type {
+  height: clamp(50px, 5vw, 100px);
+}
 .search-input {
   width: 100%;
   box-sizing: unset;

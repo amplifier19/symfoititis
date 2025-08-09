@@ -51,7 +51,7 @@ onMounted(async () => {
           v-model="search"
           type="text"
           class="regular-text search-input"
-          placeholder="  Αναζήτησε ένα μάθημα"
+          placeholder="  Αναζήτησε μάθημα"
         />
       </SearchHeader>
       <Recents

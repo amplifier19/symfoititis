@@ -19,68 +19,66 @@ watch(props, (newProps, oldProps) => {
 </script>
 
 <template>
-  <div class="search-container">
-    <span>{{ props.title }}</span>
-    <div v-if="props.displaySearch" class="search-group">
-      <div class="search-main">
-        <slot></slot>
-        <div v-if="!search" class="icon-container" id="search-icon-container" aria-label="Clear input">
-          <img class="icon" id="search-icon" src="/svg/search_icon.svg" alt="search" />
-        </div>
-        <div v-else @click="emit('clear-search')" id="close-icon-container" class="icon-container"
-          aria-label="Clear input">
-          <img class="icon" src="/svg/close_orange.svg" alt="X" />
-        </div>
+  <section class="search-wrapper">
+    <div class="search-container content-width">
+
+      <span class="search-name">{{ props.title }}</span>
+
+      <div v-if="props.displaySearch" class="searchbar">
+          <slot></slot>
+
+          <div v-if="!search" class="icon-container" id="search-icon-container">
+            <img class="icon" id="search-icon" src="/svg/search_icon.svg" alt="search" />
+          </div>
+
+          <div v-else @click="emit('clear-search')" class="icon-container" id="close-icon-container">
+            <img class="icon" src="/svg/close_orange.svg" alt="X" />
+          </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-#search-icon-container {
-  pointer-events: none;
-}
-
-.search-container {
-  background-color: var(--orange);
-  border: 1.5px solid var(--orange);
-  padding: 0.3rem 3rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border-bottom: 1.5px solid var(--orange);
-  align-items: center;
-}
-
-.search-container>span {
-  color: var(--white);
-  font-family: 'Geologica-SemiBold';
-  font-size: 1.15rem;
-}
-
-.search-group {
-  width: 40%;
-  display: flex;
-  align-items: center;
-}
-
-.search-main {
-  background-color: white;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  position: relative;
-}
-
-.icon-container {
-  position: relative;
-  background-color: white;
+.search-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  padding: 0.3rem;
+  min-height: clamp(80px, 8vw, 220px);
+}
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--orange);
+  justify-content: space-between;
+  padding: 0.3rem 3rem;
+}
+
+.search-name {
+  font-size: 1.15rem;
+  font-family: 'Geologica-SemiBold';
+  color: var(--white);
+}
+
+.searchbar {
+  display: flex;
+  flex-direction: row;
+  width: clamp(200px, 40%, 550px);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1rem;
+  padding: 0.3rem;
+  cursor: pointer;
+  background-color: white;
+}
+
+#search-icon-container {
+  pointer-events: none;
 }
 
 .icon {
@@ -90,22 +88,17 @@ watch(props, (newProps, oldProps) => {
 }
 
 @media screen and (max-width: 1800px) {
-
   .search-container {
     padding: 0.2rem 2rem;
   }
 
-  .search-container>span {
+  .search-name {
     font-size: 1.1rem;
   }
 
-  .search-group {
-    width: 55%;
-  }
-
   .icon {
-    height: 1rem;
     width: 1rem;
+    height: 1rem;
   }
 }
 
@@ -114,12 +107,12 @@ watch(props, (newProps, oldProps) => {
     padding: 0.2rem 1rem;
   }
 
-  .search-container>span {
+  .search-name {
     font-size: 1rem;
   }
 
-  .search-group {
-    width: 65%;
+  .searchbar>span {
+    font-size: 1rem;
   }
 }
 </style>

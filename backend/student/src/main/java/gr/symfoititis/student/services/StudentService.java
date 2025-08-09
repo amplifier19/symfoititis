@@ -7,9 +7,13 @@ import gr.symfoititis.common.entities.Booking;
 import gr.symfoititis.common.entities.Student;
 import gr.symfoititis.common.exceptions.InternalServerErrorException;
 import gr.symfoititis.common.utils.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
@@ -18,7 +22,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Validated
 @Service
+@EnableCaching
 public class StudentService {
     @Value("${auth.student.admin.base_url}")
     private String adminBaseUrl;
@@ -33,7 +39,8 @@ public class StudentService {
         return bookings.stream().map(Booking::getS_id).collect(Collectors.toSet());
     }
 
-    public Student getStudent (String s_id) {
+    @Cacheable("student")
+    public @Valid Student getStudent (String s_id) {
         if (jwtUtil.isTokenExpired(accessToken)) {
             accessToken = jwtUtil.retrieveNewToken();
         }

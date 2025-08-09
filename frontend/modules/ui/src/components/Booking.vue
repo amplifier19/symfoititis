@@ -2,9 +2,9 @@
 import { storeToRefs } from 'pinia';
 import { ref, computed } from 'vue'
 
-import { Booking, Course } from '@symfoititis-frontend-monorepo/interfaces'
+import { Booking, Course, ChatStats } from '@symfoititis-frontend-monorepo/interfaces'
 
-import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
+import { useChatStore, useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 
 import Card from './Card.vue'
 
@@ -14,7 +14,10 @@ const props = defineProps<{
 }>()
 
 const courseStore = useCourseStore()
+const chatStore = useChatStore()
+
 const { courses } = storeToRefs(courseStore)
+const { chatStats } = storeToRefs(chatStore)
 
 const course = computed(() => {
     return courses.value.find((c: Course) => c.c_id === props.booking.c_id) ||
@@ -54,48 +57,73 @@ const getRemainingDays = () => {
 <template>
     <Card v-if="props.card" :course="course" link="booking" :bookingId="booking.b_id">
         <template v-if="booking.state == 'CANCELED'" v-slot:card-header>
-            <div class="card-header-container">
-                <h2 class="card-header">Ακυρώθηκε</h2>
+            <div class="canceled-badge">
+                <h2 class="canceled-text card-badge-text">Ακυρώθηκε</h2>
+            </div>
+        </template>
+        <template v-else-if="chatStats.some((s) => s.room == props.booking.room && s.myUnreadCount > 0)" v-slot:card-header>
+            <div class="unread-message-badge">
+                <p class="unread-message-text card-top-text" > {{ chatStats.find((s) => s.room == props.booking.room)?.myUnreadCount }}</p>
             </div>
         </template>
         <template v-slot:card-footer>
-            <h2 ref="cardFooter" class="card-footer">{{ getRemainingDays() }}</h2>
+            <h2 ref="cardFooter" class="card-footer-text">{{ getRemainingDays() }}</h2>
         </template>
     </Card>
+
     <section v-else class="booking-row">
         <div id="course-details" class="details">
-            <span class="course-title">{{ course.c_display_name }}</span>
-            <span class="semester">{{ alphabet[course.semester - 1] }}' Εξάμηνο</span>
+            <span class="course-title booking-field">{{ course.c_display_name }}</span>
+            <span class="semester booking-field">{{ alphabet[course.semester - 1] }}' Εξάμηνο</span>
         </div>
         <div id="booking-details" class="details">
-            <span class="time">{{ booking.start_time }}:00 - {{ booking.start_time + 1 }}:00</span>
-            <span v-if="isStudent" class="name">{{ booking.teacher_firstname }} {{ booking.teacher_lastname
-                }}</span>
-            <span v-else class="name">{{ booking.student_name }}</span>
+            <span class="time booking-field">{{ booking.start_time }}:00 - {{ booking.start_time + 1 }}:00</span>
+            <span v-if="isStudent" class="name booking-field">
+                {{ booking.teacher_firstname }} {{ booking.teacher_lastname }}
+            </span>
+            <span v-else class="name booking-field">{{ booking.student_name }}</span>
         </div>
     </section>
 </template>
 
 <style>
-.card-header,
-.card-footer {
-    font-size: .8rem;
+.unread-message-text{
+    color: white;
+    padding: 0 .5rem;
+    padding-bottom: .15rem;
 }
 
-.card-header-container {
+.card-top-text {
+    font-size: 1rem;
+    text-align: center;
+}
+
+.card-footer-text {
+    text-align: center;
+    max-height: fit-content;
+}
+
+.booking-field {
+  color: var(--white);
+  font-family: 'Geologica-Medium';
+}
+
+.unread-message-badge {
     position: absolute;
-    top: 5%;
-    width: 100%;
-    padding-left: .4rem;
+    top: -.5rem;
+    left: -.5rem;
+    background-color: var(--orange);
+    border-radius: 14px;
 }
 
-.card-header {
+.card-badge-text {
+    text-align: center;
     font-family: 'Geologica-SemiBold';
 }
 
-.card-footer {
+.card-footer-text {
     position: absolute;
-    bottom: 5%;
+    bottom: 0;
     font-family: 'Geologica-SemiBold';
 }
 
@@ -147,5 +175,14 @@ const getRemainingDays = () => {
 
 .name {
     text-transform: uppercase;
+}
+
+@media screen and (max-width: 1300px) {
+    .card-top-text{
+        color: white;
+        padding: 0 .4rem;
+        padding-top: .1rem;
+        font-size: .8rem;
+    }
 }
 </style>

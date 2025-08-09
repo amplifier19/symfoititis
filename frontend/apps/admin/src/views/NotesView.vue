@@ -2,9 +2,8 @@
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useNoteStore } from '../stores/notes'
-import { useFileStore } from '../stores/files'
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
+import { useFileStore } from '../stores/files.store'
+import { useNoteStore } from '../stores/notes.store'
 import { useDisplayModal } from '../stores/displayModal'
 
 import { useFetch } from '../composables/fetchService'
@@ -25,10 +24,9 @@ const router = useRouter()
 
 const noteStore = useNoteStore()
 const fileStore = useFileStore()
-const errorStore = useErrorStore()
 const modalStore = useDisplayModal()
 
-const { uploadFile, deleteFile, createNote, updateNote, deleteNote } = useFetch()
+const { uploadFiles, deleteFile, getFiles, getNotes, createNote, updateNote, deleteNote } = useFetch()
 const {
   modal,
   activateNoteAddModal,
@@ -38,12 +36,8 @@ const {
 } = useModal()
 
 onMounted(async () => {
-  try {
-    await noteStore.getNotes(parseInt(route.params.c_id.toString()))
-    await fileStore.getFiles(parseInt(route.params.c_id.toString()))
-  } catch (error: any) {
-    errorStore.addError(error)
-  }
+  await getNotes(parseInt(route.params.c_id.toString()))
+  await getFiles(parseInt(route.params.c_id.toString()))
 })
 </script>
 
@@ -61,7 +55,7 @@ onMounted(async () => {
 
       <FileUpload
         :c_id="parseInt(route.params.c_id.toString())"
-        @upload-note="uploadFile(parseInt(route.params.c_id.toString()))"
+        @upload-note="uploadFiles(parseInt(route.params.c_id.toString()))"
       />
 
       <Table title="Files">

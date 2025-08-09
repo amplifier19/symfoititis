@@ -15,40 +15,41 @@ const router = useRouter()
 
 const alphabet = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'
 
-const { getHistoryFromStorage, removeCourseFromHistory } = useHistory(props.storageItem)
-
-const handleNavigation = () => {
-  router.push({ name: props.navigation })
-}
+const { removeCourseFromHistory } = useHistory(props.storageItem)
 
 const handleDelete = () => {
-  const history = getHistoryFromStorage()
-  const idx = history.findIndex((c: Course) => c.c_id == props.course.c_id)
-  removeCourseFromHistory(idx)
+  removeCourseFromHistory(props.course.c_id!)
   router.push({ name: props.navigation })
 }
 </script>
 
 <template>
-  <div class="header-container">
-    <div class="title-container">
-      <div @click="handleNavigation" class="icon-container">
-        <img class="title-icon" src="/svg/arrow_white.svg" alt="left-arrow" />
+  <section class="nav-wrapper wrapper" id="navbar">
+    <nav class="nav-container content-width">
+      <div class="title-container">
+        <RouterLink :to="{name: props.navigation}" class="icon-container">
+          <img class="title-icon" src="/svg/arrow_white.svg" alt="left-arrow" />
+        </RouterLink>
+        <span class="title" id="course-title">{{ props.course.c_display_name }}</span>
       </div>
-      <span class="title" id="course-title">{{ props.course.c_display_name }}</span>
-    </div>
 
-    <div class="title-container">
-      <span class="title" id="semester-title">{{ alphabet[props.course.semester - 1] }}' Εξάμηνο</span>
-      <div @click="handleDelete" class="icon-container">
-        <img class="title-icon" src="/svg/close_white.svg" alt="close-icon" />
+      <div class="title-container">
+        <span class="title" id="semester-title">{{ alphabet[props.course.semester - 1] }}' Εξάμηνο</span>
+        <div @click="handleDelete" class="icon-container">
+          <img class="title-icon" src="/svg/close_white.svg" alt="close-icon" />
+        </div>
       </div>
-    </div>
-  </div>
+    </nav>
+  </section>
 </template>
 
 <style scoped>
-.header-container {
+.nav-wrapper {
+  background-color: var(--white);
+  min-height: clamp(80px, 8vw, 220px);
+}
+
+.nav-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

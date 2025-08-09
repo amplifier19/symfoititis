@@ -51,13 +51,13 @@ public class BookingsDaoImpl implements BookingsDao {
         
         UNION ALL
         
-        (SELECT b.*, a.c_id, a.t_id, a.date, a.start_time
+        (SELECT DISTINCT ON (b.room) b.*, a.c_id, a.t_id, a.date, a.start_time
         FROM bookings b
         JOIN availability_slots a ON b.av_id = a.av_id
         WHERE b.s_id = ?
         AND ((a.date = ? AND a.start_time < ?) OR a.date < ?)
         GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
-        ORDER BY a.date, a.start_time
+        ORDER BY b.room, a.date, a.start_time
         LIMIT 7)
         """;
         Date dateToday = Date.valueOf(LocalDate.now());
@@ -76,16 +76,16 @@ public class BookingsDaoImpl implements BookingsDao {
             GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
             ORDER BY a.date, a.start_time
             LIMIT 50)
-            
+        
             UNION ALL
-            
-            (SELECT b.*, a.c_id, a.t_id, a.date, a.start_time
+        
+            (SELECT DISTINCT ON (b.room) b.*, a.c_id, a.t_id, a.date, a.start_time
             FROM bookings b
             JOIN availability_slots a ON b.av_id = a.av_id
             WHERE a.t_id = ?
             AND ((a.date = ? AND a.start_time < ?) OR a.date < ?)
             GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
-            ORDER BY a.date, a.start_time
+            ORDER BY b.room, a.date, a.start_time
             LIMIT 7)
         """;
         Date dateToday = Date.valueOf(LocalDate.now());

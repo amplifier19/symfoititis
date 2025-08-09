@@ -37,11 +37,11 @@ const selectDate = (day: Day) => {
 }
 
 onBeforeMount(async () => {
-  await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacher.t_id, false)
+  await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacher.t_id, true)
 })
 
 watch(props, async (newProps, oldProps) => {
-  await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacher.t_id, false)
+  await availabilityDataService.getAvailabilitySlots(c_id.value, props.teacher.t_id, true)
 })
 
 watch(route, (newRoute, oldRoute) => {

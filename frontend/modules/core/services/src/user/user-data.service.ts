@@ -66,11 +66,15 @@ export const useUserDataService = () => {
     }
   }
 
+  const logout = () => {
+    authAdapterService.logout() 
+  }
+
   const loadUser = () => {
     loadUserProfile()
     loadUserDepartment()
     loadUserUniversity()
   }
 
-  return { initAuthAdapter, loadUser }
+  return { initAuthAdapter, loadUser, logout }
 }

@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('../views/TutoringView.vue'),
     },
     {
+      path: '/buy/hours',
+      name: 'buy-hours',
+      component: () => import('../views/BuyHoursView.vue'),
+    },
+    {
       path: '/teachers/:c_id',
       name: 'availability',
       component: () => import('../views/TeachersView.vue'),
@@ -35,7 +40,10 @@ const router = createRouter({
       component: () => import('../views/ChatView.vue'),
     },
   ],
-  scrollBehavior() {
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name == 'booking') {
+      return false 
+    }
     return { top: 0 }
   }
 });

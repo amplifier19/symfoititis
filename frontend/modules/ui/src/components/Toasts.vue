@@ -39,8 +39,11 @@ const responseStore = useResponseStore()
         <div class="pf-v5-c-alert__icon">
           <i class="fa fa-fw fa-check-circle" aria-hidden="true"></i>
         </div>
-        <p class="pf-v5-c-alert__title" id="alert_one_title">
-          {{ response.status }} - {{ response.data }}
+        <p v-if="typeof response === 'object'" class="pf-v5-c-alert__title" id="alert_one_title">
+          {{ response?.status }} - {{ response?.data }}  
+        </p>
+        <p v-else-if="typeof response === 'string'" class="pf-v5-c-alert__title" id="alert_one_title">
+          {{ response }} 
         </p>
         <div class="pf-v5-c-alert__action">
           <button

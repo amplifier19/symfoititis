@@ -5,6 +5,7 @@ import gr.symfoititis.common.exceptions.BadRequestException;
 import gr.symfoititis.common.exceptions.NotFoundException;
 import gr.symfoititis.education.dao.CoursesDao;
 import gr.symfoititis.education.records.Course;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,17 @@ public class CoursesService {
         return coursesDao.getCourses(dep_id);
     }
 
-    public Course getCourse (Integer c_id, Integer dep_id) {
+    public Course getCourse(Integer c_id, Integer dep_id) {
         return coursesDao.getCourse(c_id, dep_id).orElseThrow(() -> new NotFoundException("Course Not Found"));
+    }
+
+    private Course getCourse(Integer c_id) {
+        return coursesDao.getCourse(c_id).orElseThrow(() -> new NotFoundException("Course Not Found"));
+    }
+
+    @RabbitListener(queues = "coursesRequestQueue")
+    public Course handleCourseRequest(Integer c_id) {
+        return getCourse(c_id);
     }
 
     public void addCourse (Course course) {

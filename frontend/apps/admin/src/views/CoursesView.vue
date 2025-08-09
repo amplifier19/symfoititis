@@ -3,8 +3,8 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { OnClickOutside } from '@vueuse/components'
 
-import { useCourseStore } from '../stores/courses'
-import { useDepStore } from '../stores/departments'
+import { useCourseStore } from '../stores/courses.store'
+import { useDepStore } from '../stores/departments.store'
 import { useDisplayModal } from '../stores/displayModal'
 import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
 
@@ -19,25 +19,19 @@ import Modal from '../components/Modal.vue'
 
 const route = useRoute()
 
-const courseStore = useCourseStore()
 const depStore = useDepStore()
-const modalStore = useDisplayModal()
+const courseStore = useCourseStore()
 const errorStore = useErrorStore()
+const modalStore = useDisplayModal()
 
 const { modal, activateCourseAddModal, activateCourseEditModal, activateCourseRemoveModal } =
   useModal()
 
-const { createCourse, updateCourse, deleteCourse } = useFetch()
+const { getDepartments, getCourses, createCourse, updateCourse, deleteCourse } = useFetch()
 
 onMounted(async () => {
-  try {
-    if (depStore.departments.length == 0) {
-      await depStore.getDepartments()
-    }
-    await courseStore.getCourses(parseInt(route.params.dep_id.toString()))
-  } catch (err: any) {
-    errorStore.addError(JSON.parse(err.message))
-  }
+  await getDepartments()
+  await getCourses(parseInt(route.params.dep_id.toString()))
 })
 </script>
 

@@ -11,7 +11,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <ul class="time-picker">
+  <ul class="booking-list">
     <li class="regular-text booking-list-header-container">
         <SearchHeader :title="props.selectedDay.date || 'Επέλεξε ημερομηνία'" :displaySearch="false"/>
     </li>
@@ -22,27 +22,14 @@ const props = defineProps<{
 </template>
 
 <style>
-.booking-list-header-container {
-    margin-bottom: 2rem;
-}
-
-li>div>span {
-  color: var(--white);
-  font-family: 'Geologica-Medium' !important;
-  font-size: 1rem !important;
-}
-
-.time-picker {
-  margin: 24px;
+.booking-list {
+  width: clamp(350px, 50%, 50%);
   display: flex;
   flex-direction: column;
-  width: 600px;
-  min-height: 353px;
-  height: max-content;
 }
 
 @media screen and (max-width: 590px) {
-  .time-picker {
+  .booking-list {
     min-height: 250px;
   }
 }

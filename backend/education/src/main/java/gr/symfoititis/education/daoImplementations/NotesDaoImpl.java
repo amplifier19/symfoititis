@@ -24,13 +24,13 @@ public class NotesDaoImpl implements NotesDao {
 
     @Override
     public void addNote(Note note) {
-        String sql = "INSERT INTO notes (c_id, type, note_display_name, note_filename) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO notes (c_id, type, note_display_name, note_filename) VALUES (?, ?::note_type_enum, ?, ?)";
         jdbcTemplate.update(sql, note.c_id(), note.type(), note.note_display_name(), note.note_filename());
     }
 
     @Override
     public int updateNote(Note note) {
-        String sql = "UPDATE notes SET c_id = ?, type = ?, note_display_name = ?, note_filename = ? WHERE note_id = ?";
+        String sql = "UPDATE notes SET c_id = ?, type = ?::note_type_enum, note_display_name = ?, note_filename = ? WHERE note_id = ?";
         return jdbcTemplate.update(sql, note.c_id(), note.type(), note.note_display_name(), note.note_filename(), note.note_id());
     }
 

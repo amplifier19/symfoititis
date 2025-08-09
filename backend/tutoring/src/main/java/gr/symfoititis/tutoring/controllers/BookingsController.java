@@ -45,6 +45,7 @@ public class BookingsController {
         return ResponseEntity.ok(new Response(200, bookings));
     }
 
+    // TODO: On booking update tokens for the user (RabitMQ - Financial Service)
     @PostMapping("/booking")
     ResponseEntity<Response> addBookings (
             @NotNull
@@ -75,6 +76,7 @@ public class BookingsController {
         }
     }
 
+    // TODO: Cancel only three times lifetime and 3 hours before the booking - On cancel refund token (RabitMQ - Financial Service)
     @PutMapping("/cancel/booking/{b_id}")
     ResponseEntity<Response> cancelBooking (
             @Positive

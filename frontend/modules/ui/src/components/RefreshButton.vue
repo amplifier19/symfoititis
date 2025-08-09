@@ -23,7 +23,8 @@ const emitRefresh = () => {
 
 <style scoped>
 .pf-v5-c-button {
-    width: 20% !important;
+    width: fit-content !important;
+    margin-left: 2rem;
 }
 .enabled {
     background-color: var(--orange);

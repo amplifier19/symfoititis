@@ -3,13 +3,14 @@ import { ref } from 'vue'
 import { Response } from '@symfoititis-frontend-monorepo/interfaces'
 
 export const useResponseStore = defineStore('responses', () => {
-  const responses = ref<Response[]>([])
+  const responses = ref<(Response | string)[]>([])
 
-  const addResponse = (resp: Response) => {
-    responses.value.push(resp)
+  const addResponse = (resp: Response | string) => {
+    responses.value = [...responses.value, resp] 
   }
+
   const deleteResponse = (idx: number) => {
-    responses.value.splice(idx, 1)
+    responses.value = responses.value.toSpliced(idx, 1)
   }
 
   return { responses, addResponse, deleteResponse }

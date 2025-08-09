@@ -1,0 +1,1509 @@
+{
+  "version": "6.0",
+  "nxVersion": "19.8.0",
+  "deps": {
+    "@types/sockjs-client": "^1.5.4",
+    "@vueuse/components": "^11.1.0",
+    "gsap": "^3.12.5",
+    "keycloak-js": "^25.0.6",
+    "pinia": "^2.2.2",
+    "sockjs-client": "^1.6.1",
+    "universal-cookie": "^7.2.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "webstomp-client": "^1.2.6",
+    "@eslint/js": "^9.8.0",
+    "@nx/eslint": "19.8.0",
+    "@nx/eslint-plugin": "19.8.0",
+    "@nx/js": "19.8.0",
+    "@nx/vite": "19.8.0",
+    "@nx/vue": "^19.8.0",
+    "@nx/web": "19.8.0",
+    "@nx/workspace": "19.8.0",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "@vitejs/plugin-vue": "^4.5.0",
+    "@vitest/coverage-v8": "^1.0.4",
+    "@vitest/ui": "^1.3.1",
+    "@vue/eslint-config-prettier": "7.1.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/test-utils": "^2.4.1",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-vue": "^9.16.1",
+    "jsdom": "~22.1.0",
+    "nx": "19.8.0",
+    "prettier": "^2.6.2",
+    "typescript": "~5.5.2",
+    "typescript-eslint": "^8.0.0",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "~3.8.1",
+    "vitest": "^1.3.1",
+    "vue-tsc": "^2.0.11"
+  },
+  "pathMappings": {
+    "@symfoititis-frontend-monorepo/composables": [
+      "modules/composables/src/index.ts"
+    ],
+    "@symfoititis-frontend-monorepo/interfaces": [
+      "modules/interfaces/src/index.ts"
+    ],
+    "@symfoititis-frontend-monorepo/core/services": [
+      "modules/core/services/src/index.ts"
+    ],
+    "@symfoititis-frontend-monorepo/stores": [
+      "modules/stores/src/index.ts"
+    ],
+    "@symfoititis-frontend-monorepo/ui": [
+      "modules/ui/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [
+    {
+      "name": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "name": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "typecheckTargetName": "typecheck"
+      }
+    }
+  ],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".nx/workspace-data/vite-8410637291831080659.hash",
+        "hash": "2134084488715332728"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "10932093552118188395"
+      },
+      {
+        "file": ".nx/workspace-data/d/daemon.log",
+        "hash": "9740729293413082570"
+      },
+      {
+        "file": ".nx/workspace-data/file-map.json",
+        "hash": "12201420945316171005"
+      },
+      {
+        "file": ".nx/workspace-data/eslint-4393011795395336301.hash",
+        "hash": "8512165254085081436"
+      },
+      {
+        "file": "vitest.workspace.ts",
+        "hash": "7870362608836821141"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "18315780835905533662"
+      },
+      {
+        "file": "nx.json",
+        "hash": "14990613675089491670"
+      },
+      {
+        "file": "package.json",
+        "hash": "183226132732307511"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "15499567816375445625"
+      },
+      {
+        "file": ".nx/workspace-data/nx_files.nxt",
+        "hash": "6567041938488527499"
+      },
+      {
+        "file": ".nx/workspace-data/project-graph.json",
+        "hash": "4997980978550087421"
+      }
+    ],
+    "projectFileMap": {
+      "student": [
+        {
+          "file": "apps/student/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "apps/student/index.html",
+          "hash": "1504483731595226208"
+        },
+        {
+          "file": "apps/student/project.json",
+          "hash": "1552842601797147275"
+        },
+        {
+          "file": "apps/student/src/app/App.vue",
+          "hash": "12279789188583146893",
+          "deps": [
+            "npm:vue",
+            "npm:vue-router"
+          ]
+        },
+        {
+          "file": "apps/student/src/components/BuyHours.vue",
+          "hash": "6011057375747483234"
+        },
+        {
+          "file": "apps/student/src/components/DateTimePicker.vue",
+          "hash": "10626433963420731026",
+          "deps": [
+            "npm:pinia",
+            "npm:vue-router",
+            "npm:vue",
+            "interfaces",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/student/src/components/TeacherCard.vue",
+          "hash": "5651234589580338561",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/student/src/components/TimePicker.vue",
+          "hash": "9414367829554319162",
+          "deps": [
+            "npm:vue-router",
+            "npm:vue",
+            "interfaces",
+            "services",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/student/src/core/services/availability/availability-api.service.ts",
+          "hash": "6197858153528058749"
+        },
+        {
+          "file": "apps/student/src/core/services/availability/availability-data.service.ts",
+          "hash": "8018113155780098183",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/student/src/core/services/teachers/teachers-api.service.ts",
+          "hash": "1876628345566683963"
+        },
+        {
+          "file": "apps/student/src/core/services/teachers/teachers-data.service.ts",
+          "hash": "7694946339706294008",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/student/src/main.ts",
+          "hash": "735314159662594169",
+          "deps": [
+            "npm:vue",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "apps/student/src/router/index.ts",
+          "hash": "15638897233247589762",
+          "deps": [
+            "npm:vue-router",
+            "services",
+            [
+              "ui",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "apps/student/src/stores/availability.ts",
+          "hash": "4624647059681531495",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/student/src/stores/teachers.ts",
+          "hash": "3111067138435103891",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/student/src/views/BookingsView.vue",
+          "hash": "15074370089168644985",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "services",
+            "stores",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/student/src/views/BuyHoursView.vue",
+          "hash": "7786244382312389293",
+          "deps": [
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/student/src/views/ChatView.vue",
+          "hash": "13966265433387760230",
+          "deps": [
+            "npm:pinia",
+            "npm:vue-router",
+            "npm:vue",
+            "interfaces",
+            "services",
+            "stores",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/student/src/views/TeachersView.vue",
+          "hash": "15795056904159436755",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "npm:vue-router",
+            "interfaces",
+            "services",
+            "stores",
+            "composables",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/student/src/views/TutoringView.vue",
+          "hash": "14360404609909750795",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "ui",
+            "stores",
+            "services",
+            "composables"
+          ]
+        },
+        {
+          "file": "apps/student/tsconfig.app.json",
+          "hash": "7420872333068594729"
+        },
+        {
+          "file": "apps/student/tsconfig.json",
+          "hash": "2334587140367692194"
+        },
+        {
+          "file": "apps/student/vite.config.ts",
+          "hash": "12389269334621130142",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "admin": [
+        {
+          "file": "apps/admin/Dockerfile",
+          "hash": "9618068608466815868"
+        },
+        {
+          "file": "apps/admin/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "apps/admin/index.html",
+          "hash": "6927119095754835591"
+        },
+        {
+          "file": "apps/admin/nginx/default.conf",
+          "hash": "9516395667587771268"
+        },
+        {
+          "file": "apps/admin/nginx/nginx.conf",
+          "hash": "16263467956879463202"
+        },
+        {
+          "file": "apps/admin/project.json",
+          "hash": "3979543679102603213"
+        },
+        {
+          "file": "apps/admin/src/app/App.vue",
+          "hash": "18071767230420392616",
+          "deps": [
+            "npm:vue-router"
+          ]
+        },
+        {
+          "file": "apps/admin/src/assets/main.css",
+          "hash": "89976101748717716"
+        },
+        {
+          "file": "apps/admin/src/components/Course.vue",
+          "hash": "17092124283835936289",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/components/Department.vue",
+          "hash": "5901117461423795970",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/components/FileEntry.vue",
+          "hash": "12328116884294964403"
+        },
+        {
+          "file": "apps/admin/src/components/FileUpload.vue",
+          "hash": "8126325598659617235",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "apps/admin/src/components/Layout.vue",
+          "hash": "873211653606740613"
+        },
+        {
+          "file": "apps/admin/src/components/Masterhead.vue",
+          "hash": "18317142578017147298",
+          "deps": [
+            "services"
+          ]
+        },
+        {
+          "file": "apps/admin/src/components/Modal.vue",
+          "hash": "17854873226880881165"
+        },
+        {
+          "file": "apps/admin/src/components/Note.vue",
+          "hash": "4394692299757626586",
+          "deps": [
+            "npm:vue",
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/components/Section.vue",
+          "hash": "8838833423279417222",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/components/Sidebar.vue",
+          "hash": "11379093928721126471"
+        },
+        {
+          "file": "apps/admin/src/components/Table.vue",
+          "hash": "992899460070797285"
+        },
+        {
+          "file": "apps/admin/src/components/University.vue",
+          "hash": "18095716637975014115"
+        },
+        {
+          "file": "apps/admin/src/composables/fetchService.ts",
+          "hash": "15049548726901370176",
+          "deps": [
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/composables/modal.ts",
+          "hash": "87145443455818911",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/courses/courses-api.service.ts",
+          "hash": "12235883189411928088",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/courses/courses-data.service.ts",
+          "hash": "2803399889228473668",
+          "deps": [
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/departments/departments-api.service.ts",
+          "hash": "9948733273450622308",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/departments/departments-data.service.ts",
+          "hash": "16537917150977552134",
+          "deps": [
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/files/files-api.service.ts",
+          "hash": "9698590597556729515"
+        },
+        {
+          "file": "apps/admin/src/core/services/files/files-data.service.ts",
+          "hash": "7643826667759020735",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/notes/notes-api.service.ts",
+          "hash": "9983296010631111180",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/notes/notes-data.service.ts",
+          "hash": "8097617741162628534",
+          "deps": [
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/universities/universities-api.service.ts",
+          "hash": "16018486486226999726",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/core/services/universities/universities-data.service.ts",
+          "hash": "7835661242646735929",
+          "deps": [
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/interfaces/Modal.ts",
+          "hash": "16939190452187622992"
+        },
+        {
+          "file": "apps/admin/src/main.ts",
+          "hash": "5724960608410078198",
+          "deps": [
+            "npm:vue",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "apps/admin/src/router/index.ts",
+          "hash": "12134552900475913045",
+          "deps": [
+            "npm:vue-router",
+            "services"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/courses.store.ts",
+          "hash": "12381548348677051697",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/departments.store.ts",
+          "hash": "15179616782465338580",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/displayModal.ts",
+          "hash": "14152176461837412000",
+          "deps": [
+            "npm:pinia",
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/files.store.ts",
+          "hash": "4724376232405599956",
+          "deps": [
+            "npm:pinia",
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/notes.store.ts",
+          "hash": "1265705376611966012",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/sidebar.ts",
+          "hash": "11868989756459125558",
+          "deps": [
+            "npm:vue",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "apps/admin/src/stores/universities.store.ts",
+          "hash": "17400069561278987039",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/admin/src/views/CoursesView.vue",
+          "hash": "7525588155787033044",
+          "deps": [
+            "npm:vue",
+            "npm:vue-router",
+            "npm:@vueuse/components",
+            "stores",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/admin/src/views/DepartmentsView.vue",
+          "hash": "17149301292869813125",
+          "deps": [
+            "npm:vue",
+            "npm:@vueuse/components",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/admin/src/views/HomeView.vue",
+          "hash": "3221142397810589439"
+        },
+        {
+          "file": "apps/admin/src/views/NotesView.vue",
+          "hash": "2464278348569132453",
+          "deps": [
+            "npm:vue",
+            "npm:vue-router",
+            "ui",
+            "npm:@vueuse/components"
+          ]
+        },
+        {
+          "file": "apps/admin/src/views/UniversitiesView.vue",
+          "hash": "986844972453567984",
+          "deps": [
+            "npm:vue",
+            "npm:@vueuse/components",
+            "ui",
+            "interfaces",
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/admin/tsconfig.app.json",
+          "hash": "3738736504077772611"
+        },
+        {
+          "file": "apps/admin/tsconfig.json",
+          "hash": "2334587140367692194"
+        },
+        {
+          "file": "apps/admin/vite.config.ts",
+          "hash": "10321524670835465747",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "interfaces": [
+        {
+          "file": "modules/interfaces/README.md",
+          "hash": "67948439726785233"
+        },
+        {
+          "file": "modules/interfaces/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "modules/interfaces/package.json",
+          "hash": "11249779142209700924"
+        },
+        {
+          "file": "modules/interfaces/project.json",
+          "hash": "17366966814878242553"
+        },
+        {
+          "file": "modules/interfaces/src/index.ts",
+          "hash": "17380900327344025106"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/AvailabilitySlot.ts",
+          "hash": "13027159329605455473"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Booking.ts",
+          "hash": "5519629515342199287"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/ChatMessage.ts",
+          "hash": "8583599531236494993"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/ChatStats.ts",
+          "hash": "11757697464433542469"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Course.ts",
+          "hash": "16753213525337319262"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Day.ts",
+          "hash": "14195064611890168658"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Department.ts",
+          "hash": "5754790203964314827"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/MessageTracker.ts",
+          "hash": "8442032845489103994"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Note.ts",
+          "hash": "505264019794859918"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/ReadReceipt.ts",
+          "hash": "17154457825672268220"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Response.ts",
+          "hash": "1611318809144248382"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/Teacher.ts",
+          "hash": "1729990509063236917"
+        },
+        {
+          "file": "modules/interfaces/src/interfaces/University.ts",
+          "hash": "13427805412831256323"
+        },
+        {
+          "file": "modules/interfaces/src/vue-shims.d.ts",
+          "hash": "1350740973621485859",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/interfaces/tsconfig.json",
+          "hash": "5004842028736779172"
+        },
+        {
+          "file": "modules/interfaces/tsconfig.lib.json",
+          "hash": "7566345199268402598"
+        },
+        {
+          "file": "modules/interfaces/vite.config.ts",
+          "hash": "14175138151054980329",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:vite-plugin-dts",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "ui": [
+        {
+          "file": "modules/ui/README.md",
+          "hash": "12971312433074001572"
+        },
+        {
+          "file": "modules/ui/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "modules/ui/package-lock.json",
+          "hash": "9613675013109284290"
+        },
+        {
+          "file": "modules/ui/package.json",
+          "hash": "11113670636278265345"
+        },
+        {
+          "file": "modules/ui/project.json",
+          "hash": "16161363468507754856"
+        },
+        {
+          "file": "modules/ui/src/components/Booking.vue",
+          "hash": "1855829355504555432",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "interfaces",
+            "stores"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/BookingList.vue",
+          "hash": "7767245724985641044",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/BookingProgram.vue",
+          "hash": "15101856809299381343",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/BookingsGallery.vue",
+          "hash": "2672685685859873244",
+          "deps": [
+            "npm:gsap",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Calendar.vue",
+          "hash": "16698679783352642199",
+          "deps": [
+            "npm:vue",
+            "npm:vue-router",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Card.vue",
+          "hash": "770704194272883503",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Chat.vue",
+          "hash": "14980378644458034049",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces",
+            "stores",
+            "services"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/ChatMessage.vue",
+          "hash": "17418647573611288688",
+          "deps": [
+            "npm:vue",
+            "interfaces",
+            "services",
+            "stores",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Drawer.vue",
+          "hash": "5658719568753471192",
+          "deps": [
+            "npm:pinia",
+            "stores",
+            "services"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Gallery.vue",
+          "hash": "2500567558615326506",
+          "deps": [
+            "npm:gsap",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/History.vue",
+          "hash": "15473525290599724284",
+          "deps": [
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Loading.vue",
+          "hash": "11064459695484328517"
+        },
+        {
+          "file": "modules/ui/src/components/Masterhead.vue",
+          "hash": "7624708314022367123",
+          "deps": [
+            "npm:vue",
+            "npm:@vueuse/components",
+            "composables"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/NavHeader.vue",
+          "hash": "229926360379486378",
+          "deps": [
+            "npm:vue-router",
+            "interfaces",
+            "composables"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Note.vue",
+          "hash": "4499247857918332041",
+          "deps": [
+            "npm:vue",
+            "interfaces",
+            "services"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Page.vue",
+          "hash": "15581517673779107722"
+        },
+        {
+          "file": "modules/ui/src/components/Recents.vue",
+          "hash": "13412534528538872983",
+          "deps": [
+            "npm:gsap",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/RefreshButton.vue",
+          "hash": "17330024934098228686",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/SearchHeader.vue",
+          "hash": "10844360663555775371",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/ui/src/components/Sidebox.vue",
+          "hash": "6727806831826552405"
+        },
+        {
+          "file": "modules/ui/src/components/Skeleton.vue",
+          "hash": "4450877163250294581"
+        },
+        {
+          "file": "modules/ui/src/components/Subheader.vue",
+          "hash": "11485965526165830816"
+        },
+        {
+          "file": "modules/ui/src/components/Toasts.vue",
+          "hash": "8114839790329578941",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "modules/ui/src/index.ts",
+          "hash": "10948733897071502861"
+        },
+        {
+          "file": "modules/ui/src/views/CoursesView.vue",
+          "hash": "12811308437965984242",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "stores",
+            "composables",
+            "services"
+          ]
+        },
+        {
+          "file": "modules/ui/src/views/NotesView.vue",
+          "hash": "7986993856691706385",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "npm:vue-router",
+            "interfaces",
+            "services",
+            "stores",
+            "composables"
+          ]
+        },
+        {
+          "file": "modules/ui/src/vue-shims.d.ts",
+          "hash": "1350740973621485859",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/ui/tsconfig.json",
+          "hash": "5004842028736779172"
+        },
+        {
+          "file": "modules/ui/tsconfig.lib.json",
+          "hash": "7566345199268402598"
+        },
+        {
+          "file": "modules/ui/vite.config.ts",
+          "hash": "5537929779667157723",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:vite-plugin-dts",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "teacher": [
+        {
+          "file": "apps/teacher/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "apps/teacher/index.html",
+          "hash": "12893645920260399499"
+        },
+        {
+          "file": "apps/teacher/project.json",
+          "hash": "7642131381321224934"
+        },
+        {
+          "file": "apps/teacher/src/app/App.vue",
+          "hash": "18071767230420392616",
+          "deps": [
+            "npm:vue-router"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/components/DateTimePicker.vue",
+          "hash": "7727753787165710594",
+          "deps": [
+            "npm:vue-router",
+            "npm:vue",
+            "npm:pinia",
+            "ui",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/components/TimePicker.vue",
+          "hash": "15521665435507681230",
+          "deps": [
+            "npm:vue-router",
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/components/TimeSlot.vue",
+          "hash": "922240671733196529",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/composables/fetch.ts",
+          "hash": "18370871638910956500"
+        },
+        {
+          "file": "apps/teacher/src/core/services/availability/availability-api.service.ts",
+          "hash": "17064122848216497020",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/core/services/availability/availability-data.service.ts",
+          "hash": "18394230268955019164",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/main.ts",
+          "hash": "16356489309254210539",
+          "deps": [
+            "npm:vue",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/router/index.ts",
+          "hash": "6523476923023800573",
+          "deps": [
+            "npm:vue-router",
+            "services",
+            [
+              "ui",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "apps/teacher/src/stores/availability.ts",
+          "hash": "11546004579819428154",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "stores",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/views/AvailabilityView.vue",
+          "hash": "4680302371962658801",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "npm:vue-router",
+            "interfaces",
+            "ui",
+            "services",
+            "composables",
+            "stores"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/views/BookingsView.vue",
+          "hash": "18229806271683660634",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "services",
+            "stores",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/views/ChatView.vue",
+          "hash": "16321755299827661865",
+          "deps": [
+            "npm:pinia",
+            "npm:vue-router",
+            "npm:vue",
+            "interfaces",
+            "services",
+            "stores",
+            "ui"
+          ]
+        },
+        {
+          "file": "apps/teacher/src/views/TutoringView.vue",
+          "hash": "4754989104801458756",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "ui",
+            "stores",
+            "services",
+            "composables"
+          ]
+        },
+        {
+          "file": "apps/teacher/tsconfig.app.json",
+          "hash": "3738736504077772611"
+        },
+        {
+          "file": "apps/teacher/tsconfig.json",
+          "hash": "2334587140367692194"
+        },
+        {
+          "file": "apps/teacher/vite.config.ts",
+          "hash": "3752448759022704448",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "composables": [
+        {
+          "file": "modules/composables/README.md",
+          "hash": "14871565100671530484"
+        },
+        {
+          "file": "modules/composables/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "modules/composables/package.json",
+          "hash": "11432027728020872611"
+        },
+        {
+          "file": "modules/composables/project.json",
+          "hash": "5713995665551375646"
+        },
+        {
+          "file": "modules/composables/src/composables/history.ts",
+          "hash": "10626599793650775689",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/composables/src/composables/recents.ts",
+          "hash": "12099112483747750069",
+          "deps": [
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/composables/src/index.ts",
+          "hash": "4716081501861726875"
+        },
+        {
+          "file": "modules/composables/src/vue-shims.d.ts",
+          "hash": "1350740973621485859",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/composables/tsconfig.json",
+          "hash": "5004842028736779172"
+        },
+        {
+          "file": "modules/composables/tsconfig.lib.json",
+          "hash": "7566345199268402598"
+        },
+        {
+          "file": "modules/composables/vite.config.ts",
+          "hash": "10619129653714693689",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:vite-plugin-dts",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "stores": [
+        {
+          "file": "modules/stores/README.md",
+          "hash": "14094560785446188806"
+        },
+        {
+          "file": "modules/stores/eslint.config.js",
+          "hash": "609792357052144534",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "modules/stores/package.json",
+          "hash": "13475887400917957956"
+        },
+        {
+          "file": "modules/stores/project.json",
+          "hash": "2736606746136935344"
+        },
+        {
+          "file": "modules/stores/src/index.ts",
+          "hash": "15729999281908156065"
+        },
+        {
+          "file": "modules/stores/src/stores/bookings.store.ts",
+          "hash": "18122859369039733902",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/chat.store.ts",
+          "hash": "11943356389485838865",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "npm:webstomp-client",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/courses.store.ts",
+          "hash": "16145621996849531595",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/errors.store.ts",
+          "hash": "3043652320933118166",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/files.store.ts",
+          "hash": "11024978349328245819",
+          "deps": [
+            "npm:vue",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/notes.store.ts",
+          "hash": "1230399120821314190",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/responses.store.ts",
+          "hash": "17232132879975149971",
+          "deps": [
+            "npm:pinia",
+            "npm:vue",
+            "interfaces"
+          ]
+        },
+        {
+          "file": "modules/stores/src/stores/user.store.ts",
+          "hash": "3808876956929572709",
+          "deps": [
+            "npm:vue",
+            "npm:pinia",
+            "interfaces",
+            "npm:keycloak-js"
+          ]
+        },
+        {
+          "file": "modules/stores/src/vue-shims.d.ts",
+          "hash": "1350740973621485859",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/stores/tsconfig.json",
+          "hash": "5004842028736779172"
+        },
+        {
+          "file": "modules/stores/tsconfig.lib.json",
+          "hash": "7566345199268402598"
+        },
+        {
+          "file": "modules/stores/vite.config.ts",
+          "hash": "12632832621629167602",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:vite-plugin-dts",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "services": [
+        {
+          "file": "modules/core/services/README.md",
+          "hash": "13588354782459222461"
+        },
+        {
+          "file": "modules/core/services/eslint.config.js",
+          "hash": "17559067862277079597",
+          "deps": [
+            "npm:eslint-plugin-vue",
+            "npm:@typescript-eslint/parser"
+          ]
+        },
+        {
+          "file": "modules/core/services/package-lock.json",
+          "hash": "12948962589432129457"
+        },
+        {
+          "file": "modules/core/services/package.json",
+          "hash": "17973498442623642866"
+        },
+        {
+          "file": "modules/core/services/project.json",
+          "hash": "15007437988353687896"
+        },
+        {
+          "file": "modules/core/services/src/auth/auth-adapter.service.ts",
+          "hash": "3967842636543983816",
+          "deps": [
+            "npm:keycloak-js",
+            "npm:universal-cookie"
+          ]
+        },
+        {
+          "file": "modules/core/services/src/bookings/bookings-api.service.ts",
+          "hash": "10481391014205254494"
+        },
+        {
+          "file": "modules/core/services/src/bookings/bookings-data.service.ts",
+          "hash": "11772760856714914943",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "modules/core/services/src/chat/chat-api.service.ts",
+          "hash": "16161240119121467546"
+        },
+        {
+          "file": "modules/core/services/src/chat/chat-data.service.ts",
+          "hash": "12956519454209981810",
+          "deps": [
+            "npm:pinia",
+            "npm:webstomp-client",
+            "npm:sockjs-client",
+            "interfaces",
+            "stores"
+          ]
+        },
+        {
+          "file": "modules/core/services/src/courses/courses-api.service.ts",
+          "hash": "9445890000055447872"
+        },
+        {
+          "file": "modules/core/services/src/courses/courses-data.service.ts",
+          "hash": "7603148577811655330",
+          "deps": [
+            "npm:pinia",
+            "stores"
+          ]
+        },
+        {
+          "file": "modules/core/services/src/index.ts",
+          "hash": "11424875866732903615"
+        },
+        {
+          "file": "modules/core/services/src/notes/notes-api.service.ts",
+          "hash": "17231064735810133512"
+        },
+        {
+          "file": "modules/core/services/src/notes/notes-data.service.ts",
+          "hash": "16385396257455467772",
+          "deps": [
+            "stores"
+          ]
+        },
+        {
+          "file": "modules/core/services/src/user/departments-api.service.ts",
+          "hash": "7222368794788934662"
+        },
+        {
+          "file": "modules/core/services/src/user/universities-api.service.ts",
+          "hash": "7701823112194592787"
+        },
+        {
+          "file": "modules/core/services/src/user/user-data.service.ts",
+          "hash": "12793232481895922338",
+          "deps": [
+            "npm:keycloak-js",
+            "stores",
+            "npm:pinia"
+          ]
+        },
+        {
+          "file": "modules/core/services/src/vue-shims.d.ts",
+          "hash": "1350740973621485859",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "modules/core/services/tsconfig.json",
+          "hash": "5865820734782665446"
+        },
+        {
+          "file": "modules/core/services/tsconfig.lib.json",
+          "hash": "7173602238919161478"
+        },
+        {
+          "file": "modules/core/services/vite.config.ts",
+          "hash": "6864124885768339614",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-vue",
+            "npm:vite-plugin-dts",
+            "npm:@nx/vite"
+          ]
+        }
+      ]
+    }
+  }
+}

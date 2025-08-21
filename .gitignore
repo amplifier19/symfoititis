@@ -34,7 +34,7 @@ HELP.md
 target/
 **/env
 **/prod
-**/resources/application*
+**/application-*.yml
 **/cert/
 **/resources/policy-enforcer.json
 !.mvn/wrapper/maven-wrapper.jar

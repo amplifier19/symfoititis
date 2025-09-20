@@ -41,8 +41,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# NX
-.nx/*
+.nx
+keycloak/themes
 
 ### STS ###
 .apt_generated

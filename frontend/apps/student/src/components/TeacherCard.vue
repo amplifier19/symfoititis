@@ -42,6 +42,12 @@ const handleSelectTeacher = (event: Event) => {
   box-shadow: none;
   margin-bottom: 1rem;
 }
+
+.pf-v5-c-expandable-section__content {
+  padding-inline-start: 0; 
+  padding-inline-end: 0; 
+}
+
 .pf-v5-c-expandable-section > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > i {
   rotate: 90deg;
 }
@@ -98,7 +104,7 @@ const handleSelectTeacher = (event: Event) => {
 }
 .fa-angle-right {
   transform: translateX(2px);
-  font-size: 40px;
+  font-size: 20px;
 }
 .calendar-container {
   max-width: 100%;
@@ -109,8 +115,8 @@ const handleSelectTeacher = (event: Event) => {
   .toogle-item {
     margin: 0 10px;
   }
-  .fa-angle-right {
+  /* .fa-angle-right {
     font-size: 30px;
-  }
+  } */
 }
 </style>

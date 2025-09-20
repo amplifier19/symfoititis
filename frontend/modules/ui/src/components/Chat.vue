@@ -351,7 +351,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     </section>
 </template>
 
-<style>
+<style scoped>
 .chat-header-wrapper {
     position: sticky;
     top: clamp(80px, 8vw, 220px);

@@ -1,2 +1,3 @@
-export { useRecents } from './composables/recents.ts'
-export { useHistory } from './composables/history.ts'
+export { useRecents } from './composables/recents'
+export { useHistory } from './composables/history'
+export { useDate } from './composables/date'

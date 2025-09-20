@@ -8,7 +8,7 @@ const props = defineProps<{
   bookingId?: number
 }>()
 
-const formattedCourseName = computed(() => {
+const getCourseThumbnail = computed(() => {
   return props.course.c_display_name
     .split(' ')
     .map((word: string) => {
@@ -20,28 +20,33 @@ const formattedCourseName = computed(() => {
 </script>
 
 <template>
-  <RouterLink :to="{ name: props.link, params: { c_id: course.c_id, b_id: props.bookingId } }">
-    <div class="card-container">
+  <RouterLink class="card-wrapper" :to="{ name: props.link, params: { c_id: course.c_id, b_id: props.bookingId } }">
+    <div class="card-cnt">
       <slot name="card-header"></slot>
-      <span class="course-name">
-        {{ formattedCourseName  }}
+      <span class="course-thumb xxl-font rg-fw">
+        {{ getCourseThumbnail  }}
       </span>
       <slot name="card-footer"></slot>
     </div>
   </RouterLink>
-  <span class="course-description">
-    <h2>{{ props.course.c_display_name }}</h2>
+  <span class="course-name sm-font rg-fw">
+    {{ props.course.c_display_name }}
   </span>
 </template>
 
 <style scoped>
-.card-container:hover {
+.card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-cnt:hover {
   background-image: url('/svg/hover_course_card.svg');
 }
 
-.card-container{
-  height: clamp(7.5rem, 6vw, 8.5rem);
-  width: clamp(7.5rem, 6vw, 8.5rem);
+.card-cnt{
+  height: clamp(110px, 9vw, 140px);
+  width: clamp(110px, 9vw, 140px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,74 +58,66 @@ const formattedCourseName = computed(() => {
 
 }
 
-.course-name {
+.course-thumb {
   color: var(--orange);
-  font-size: 1.5rem;
   flex-grow: 0;
 }
 
-.course-description {
-  width: 8.5rem;
+.course-name {
+  width: 75%;
   display: flex;
   justify-content: center;
   text-align: center;
-  margin: 1rem auto;
-  font-size: 0.95rem;
+  margin: 0 auto;
+  margin-top: 8px;
+  margin-bottom: 30px;
 }
 
-.course-description > h2 {
-  font-weight: 500;
-}
-
-@media screen and (max-width: 1800px) {
-  .card-container {
-    height: clamp(6.5rem, 7vw, 8.5rem);
-    width: clamp(6.5rem, 7vw, 8.5rem);
-  }
-
-  .course-description {
-    width: 6.5rem;
-    margin: 0.8rem auto 1rem auto;
+@media screen and (max-width: 1600px) {
+  .card-cnt {
+    height: clamp(110px, 9vw, 500px);
+    width: clamp(110px, 9vw, 500px);
   }
 
   .course-name {
-    font-size: 1.1rem;
+    /* width: 6.5rem; */
+    /* margin: 0.8rem auto 1rem auto; */
   }
 
-  .course-description {
-    font-size: 0.85rem;
-  }
 }
 
 @media screen and (max-width: 1300px) {
-  .card-container {
-    height: clamp(5.5rem, 7vw, 8.5rem);
-    width: clamp(5.5rem, 7vw, 8.5rem);
+  .card-cnt {
+    height: clamp(110px, 10vw, 500px);
+    width: clamp(110px, 10vw, 500px);
   }
 
-  .course-description {
-    width: 5.5rem;
-    margin: 0.6rem auto 1rem auto;
-  }
-
-  .course-description {
-    font-size: 0.8rem;
+  .course-name {
+    /* width: 5.5rem; */
+    /* margin: 0.6rem auto 1rem auto; */
   }
 }
 
-@media screen and (max-width: 800px) {
-  .pf-v5-c-card {
-    min-width: 5rem;
-    min-height: 5rem;
+@media screen and (max-width: 1000px) {
+  .card-cnt {
+    height: clamp(100px, 12.5vw, 500px);
+    width: clamp(100px, 12.5vw, 500px);
   }
 
-  .course-description {
-    width: 5rem;
-    margin: 0.6rem auto 1rem auto;
+  .course-name {
+    /* width: 5.5rem; */
+    /* margin: 0.6rem auto 1rem auto; */
   }
+}
 
-  .course-description {
-    font-size: 0.8rem;
+@media screen and (max-width: 700px) {
+  .card-cnt {
+    height: clamp(100px, 16vw, 500px);
+    width: clamp(100px, 16vw, 500px);
+  }
+  .course-name {
+    /* width: 5rem; */
+    /* margin: 0.6rem auto 1rem auto; */
   }
 }
 </style>

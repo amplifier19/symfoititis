@@ -7,6 +7,7 @@ import { Booking, Course, ChatStats } from '@symfoititis-frontend-monorepo/inter
 import { useChatStore, useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 
 import Card from './Card.vue'
+import { useDate } from '@symfoititis-frontend-monorepo/composables';
 
 const props = defineProps<{
     booking: Booking
@@ -15,6 +16,7 @@ const props = defineProps<{
 
 const courseStore = useCourseStore()
 const chatStore = useChatStore()
+const { formatDate } = useDate()
 
 const { courses } = storeToRefs(courseStore)
 const { chatStats } = storeToRefs(chatStore)
@@ -40,16 +42,16 @@ const getRemainingDays = () => {
     const hours = Math.floor((Math.abs(difference) - (days * DAY_MILLISEC)) / HOUR_MILLISEC)
     const minutes = Math.floor((Math.abs(difference) - (days * DAY_MILLISEC) - (hours * HOUR_MILLISEC)) / MINUTE_MILLISEC)
     if (days > 0) {
-        cardFooter.value?.classList.add('not-immediate-booking-footer-title')
-        return difference < 0 ? `Πριν ${days} μέρες` : `Σε ${days} μέρες`
+        cardFooter.value?.classList.add('rg-fw')
+        return difference < 0 ? formatDate(props.booking.date, "dd/MM") : `Σε ${days} μέρες`
     } else if (hours > 0) {
-        cardFooter.value?.classList.add('not-so-immediate-booking-footer-title')
-        return difference < 0 ? `Πριν ${hours} ώρες` : `Σε ${hours} ώρες`
+        cardFooter.value?.classList.add('sb-fw')
+        return difference < 0 ? formatDate(props.booking.date, "dd/MM") : `Σε ${hours} ώρες`
     } else if (minutes > 0) {
-        cardFooter.value?.classList.add('immediate-booking-footer-title')
-        return difference < 0 ? `Πριν ${minutes} λεπτά` : `Σε ${minutes} λεπτά`
+        cardFooter.value?.classList.add('b-fw')
+        return difference < 0 ? formatDate(props.booking.date, "dd/MM")  : `Σε ${minutes} λεπτά`
     }
-    cardFooter.value?.classList.add('immediate-booking-footer-title')
+    cardFooter.value?.classList.add('b-fw')
     return 'Τώρα'
 }
 </script>
@@ -67,21 +69,21 @@ const getRemainingDays = () => {
             </div>
         </template>
         <template v-slot:card-footer>
-            <h2 ref="cardFooter" class="card-footer-text">{{ getRemainingDays() }}</h2>
+            <span ref="cardFooter" class="card-footer-text sm-font">{{ getRemainingDays() }}</span>
         </template>
     </Card>
 
     <section v-else class="booking-row">
         <div id="course-details" class="details">
-            <span class="course-title booking-field">{{ course.c_display_name }}</span>
-            <span class="semester booking-field">{{ alphabet[course.semester - 1] }}' Εξάμηνο</span>
+            <span class="course-title booking-field lg-font sb-fw">{{ course.c_display_name }}</span>
+                <span class="semester booking-field lg-font md-fw">{{ alphabet[course.semester - 1] }}' Εξάμηνο</span>
         </div>
         <div id="booking-details" class="details">
-            <span class="time booking-field">{{ booking.start_time }}:00 - {{ booking.start_time + 1 }}:00</span>
-            <span v-if="isStudent" class="name booking-field">
+            <span class="time booking-field md-font sb-fw">{{ booking.start_time }}:00 - {{ booking.start_time + 1 }}:00</span>
+            <span v-if="isStudent" class="name booking-field md-font lt-fw">
                 {{ booking.teacher_firstname }} {{ booking.teacher_lastname }}
             </span>
-            <span v-else class="name booking-field">{{ booking.student_name }}</span>
+            <span v-else class="name booking-field md-font lt-fw">{{ booking.student_name }}</span>
         </div>
     </section>
 </template>
@@ -94,18 +96,12 @@ const getRemainingDays = () => {
 }
 
 .card-top-text {
-    font-size: 1rem;
     text-align: center;
 }
 
 .card-footer-text {
     text-align: center;
     max-height: fit-content;
-}
-
-.booking-field {
-  color: var(--white);
-  font-family: 'Geologica-Medium';
 }
 
 .unread-message-badge {
@@ -118,25 +114,11 @@ const getRemainingDays = () => {
 
 .card-badge-text {
     text-align: center;
-    font-family: 'Geologica-SemiBold';
 }
 
 .card-footer-text {
     position: absolute;
     bottom: 0;
-    font-family: 'Geologica-SemiBold';
-}
-
-.not-immediate-booking-footer-title {
-    font-family: 'Geologica-Regular';
-}
-
-.not-so-immediate-booking-footer-title {
-    font-family: 'Geologica-Semibold';
-}
-
-.immediate-booking-footer-title {
-    font-family: 'Geologica-Bold';
 }
 
 .booking-row {
@@ -144,6 +126,14 @@ const getRemainingDays = () => {
     display: flex;
     flex-direction: column;
     margin-bottom: 2rem;
+}
+
+.semester {
+    white-space: nowrap ;
+}
+
+.time {
+    white-space: nowrap;
 }
 
 .details {
@@ -158,31 +148,31 @@ const getRemainingDays = () => {
     border: 1.5px solid var(--orange);
     border-radius: 5px;
     color: var(--orange);
-    margin-bottom: 0.5rem;
 }
 
 #booking-details {
     color: var(--black);
 }
 
-.course-title {
-    font-family: 'Geologica-Medium';
-}
-
-.semester {
-    font-family: 'Geologica-Light';
+.name-cnt {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .name {
     text-transform: uppercase;
+    display: block;
+    text-align: right;
 }
 
-@media screen and (max-width: 1300px) {
-    .card-top-text{
+@media screen and (max-width: 1000px) {
+    .details {
+        padding: 0.3rem 1rem;
+    } 
+    /* .card-top-text{
         color: white;
         padding: 0 .4rem;
         padding-top: .1rem;
-        font-size: .8rem;
-    }
+    } */
 }
 </style>

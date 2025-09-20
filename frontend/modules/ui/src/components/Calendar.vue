@@ -235,7 +235,6 @@ watch(props, (newProps, oldProps) => initWeeks())
 .elapsed-date {
   cursor: not-allowed;
 }
-
 .notallowed-btn {
   pointer-events: none;
 }

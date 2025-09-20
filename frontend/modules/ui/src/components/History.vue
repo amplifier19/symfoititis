@@ -20,7 +20,7 @@ const props = defineProps<{
         :class="course.c_id == props.cid ? 'current-history-item' : ''" 
         :data-index="index">
 
-        <RouterLink class="history-link" :to="{ name: props.to, params: { c_id: course.c_id } }">
+        <RouterLink class="history-link sm-font rg-fw" :to="{ name: props.to, params: { c_id: course.c_id } }">
           {{ course.c_display_name }}
         </RouterLink>
 
@@ -57,7 +57,6 @@ const props = defineProps<{
 .history-container {
   display: flex;
   flex-direction: row;
-  font-size: .95rem;
 }
 
 .history-item {
@@ -87,17 +86,7 @@ const props = defineProps<{
   padding-left: .9rem;
 }
 
-@media screen and (max-width: 1800px) {
-  .history-container {
-    font-size: 0.85rem;
-  }
-}
-
 @media screen and (max-width: 1300px) {
-  .history-container {
-    font-size: 0.8rem;
-  }
-
   .history-item {
     padding: 0.3rem 0.7rem;
   }

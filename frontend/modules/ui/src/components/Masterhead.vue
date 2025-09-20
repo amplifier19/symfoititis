@@ -79,12 +79,12 @@ onMounted(() => {
       <ul class="nav-items-container">
         <RouterLink :to="{ name: 'courses'}">
           <Sidebox v-if="props.selected == 1 || props.selected == 2" :content="getHistorySize('notes_history')" id="left-sidebox" />
-          <li ref="notesBtn" class="nav-item">
+          <li ref="notesBtn" class="nav-item lg-font md-fw">
             Σημειώσεις
           </li>
         </RouterLink>
         <RouterLink :to="{ name: 'tutoring'}">
-          <li ref="tutoringBtn" class="nav-item">
+          <li ref="tutoringBtn" class="nav-item lg-font md-fw">
             Ιδιαίτερα
           </li>
           <Sidebox v-if="props.selected == 0 || props.selected == 2" :content="getHistorySize('bookings_history')" id="right-sidebox" />
@@ -149,7 +149,6 @@ nav {
 }
 
 .nav-items-container {
-  font-family: 'Geologica-Medium';
   display: flex;
   flex-direction: row;
   transform: translateY(1px);
@@ -167,7 +166,6 @@ nav {
   align-items: center;
   width: clamp(160px, 16vw, 235px);
   height: clamp(40px, 4vw, 55px);
-  font-size: clamp(1rem, 1.5vw, 1.2rem); 
   color: var(--white);
 }
 

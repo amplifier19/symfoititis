@@ -43,58 +43,7 @@ const enter = (element: Element, done: gsap.Callback) => {
 </template>
 
 <style scoped>
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  padding: 0 auto;
-  justify-items: center;
-}
-
-.card-container {
-  width: max-content;
-  height: auto;
-}
-
-@media screen and (max-width: 1800px) {
-  .gallery {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  .gallery {
-    grid-template-columns: repeat(5, 1fr)
-  }
-
-}
-
-@media screen and (max-width: 800px) {
-  .gallery {
-    grid-template-columns: repeat(4, 1fr)
-  }
-}
-
-@media screen and (max-width: 550px) {
-  .gallery {
-    grid-template-columns: repeat(3, 1fr)
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .gallery {
-    grid-template-columns: repeat(3, 1fr)
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .gallery {
-    grid-template-columns: repeat(2, 1fr)
-  }
-}
-
-@media screen and (max-width: 250px) {
-  .gallery {
-    grid-template-columns: repeat(1, 1fr)
-  }
+.subheader {
+  color: var(--orange);
 }
 </style>

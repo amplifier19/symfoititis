@@ -39,10 +39,6 @@ a {
     color: var(--black);
 }
 
-.regular-text {
-  font-size: 1rem;
-}
-
 .search-input {
   border-radius: 0px;
   height: auto;
@@ -54,16 +50,3 @@ a {
   margin: 0px;
 }
 
-@media screen and (max-width: 1800px) {
-
-}
-
-@media screen and (max-width: 1300px) {
-  .regular-text {
-    font-size: 0.9rem !important;
-  }
-}
-
-@media screen and (max-width: 590px) {
-
-}

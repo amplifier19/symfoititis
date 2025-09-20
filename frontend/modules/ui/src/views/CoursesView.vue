@@ -40,7 +40,7 @@ onMounted(async () => {
 
     <template v-slot:subheader>
       <SearchHeader title="Σημειώσεις" :display-search="true" :search="search" @clear-search="clearSearch">
-        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε μάθημα" />
+        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε μάθημα" /> 
       </SearchHeader>
     </template>
 
@@ -52,9 +52,6 @@ onMounted(async () => {
 </template>
 
 <style>
-h2:first-of-type {
-  height: clamp(50px, 5vw, 100px);
-}
 .search-input {
   width: 100%;
   box-sizing: unset;

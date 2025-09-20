@@ -121,26 +121,22 @@ watch(route, (newRoute, oldRoute) => {
   margin-top: 10px;
 }
 
-/* 👇 outer wrapper shrink-wraps its contents */
 .time-picker-container {
-  display: inline-block;     /* shrink to fit its child */
-  width: fit-content;        /* or: width: max-content; */
-  max-width: 100%;           /* guard against viewport overflow */
-  flex: 0 0 auto;            /* if it's inside a flex parent, don't stretch */
+  display: inline-block;     
+  width: fit-content;        
+  max-width: 100%;           
 }
 
-/* 👇 inner list sizes to its content (no fixed width) */
 .time-picker {
   margin: 24px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: fit-content;        /* key: shrink to the widest child */
+  width: fit-content;        
   min-height: 353px;
   height: max-content;
 }
 
-/* children don't force full width */
 .time-picker > li {
   width: auto;
 }
@@ -153,12 +149,10 @@ watch(route, (newRoute, oldRoute) => {
   align-items: center;
 }
 
-/* keep spacing */
 .time-picker > li:last-of-type {
   margin-bottom: 2.5rem;
 }
 
-/* buttons size by their text, not container */
 .time-slot {
   display: flex;
   align-items: center;
@@ -166,8 +160,8 @@ watch(route, (newRoute, oldRoute) => {
   height: 60px;
   margin-bottom: 0.25rem;
   padding: 0 1rem;
-  width: max-content;        /* intrinsic width */
-  white-space: nowrap;       /* avoid wrapping that would change width */
+  width: max-content;       
+  white-space: nowrap;       
 }
 
 .time-slot,
@@ -177,7 +171,6 @@ watch(route, (newRoute, oldRoute) => {
   color: var(--black);
 }
 
-/* remove forced full-width from PF button */
 .pf-v5-c-button {
   width: auto;
 }
@@ -191,7 +184,7 @@ watch(route, (newRoute, oldRoute) => {
   height: 60px;
   color: var(--orange);
   margin-top: auto;
-  align-self: center;        /* center the CTA within shrink-wrapped list */
+  align-self: center;       
 }
 
 #book-btn {
@@ -214,13 +207,12 @@ watch(route, (newRoute, oldRoute) => {
   color: white;
 }
 
-/* prompts also shrink to content */
 .time-picker-prompt {
-  margin: 24px auto;
+  margin: 16px 24px auto;
   color: var(--orange);
   border: 2.5px dashed var(--orange);
-  width: fit-content;        /* was 450px */
-  max-width: 100%;           /* keep responsive */
+  width: fit-content;        
+  max-width: 100%;           
   display: flex;
   align-items: center;
   justify-content: center;

@@ -22,7 +22,7 @@ watch(props, (newProps, oldProps) => {
   <section class="search-wrapper">
     <div class="search-container content-width">
 
-      <span class="search-name">{{ props.title }}</span>
+      <span class="search-name lg-font md-fw">{{ props.title }}</span>
 
       <div v-if="props.displaySearch" class="searchbar">
           <slot></slot>
@@ -56,9 +56,9 @@ watch(props, (newProps, oldProps) => {
 }
 
 .search-name {
-  font-size: 1.15rem;
-  font-family: 'Geologica-SemiBold';
   color: var(--white);
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .searchbar {
@@ -71,48 +71,33 @@ watch(props, (newProps, oldProps) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  padding: 0.3rem;
   cursor: pointer;
   background-color: white;
 }
 
 #search-icon-container {
+  padding: 0 6px;
+  flex: 0 0 auto;
   pointer-events: none;
 }
 
 .icon {
-  width: 1.2rem;
-  height: 1.2rem;
+  flex: 0 0 auto;
+  object-fit: fill;
   background-color: white;
+  width:  18px;
+  height: 18px;
 }
 
 @media screen and (max-width: 1800px) {
   .search-container {
     padding: 0.2rem 2rem;
   }
-
-  .search-name {
-    font-size: 1.1rem;
-  }
-
-  .icon {
-    width: 1rem;
-    height: 1rem;
-  }
 }
 
 @media screen and (max-width: 1300px) {
   .search-container {
     padding: 0.2rem 1rem;
-  }
-
-  .search-name {
-    font-size: 1rem;
-  }
-
-  .searchbar>span {
-    font-size: 1rem;
   }
 }
 </style>

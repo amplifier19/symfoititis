@@ -226,7 +226,7 @@ watch(route, async (oldRoute, newRoute) => {
 }
 
 .time-picker-prompt {
-  margin: 24px;
+  margin: 16px 24px;
   color: var(--orange);
   border: 2.5px dashed var(--orange);
   width: 450px;
@@ -235,7 +235,7 @@ watch(route, async (oldRoute, newRoute) => {
   justify-content: center;
   text-align: center;
   text-transform: uppercase;
-  padding: 2rem;
+  padding: 32px;
 }
 
 @media screen and (max-width: 1300px) {

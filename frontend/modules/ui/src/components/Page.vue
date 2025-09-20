@@ -56,4 +56,120 @@ html, body {
 .content-width {
   width: clamp(350px, 70vw, 1500px);
 }
+
+.gallery-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-container {
+  margin-bottom: 2rem;
+}
+
+.gallery {
+  display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  padding: 0 auto;
+  justify-items: center;
+}
+
+.card-container {
+  width: 100%;
+  height: auto;
+}
+
+@media screen and (max-width: 1600px) {
+  .gallery {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .gallery {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/*
+@media screen and (max-width: 340px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 250px) {
+  .gallery {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}*/
+
+.sm-font {
+  font-size: 15px;
+}
+
+.md-font {
+  font-size: 18px;
+}
+
+.lg-font {
+  font-size: 20px;
+}
+
+.xl-font {
+  font-size: 40px;
+}
+
+.xxl-font {
+  font-size: 40px;
+}
+
+.lt-fw {
+  font-family: "Geologica-Light";
+}
+
+.rg-fw {
+  font-family: "Geologica-Regular";
+}
+
+.md-fw {
+  font-family: "Geologica-Medium";
+}
+
+.sb-fw {
+  font-family: "Geologica-SemiBold";
+}
+
+@media screen and (max-width: 1000px) {
+.sm-font {
+  font-size: 12px;
+}
+
+.md-font {
+  font-size: 16px;
+}
+
+.lg-font {
+  font-size: 18px;
+}
+
+.xl-font {
+  font-size: 22px;
+}
+
+.xxl-font {
+  font-size: 30px;
+}
+}
+
 </style>

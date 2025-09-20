@@ -30,11 +30,11 @@ const handleDelete = () => {
         <RouterLink :to="{name: props.navigation}" class="icon-container">
           <img class="title-icon" src="/svg/arrow_white.svg" alt="left-arrow" />
         </RouterLink>
-        <span class="title" id="course-title">{{ props.course.c_display_name }}</span>
+        <span class="title lg-font md-fw" id="course-title">{{ props.course.c_display_name }}</span>
       </div>
 
       <div class="title-container">
-        <span class="title" id="semester-title">{{ alphabet[props.course.semester - 1] }}' Εξάμηνο</span>
+        <span class="title lg-font lt-fw" id="semester-title">{{ alphabet[props.course.semester - 0] }}' Εξάμηνο</span>
         <div @click="handleDelete" class="icon-container">
           <img class="title-icon" src="/svg/close_white.svg" alt="close-icon" />
         </div>
@@ -66,24 +66,24 @@ const handleDelete = () => {
 
 .title {
   color: var(--orange);
-  font-size: 1.15rem;
 }
 
 #course-title {
+  min-width: 0;
+  flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 800;
   padding-left: 2rem;
 }
 
 #semester-title {
-  font-family: 'Geologica-Light';
   padding-right: 2rem;
 }
 
 .icon-container {
   background-color: var(--orange);
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,6 +92,8 @@ const handleDelete = () => {
 }
 
 .title-icon {
+  flex: 0 0 auto;
+  object-fit: fill;
   height: 1.4rem;
   width: 1.4rem;
 }
@@ -99,10 +101,6 @@ const handleDelete = () => {
 @media screen and (max-width: 1800px) {
   .title-container {
     max-width: calc(100% - 160px);
-  }
-
-  .title {
-    font-size: 1rem;
   }
 
   .title-icon {
@@ -120,17 +118,10 @@ const handleDelete = () => {
 }
 
 @media screen and (max-width: 1300px) {
-  .title-container {
-    max-width: calc(100% - 130px);
-  }
-
-  .title {
-    font-size: 0.9rem;
-  }
-
   .title-icon {
     height: 1rem;
     width: 1rem;
+
   }
 
   #course-title {

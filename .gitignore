@@ -41,6 +41,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# NX
+.nx/*
+
 ### STS ###
 .apt_generated
 .classpath

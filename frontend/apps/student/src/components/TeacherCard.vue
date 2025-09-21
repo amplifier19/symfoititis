@@ -2,6 +2,8 @@
 import { ref, defineAsyncComponent } from 'vue'
 import { type Teacher } from '@symfoititis-frontend-monorepo/interfaces'
 
+
+const rootUrl = import.meta.env.VITE_HOST
 const props = defineProps<{
   teacher: Teacher
   selectedTeacherId: string
@@ -12,6 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const expandableDiv = ref<HTMLElement>()
+
 const DateTimePicker = defineAsyncComponent(() => import('./DateTimePicker.vue'))
 
 const handleSelectTeacher = (event: Event) => {
@@ -26,7 +29,8 @@ const handleSelectTeacher = (event: Event) => {
         {{ props.teacher.firstname }} {{ props.teacher.lastname }}
       </span>
       <span class="pf-v5-c-expandable-section__toggle-icon toogle-item">
-        <i class="fa fa-angle-right" aria-hidden="true"></i>
+        <!-- <i class="fa fa-angle-right" aria-hidden="true"></i> -->
+         <img class="angle-icon" src="./angle-icon-orange.svg" alt="angle-icon">
       </span>
     </section>
 
@@ -48,9 +52,6 @@ const handleSelectTeacher = (event: Event) => {
   padding-inline-end: 0; 
 }
 
-.pf-v5-c-expandable-section > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > i {
-  rotate: 90deg;
-}
 .pf-v5-c-expandable-section__toggle {
   display: flex;
   flex-direction: row;
@@ -62,12 +63,18 @@ const handleSelectTeacher = (event: Event) => {
   color: var(--gray);
   cursor: pointer;
 }
-.pf-m-expanded > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > i {
-  rotate: -180deg;
+.pf-v5-c-expandable-section__toggle-icon > img {
+  user-select: none;
 }
-.pf-m-expanded:hover > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > i {
-  rotate: -180deg;
+
+.pf-v5-c-expandable-section > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > img {
+  rotate: 180deg;
 }
+
+.pf-m-expanded > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > img {
+  rotate: -90deg;
+}
+
 .pf-m-expanded::after {
   background-color: transparent;
 }
@@ -93,18 +100,22 @@ const handleSelectTeacher = (event: Event) => {
   border-bottom: transparent;
   color: var(--black);
 }
-.pf-v5-c-expandable-section__toggle:hover > .pf-v5-c-expandable-section__toggle-icon {
-  color: white;
+.pf-v5-c-expandable-section__toggle:hover > .pf-v5-c-expandable-section__toggle-icon > img {
+  /* color: white; */
+  content: url('./angle-icon-white.svg');
 }
-.pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon {
-  color: var(--orange);
+.pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > img {
+  /* color: var(--orange); */
+  content: url('./angle-icon-orange.svg');
 }
-.pf-m-expanded > .pf-v5-c-expandable-section__toggle:hover > .pf-v5-c-expandable-section__toggle-icon {
-  color: var(--orange);
+.pf-m-expanded > .pf-v5-c-expandable-section__toggle:hover > .pf-v5-c-expandable-section__toggle-icon > img {
+  /* color: var(--orange); */
+  content: url('./angle-icon-orange.svg');
 }
-.fa-angle-right {
-  transform: translateX(2px);
-  font-size: 20px;
+
+.angle-icon {
+  width: 23px;
+  height: 13px;
 }
 .calendar-container {
   max-width: 100%;

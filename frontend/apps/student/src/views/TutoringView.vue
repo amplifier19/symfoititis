@@ -44,7 +44,7 @@ onMounted(async () => {
     </template>
     <template v-slot:main>
       <SearchHeader title="Ιδιαίτερα" :display-search="true" :search="search" @clear-search="clearSearch">
-        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε μάθημα" />
+        <input v-model="search" type="text" class="search-input" placeholder="  Αναζήτησε μάθημα" />
       </SearchHeader>
       <Recents v-if="!search && recents.length > 0" link="availability" :recentCourses="recents" />
       <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredAvailableTutoringCourses"
@@ -54,18 +54,5 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.search-input {
-  width: 100%;
-  box-sizing: unset;
-  border: none;
-  outline: none;
-  background-color: white;
-  margin: 0px;
-}
 
-@media screen and (max-width: 590px) {
-  .search-input {
-    font-size: 0.9rem;
-  }
-}
 </style>

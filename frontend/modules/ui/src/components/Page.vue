@@ -57,6 +57,15 @@ html, body {
   width: clamp(350px, 70vw, 1500px);
 }
 
+.search-input {
+  width: 100%;
+  box-sizing: unset;
+  border: none;
+  outline: none;
+  background-color: white;
+  margin: 0px;
+}
+
 .gallery-wrapper {
   display: flex;
   flex-direction: column;
@@ -101,18 +110,6 @@ html, body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-/*
-@media screen and (max-width: 340px) {
-  .gallery {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media screen and (max-width: 250px) {
-  .gallery {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}*/
 
 .sm-font {
   font-size: 15px;

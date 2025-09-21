@@ -76,12 +76,12 @@ watch(props, (newProps, oldProps) => {
 }
 
 #search-icon-container {
-  padding: 0 6px;
   flex: 0 0 auto;
   pointer-events: none;
 }
 
 .icon {
+  margin: 0 6px;
   flex: 0 0 auto;
   object-fit: fill;
   background-color: white;

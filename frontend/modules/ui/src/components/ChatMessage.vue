@@ -37,22 +37,22 @@ const openAttachment = async () => {
 </script>
 
 <template>
-    <section v-if="XOR(isTeacher, props.chatMessage.is_teacher)" class="message-container regular-text"
+    <section v-if="XOR(isTeacher, props.chatMessage.is_teacher)" class="message-container"
         id="recipient-message-container">
         <button v-if="isAttachment" @click="openAttachment" class="content attachment" id="recipient-content">
             <i class="fa fa-file"></i>
-            <span class="message-text regular-text" @click="openAttachment">
+            <span class="message-text" @click="openAttachment">
                 {{ props.chatMessage.content }}
             </span>
             <a ref="linkRef" :href="attachmentUrl" target="_blank" rel="noopener noreferrer" style="display: none;"></a>
         </button>
         <div v-else class="content" id="recipient-content">
-            <span class="message-text regular-text">
+            <span class="message-text">
                 {{ props.chatMessage.content }}
             </span>
         </div>
     </section>
-    <section v-else class="message-container regular-text" id="sender-message-container">
+    <section v-else class="message-container" id="sender-message-container">
         <div v-if="props.chatMessage.state == 'error'" class="arrow-cnt">
             <i class="fa fa-exclamation-circle"></i> 
         </div>
@@ -75,7 +75,7 @@ const openAttachment = async () => {
             </span>
         </button>
         <div v-else class="content" id="sender-content">
-            <span class="message-text regular-text">
+            <span class="message-text">
                 {{ props.chatMessage.content }}
             </span>
         </div> 

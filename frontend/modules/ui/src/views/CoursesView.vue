@@ -40,7 +40,7 @@ onMounted(async () => {
 
     <template v-slot:subheader>
       <SearchHeader title="Σημειώσεις" :display-search="true" :search="search" @clear-search="clearSearch">
-        <input v-model="search" type="text" class="regular-text search-input" placeholder="  Αναζήτησε μάθημα" /> 
+        <input v-model="search" type="text" class="search-input" placeholder="  Αναζήτησε μάθημα" /> 
       </SearchHeader>
     </template>
 
@@ -59,11 +59,6 @@ onMounted(async () => {
   outline: none;
   background-color: white;
   margin: 0px;
-}
-
-@media screen and (max-width: 590px) {
-  .search-input {
-    font-size: 0.9rem;
-  }
+  font-size: 16px;
 }
 </style>

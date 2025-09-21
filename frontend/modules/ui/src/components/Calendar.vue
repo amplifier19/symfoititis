@@ -141,7 +141,7 @@ watch(props, (newProps, oldProps) => initWeeks())
           <i class="fa fa-angle-left" aria-hidden="true"></i>
         </button>
       </div>
-      <span class="regular-text">{{ months[month] }} {{ year }}</span>
+      <span class="">{{ months[month] }} {{ year }}</span>
       <div class="pf-v5-c-calendar-month__header-nav-control pf-m-next-month">
         <button @click="nextMonth" class="pf-v5-c-button pf-m-plain" type="button" aria-label="Next month">
           <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -154,31 +154,31 @@ watch(props, (newProps, oldProps) => initWeeks())
         <tr class="pf-v5-c-calendar-month__days-row">
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Monday</span>
-            <span class="regular-text" aria-hidden="true">Κ</span>
+            <span class="" aria-hidden="true">Κ</span>
           </th>
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Tuesday</span>
-            <span class="regular-text" aria-hidden="true">Δ</span>
+            <span class="" aria-hidden="true">Δ</span>
           </th>
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Wednesday</span>
-            <span class="regular-text" aria-hidden="true">Τ</span>
+            <span class="" aria-hidden="true">Τ</span>
           </th>
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Thursday</span>
-            <span class="regular-text" aria-hidden="true">Τ</span>
+            <span class="" aria-hidden="true">Τ</span>
           </th>
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Friday</span>
-            <span class="regular-text" aria-hidden="true">Π</span>
+            <span class="" aria-hidden="true">Π</span>
           </th>
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Saturday</span>
-            <span class="regular-text" aria-hidden="true">Π</span>
+            <span class="" aria-hidden="true">Π</span>
           </th>
           <th class="pf-v5-c-calendar-month__day">
             <span class="pf-v5-screen-reader">Sunday</span>
-            <span class="regular-text" aria-hidden="true">Σ</span>
+            <span class="" aria-hidden="true">Σ</span>
           </th>
         </tr>
       </thead>

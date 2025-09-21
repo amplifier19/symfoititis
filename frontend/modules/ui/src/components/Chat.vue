@@ -297,7 +297,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
             </div>
             <div v-else class="chat-body content-width">
                 <div class="chat-message-container" v-for="message in messages">
-                    <div v-if="displayDateSeperator(message.created_at)" class="date-seperator-container regular-text">
+                    <div v-if="displayDateSeperator(message.created_at)" class="date-seperator-container">
                         <p class="seperator-line"></p>
                         <span class="date-seperator-text">{{ formatSeperatorDate(message.created_at) }}, {{ getSeperatorTime(message.created_at) }}</span>
                         <p class="seperator-line"></p>

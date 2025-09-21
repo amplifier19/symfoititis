@@ -39,17 +39,17 @@ watch(route, async (oldRoute, newRoute) => {
   </div>
 
   <div v-else-if="availabilityStore.availabilityPreferences.length > 0" class="time-picker preferences-container">
-    <span class="regular-text date-prompt pf-v5-c-title pf-m-lg">
+    <span class="date-prompt pf-v5-c-title pf-m-lg">
       {{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}
     </span>
     <section class="preferences-prompt-container">
-      <span class="regular-text">Αυτή την ημέρα, συνήθως προτιμάς τις παρακάτω ώρες.</span>
+      <span class="">Αυτή την ημέρα, συνήθως προτιμάς τις παρακάτω ώρες.</span>
       <ul class="preference-slot-list">
         <li v-for="(el, idx) in availabilityStore.availabilityPreferences" :key="idx"> {{ el.start_time }}:00 - {{
           el.start_time + 1 }}:00
         </li>
       </ul>
-      <span class="regular-text">Θα ήθελες να ξεκινήσεις τον προγραμματισμό της ημέρας με εκείνες τις ώρες;</span>
+      <span class="">Θα ήθελες να ξεκινήσεις τον προγραμματισμό της ημέρας με εκείνες τις ώρες;</span>
     </section>
     <section class="preference-btn-container">
       <button @click="availabilityStore.declinePreferences" class="pf-v5-c-button pf-m-link preference-btn"
@@ -69,7 +69,7 @@ watch(route, async (oldRoute, newRoute) => {
   </div>
 
   <ul v-else ref="timeSlotList" class="time-picker">
-    <li class="regular-text date-prompt pf-v5-c-title pf-m-lg">
+    <li class="date-prompt pf-v5-c-title pf-m-lg">
       {{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}
     </li>
     <li v-for="(slot, idx) in availabilityStore.filteredByDateAvailabilitySlots" class="time-slot">
@@ -99,10 +99,10 @@ watch(route, async (oldRoute, newRoute) => {
         availabilityStore.cancelableAvailabilitySlotIds.length > 0
       "
        @click="availabilityDataService.saveAvailabilityChanges(cid)"
-        class="regular-text booking-btn" id="book-btn">
+        class="booking-btn" id="book-btn">
         <span>ΑΠΟΘΗΚΕΥΣΗ</span>
       </div>
-      <div v-else class="regular-text booking-btn" id="choose-time-btn">
+      <div v-else class="booking-btn" id="choose-time-btn">
         <span>ΚΑΝΕ ΑΛΛΑΓΕΣ</span>
       </div>
     </section>

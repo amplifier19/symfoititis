@@ -88,7 +88,7 @@ watch(route, (newRoute, oldRoute) => {
   </div>
   <div v-else class="time-picker-container">
     <ul ref="timeSlotList" v-if="filteredAvailabilitySlots.length > 0" class="time-picker">
-      <li class="regular-text date-prompt">
+      <li class="date-prompt">
         <span class="date-prompt-text">{{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}</span>
         <RefreshButton @refresh="handleRefresh" />
       </li>
@@ -97,11 +97,11 @@ watch(route, (newRoute, oldRoute) => {
           {{ slot.start_time }}:00 - {{ slot.start_time + 1 }}:00
         </span>
       </li>
-      <div v-if="selectedAvailabilitySlotIds.length > 0" @click="bookSlots" class="regular-text booking-btn"
+      <div v-if="selectedAvailabilitySlotIds.length > 0" @click="bookSlots" class="booking-btn"
         id="book-btn">
         <span>ΚΡΑΤΗΣΗ</span>
       </div>
-      <div v-else class="regular-text booking-btn" id="choose-time-btn">
+      <div v-else class="booking-btn" id="choose-time-btn">
         <span>ΕΠΕΛΕΞΕ ΩΡΑ</span>
       </div>
     </ul>
@@ -210,7 +210,7 @@ watch(route, (newRoute, oldRoute) => {
 .time-picker-prompt {
   margin: 16px 24px auto;
   color: var(--orange);
-  border: 2.5px dashed var(--orange);
+  border: 2px dashed var(--orange);
   width: fit-content;        
   max-width: 100%;           
   display: flex;

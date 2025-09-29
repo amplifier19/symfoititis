@@ -37,20 +37,22 @@ onMounted(async () => {
       <Masterhead :selected="2" />
     </template>
     <template v-slot:main>
+      <div class="history-fill"></div>
       <SearchHeader title="Χαρτοφυλάκιο" :display-search="false" />
-      <div class="main-container">
         <BuyHours />
         <BookingsGallery :bookings="upcomingBookings" header="Προγραμματισμένα Μαθήματα" />
         <BookingProgram :bookings="bookings" />
         <BookingsGallery :bookings="pastBookings" header="Περασμένη δραστηριότητα" />
-      </div>
     </template>
   </Page>
 </template>
 
 <style scoped>
 .main-container {
-  width: 100%;
-  height: 100%;
+  display: flex;
+}
+
+.history-fill {
+  min-height: clamp(50px, 3vw, 60px);
 }
 </style>

@@ -18,7 +18,7 @@ export const useRecents = (name: string) => {
   const addCourseToRecents = (course: Course) => {
     const courseDoesNotExist = !recents.value.some((c: Course) => c.c_id == course.c_id)
     if (courseDoesNotExist) {
-      const recs = getRecentsFromStorage().slice(0, 6)
+      const recs = getRecentsFromStorage().slice(0, 4)
       recents.value = [course, ...recs]
       saveRecentsToStorage()
     }

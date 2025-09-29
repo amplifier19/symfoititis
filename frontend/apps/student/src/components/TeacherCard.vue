@@ -23,7 +23,7 @@ const handleSelectTeacher = (event: Event) => {
 </script>
 
 <template>
-  <div ref="expandableDiv" class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width">
+  <div ref="expandableDiv" class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width teacher-card">
     <section @click="handleSelectTeacher" class="pf-v5-c-expandable-section__toggle">
       <span class="regular-text pf-v5-c-expandable-section__toggle-text toogle-item">
         {{ props.teacher.firstname }} {{ props.teacher.lastname }}

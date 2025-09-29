@@ -41,15 +41,15 @@ const openAttachment = async () => {
         id="recipient-message-container">
         <button v-if="isAttachment" @click="openAttachment" class="content attachment" id="recipient-content">
             <i class="fa fa-file"></i>
-            <span class="message-text" @click="openAttachment">
+            <div class="message-text" @click="openAttachment">
                 {{ props.chatMessage.content }}
-            </span>
+            </div>
             <a ref="linkRef" :href="attachmentUrl" target="_blank" rel="noopener noreferrer" style="display: none;"></a>
         </button>
         <div v-else class="content" id="recipient-content">
-            <span class="message-text">
+            <div class="message-text">
                 {{ props.chatMessage.content }}
-            </span>
+            </div>
         </div>
     </section>
     <section v-else class="message-container" id="sender-message-container">
@@ -70,14 +70,14 @@ const openAttachment = async () => {
         </div>
         <button v-if="isAttachment" @click="openAttachment" class="content attachment" id="sender-content">
             <i class="fa fa-file"></i>
-            <span class="message-text ">
+            <div class="message-text ">
                 {{ props.chatMessage.content }}
-            </span>
+            </div>
         </button>
         <div v-else class="content" id="sender-content">
-            <span class="message-text">
+            <div class="message-text">
                 {{ props.chatMessage.content }}
-            </span>
+            </div>
         </div> 
         <a v-if="isAttachment" ref="linkRef" target="_blank" style="display: none;"></a>
     </section>
@@ -89,6 +89,10 @@ const openAttachment = async () => {
     display: flex;
     flex-direction: row;
     margin-bottom: clamp(5px, 1vw, 10px);
+}
+
+.message-txt {
+    white-space: pre-wrap;
 }
 
 #recipient-message-container {
@@ -136,7 +140,6 @@ const openAttachment = async () => {
 }
 
 #recipient-content {
-    margin-left: clamp(10px, 4vw, 66px);
     background-color: white;
     color: var(--orange);
     text-align: left;
@@ -145,11 +148,10 @@ const openAttachment = async () => {
 #sender-content {
     color: white;
     text-align: right;
-    margin-right: clamp(10px, 4vw, 66px);
     background-color: var(--orange);
 }
 
-.attachment > span {
+.attachment > div {
     text-decoration: underline;
 }
 </style>

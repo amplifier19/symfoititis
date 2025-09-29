@@ -20,6 +20,7 @@ import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import { History } from '@symfoititis-frontend-monorepo/ui'
 import { NavHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
+import { Subheader } from '@symfoititis-frontend-monorepo/ui'
 
 const route = useRoute()
 const router = useRouter()
@@ -43,10 +44,14 @@ const teacherSection = ref<Element>()
 const c_id = ref<number>(parseInt(route.params.c_id as string))
 const selectedTeacher = ref<Teacher>({ t_id: "", firstname: "", lastname: "" })
 
-const selectTeacher = (teacher: Teacher, e: Event) => {
+const collapseTeacher = () => {
   if (!!teacherSection.value) {
     teacherSection.value.classList.remove('pf-m-expanded')
   }
+}
+
+const selectTeacher = (teacher: Teacher, e: Event) => {
+  collapseTeacher()
   if (selectedTeacher.value.t_id === teacher.t_id) {
     selectedTeacher.value = { t_id: "", firstname: "", lastname: "" }
     return
@@ -84,6 +89,7 @@ onMounted(async () => {
 })
 
 watch(route, async (oldRoute, newRoute) => {
+  collapseTeacher()
   c_id.value = parseInt(route.params.c_id as string)
   selectedTeacher.value = { t_id: "", firstname: "", lastname: "" }
   await teacherDataService.getTeachers(c_id.value)
@@ -106,6 +112,7 @@ watch(route, async (oldRoute, newRoute) => {
     <template v-slot:main>
       <section class="teachers-wrapper wrapper">
         <div class="teacher-container content-width">
+          <Subheader title="Συμφοιτητές" />
           <TeacherCard v-for="teacher in teachers" :teacher="teacher" 
             :selectedTeacherId="selectedTeacher.t_id"
             @select-teacher="selectTeacher" :key="teacher.t_id" 

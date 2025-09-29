@@ -12,8 +12,16 @@ const props = defineProps<{
 
 <style scoped>
 .subheader {
-  display: block;
+  display: flex;
   height: clamp(70px, 7vw, 125px); 
-  line-height: clamp(50px, 5vw, 125px); 
+  margin-bottom: 32px;
+  align-items: flex-end;
+}
+
+@media screen and (max-width: 1000px) {
+  .subheader {
+    margin-bottom: 24px;
+  }
 }
 </style>
+

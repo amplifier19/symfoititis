@@ -14,12 +14,12 @@ const chatStore = useChatStore()
 const userStore = useUserStore()
 const fileStore = useFileStore()
 const { attachments } = storeToRefs(fileStore)
-const { messages, offset, fetchCount, connected, currentRoom } = storeToRefs(chatStore)
+const { messages, connected, currentRoom } = storeToRefs(chatStore)
 const { profile, department } = storeToRefs(userStore)
 
 const { getMessages, sendMessage, uploadAttachments, readMessages } = useChatDataService()
 
-const textArea = ref<HTMLElement>()
+const chatInputElement = ref<HTMLDivElement>()
 const chatInput = ref<string>('')
 const shiftDown = ref<boolean>(false)
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -52,10 +52,9 @@ const sendMessages = async () => {
             dep_id: department.value.dep_id!,
             is_teacher: isTeacher,
             type: 'TEXT',
-            content: chatInput.value.replace(/[\r\n]+/g, ' '),
+            content: chatInput.value.replaceAll(/ +/g, ' '),
         }
         sendMessage(message)
-        chatInput.value = ''
     }
     if (attachments.value.length > 0) {
         const filenames = await uploadAttachments(room)
@@ -96,14 +95,17 @@ const handleKeyUp = (e: KeyboardEvent) => {
     if (e.key == 'Shift') {
         shiftDown.value = false
     }
-    textArea.value!.style.height = textArea.value!.scrollHeight + 'px'
 }
 
 const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key == 'Enter' && !shiftDown.value) {
         e.preventDefault()
-        sendMessages()
-        chatInput.value = ''
+        if (chatInputElement.value) {
+            chatInput.value = chatInputElement.value.innerText || ''
+            sendMessages()
+            chatInputElement.value.innerText = ''
+            chatInput.value = ''
+        }
     }
 }
 
@@ -113,7 +115,7 @@ const scrollAt = (top: number, behavior: 'smooth' | 'instant') => {
         const pageWrapper = document.getElementById('page-wrapper')
         if (pageWrapper) {
             pageWrapper.scrollTo({
-                top: top - 5,
+                top: top,
                 behavior
             })
         }
@@ -128,7 +130,7 @@ const handleScrollEvent = async () => {
     const pageWrapper = document.getElementById("page-wrapper")
     if (!pageWrapper) return
     const height = pageWrapper.scrollHeight
-    if (pageWrapper.scrollTop == 0 && fetchCount.value == offset.value) {
+    if (pageWrapper.scrollTop == 0) {
         loadingNextBatch.value = true
         const { c_id, s_id, t_id } = props.booking
         const participantId = isTeacher ? s_id : t_id
@@ -189,7 +191,6 @@ watch(messages, () => {
 
 onMounted(() => {
     currentRoom.value = props.booking.room
-    console.log('chatVue', currentRoom.value)
     setStickyNavbar()
     setScrollListener()
     handleMessageRead()
@@ -237,7 +238,6 @@ const formatSeperatorDate = (createdAt: string | undefined) => {
         out += ` ${dt.getFullYear()}`;
     }
     return out;
-
 }
 
 const distinctDates = computed(() => {
@@ -265,11 +265,12 @@ const displayDateSeperator = (createdAt: string | undefined) => {
         return condition
     })
 }
+
 </script>
 
 <template>
     <section class="chat-header-wrapper wrapper">
-        <header class="chat-header content-width">
+        <header class="chat-header">
             <div class="booking-info-container">
                 <div class="date">{{ formatDate(props.booking.date) }}</div>
                 <div class="name-day-time-container">
@@ -288,14 +289,14 @@ const displayDateSeperator = (createdAt: string | undefined) => {
         </header>
     </section>
 
-    <section class="chat-body-wrapper wrapper">
-        <div class="chat-body-container content-width">
-            <div class="loading-spinner-container" v-if="loadingNextBatch">
+    <section id="chat-body-wrapper" class="chat-body-wrapper wrapper">
+        <div class="chat-body-container">
+            <div v-if="loadingNextBatch" class="loading-spinner-container">
                 <svg class="pf-v5-c-spinner pf-m-xl" role="progressbar" viewBox="0 0 100 100" aria-label="Loading...">
                     <circle class="pf-v5-c-spinner__path" cx="50" cy="50" r="45" fill="none" />
                 </svg>
             </div>
-            <div v-else class="chat-body content-width">
+            <div class="chat-body">
                 <div class="chat-message-container" v-for="message in messages">
                     <div v-if="displayDateSeperator(message.created_at)" class="date-seperator-container">
                         <p class="seperator-line"></p>
@@ -322,7 +323,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     </section>
 
     <section class="chat-input-wrapper wrapper">
-        <div v-if="connected" class="chat-input-container content-width">
+        <div v-if="connected" class="chat-input-container">
             <div class="icon">
                 <form class="file-upload-form" @submit.prevent="">
                     <label class="upload-container">
@@ -332,9 +333,19 @@ const displayDateSeperator = (createdAt: string | undefined) => {
                     </label>
                 </form>
             </div>
-            <textarea @click.once="handleMessageRead" @keydown="handleKeyDown" @keyup="handleKeyUp" @keypress="handleKeyPress" ref="textArea"
-                v-model="chatInput" class="chat-input" type="text">
-            </textarea>
+            <div id="chatInput"
+                @click.once="handleMessageRead"
+                @keydown="handleKeyDown" 
+                @keyup="handleKeyUp" 
+                @keypress="handleKeyPress" 
+                class="chat-input"
+                contenteditable="true"
+                role="textbox"
+                aria-multiline="true"
+                spellcheck="true"
+                data-placeholder="Type a message…"
+                ref="chatInputElement"
+            ></div>
             <div v-if="!sendingMessagges" @click="sendMessages" class="icon">
                 <i class="fa fa-paper-plane"></i>
             </div>
@@ -343,10 +354,13 @@ const displayDateSeperator = (createdAt: string | undefined) => {
                     <circle class="pf-v5-c-spinner__path" cx="50" cy="50" r="45" fill="none" />
                 </svg>
             </div>
-
         </div>
+
         <div v-else class="chat-input-container content-width">
             <div class="pf-v5-c-skeleton"></div>
+        </div>
+        <div>
+            
         </div>
     </section>
 </template>
@@ -364,6 +378,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 
 .chat-body-container {
     height: 100%;
+    width: 800px;
 }
 
 .chat-attachments-wrapper {
@@ -381,11 +396,13 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 }
 
 .chat-input-wrapper {
-    width: 100%;
-    height: clamp(60px, 4vw, 110px);
-    align-items: start !important;
+    min-height: 70px;
+    display: flex;
+    align-items: baseline;
     position: sticky;
     bottom: 0px;
+    margin: 0 auto;
+    border-radius: 15px 15px 0 0;
     background-color: var(--white);
 }
 
@@ -398,6 +415,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 .chat-header {
     display: flex;
     flex-direction: row;
+    width: 800px;
 }
 
 .booking-info-container {
@@ -484,22 +502,25 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 .chat-input-container {
     display: flex;
     height: fit-content;
+    width: 804px;
     flex-direction: row;
-    align-items: center;
-    margin: 0 auto;
+    border: 1.5px solid var(--orange);
+    border-radius: 15px;
 }
 
 .chat-input {
     flex-grow: 1;
-    height: 2rem;
-    max-height: 4rem;
-    resize: none;
-    padding: 0 1rem;
-    box-sizing: unset;
-    border: 1.5px solid var(--orange);
-    border-radius: 15px;
-    outline: none;
-    background-color: white;
+  outline: none;
+  background-color: var(--white);
+
+  min-height: 32px;
+  max-height: 200px;
+  overflow-y: auto;
+
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;   /* some breathing room */
+  line-height: 1.4;   /* keep lines nicely spaced */
 }
 
 .icon {
@@ -507,7 +528,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     justify-content: center;
     align-items: center;
     width: 50px;
-    height: 50px;
+    height: auto;
     cursor: pointer;
     font-size: 20px;
     color: var(--orange);
@@ -590,5 +611,9 @@ const displayDateSeperator = (createdAt: string | undefined) => {
   .chat-attachments-container {
     padding: 0.3rem 0.7rem;
   }
+
+    .chat-header, .chat-body-container, .chat-input-container{
+        width: clamp(350px, 70vw, 1500px);
+    }
 }
 </style>

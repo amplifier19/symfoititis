@@ -12,15 +12,16 @@ import java.util.List;
 
 @Repository
 public class ChatMessageDaoImpl implements ChatMessageDao {
+    private final int limit = 32;
     private final JdbcTemplate jdbcTemplate;
 
     public ChatMessageDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
     @Override
-    public List<ChatMessage> getMessages(String roomId, int offset) {
-        String sql = "SELECT * FROM chat_messages WHERE room = ? ORDER BY created_at DESC LIMIT 16 OFFSET ?";
-        return jdbcTemplate.query(sql, new ChatMessagesRowMapper(), roomId, offset);
+    public List<ChatMessage> getMessages(String roomId, int page) {
+        String sql = "SELECT * FROM chat_messages WHERE room = ? ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, new ChatMessagesRowMapper(), roomId, limit, page*limit);
     }
 
     @Override

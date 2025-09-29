@@ -8,9 +8,9 @@ export class ChatApiService {
         return this.instance
     }
 
-    public getMessages = (c_id: number, participant_id: string, offset: number) => {
+    public getMessages = (c_id: number, participant_id: string, page: number) => {
         return fetch(
-            `${this.API_BASE_URL}/chat/messages/${c_id}/${participant_id}?offset=${offset}`,
+            `${this.API_BASE_URL}/chat/messages/${c_id}/${participant_id}?page=${page}`,
             {
                 method: 'GET'
             }

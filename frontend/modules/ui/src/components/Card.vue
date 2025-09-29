@@ -6,7 +6,10 @@ const props = defineProps<{
   course: Course
   link: string
   bookingId?: number
+  context?: string
 }>()
+
+const classList = !!props.context && props.context == 'booking' ? 'booking-ctx' : 'card-xtx'
 
 const getCourseThumbnail = computed(() => {
   return props.course.c_display_name
@@ -21,7 +24,7 @@ const getCourseThumbnail = computed(() => {
 
 <template>
   <RouterLink class="card-wrapper" :to="{ name: props.link, params: { c_id: course.c_id, b_id: props.bookingId } }">
-    <div class="card-cnt">
+    <div :class="`${classList} card-cnt`">
       <slot name="card-header"></slot>
       <span class="course-thumb xxl-font rg-fw">
         {{ getCourseThumbnail  }}
@@ -40,9 +43,6 @@ const getCourseThumbnail = computed(() => {
   justify-content: center;
   align-items: center;
 }
-.card-cnt:hover {
-  background-image: url('/svg/hover_course_card.svg');
-}
 
 .card-cnt{
   height: clamp(110px, 9vw, 140px);
@@ -52,10 +52,25 @@ const getCourseThumbnail = computed(() => {
   align-items: center;
   position: relative;
   background-color: var(--white);
-  background-image: url('/svg/course-icon.svg');
   background-repeat: no-repeat;
   color: var(--orange); 
 
+}
+
+.card-cnt:hover {
+  background-image: url('/svg/hover_course_card.svg');
+}
+
+.card-cnt{
+  background-image: url('/svg/course-icon.svg');
+}
+
+.booking-ctx:hover {
+  background-image: url('/svg/hover_flipped_card.svg');
+}
+
+.booking-ctx{
+  background-image: url('/svg/flipped_card.svg'); 
 }
 
 .course-thumb {
@@ -78,23 +93,12 @@ const getCourseThumbnail = computed(() => {
     height: clamp(110px, 9vw, 500px);
     width: clamp(110px, 9vw, 500px);
   }
-
-  .course-name {
-    /* width: 6.5rem; */
-    /* margin: 0.8rem auto 1rem auto; */
-  }
-
 }
 
 @media screen and (max-width: 1300px) {
   .card-cnt {
     height: clamp(110px, 10vw, 500px);
     width: clamp(110px, 10vw, 500px);
-  }
-
-  .course-name {
-    /* width: 5.5rem; */
-    /* margin: 0.6rem auto 1rem auto; */
   }
 }
 
@@ -103,21 +107,12 @@ const getCourseThumbnail = computed(() => {
     height: clamp(100px, 12.5vw, 500px);
     width: clamp(100px, 12.5vw, 500px);
   }
-
-  .course-name {
-    /* width: 5.5rem; */
-    /* margin: 0.6rem auto 1rem auto; */
-  }
 }
 
 @media screen and (max-width: 700px) {
   .card-cnt {
     height: clamp(100px, 16vw, 500px);
     width: clamp(100px, 16vw, 500px);
-  }
-  .course-name {
-    /* width: 5rem; */
-    /* margin: 0.6rem auto 1rem auto; */
   }
 }
 </style>

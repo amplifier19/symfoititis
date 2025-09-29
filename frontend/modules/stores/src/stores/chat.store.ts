@@ -13,7 +13,7 @@ export const useChatStore = defineStore('chat', () => {
 
     const messages = ref<ChatMessage[]>([])
     const fetchCount = ref<number>(0)
-    const offset = ref<number>(0)
+    const page = ref<number>(0)
 
     const chatStats = ref<ChatStats[]>([])
     const fetchedUnread = ref<boolean>(false)
@@ -52,7 +52,7 @@ export const useChatStore = defineStore('chat', () => {
         chatStats, 
         fetchedUnread, 
         fetchCount, 
-        offset, 
+        page, 
         currentCourseId, 
         currentRoom,
         trackers,

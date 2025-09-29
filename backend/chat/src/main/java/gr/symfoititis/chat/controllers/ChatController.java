@@ -89,8 +89,8 @@ public class ChatController {
             @PathVariable(value = "participant_id", required = true)
             String participant_id,
             @PositiveOrZero
-            @RequestParam(name = "offset", required = false)
-            Integer offset
+            @RequestParam(name = "page", required = false)
+            Integer page 
     ) {
         isStudentOrTeacher(role);
         try {
@@ -108,8 +108,8 @@ public class ChatController {
                 }
                 default -> throw new ForbiddenException("Invalid role");
             };
-            offset = offset == null ? 0 : offset;
-            List<ChatMessage> chatMessages = chatService.getMessages(roomId, offset);
+            page = page == null ? 0 : page;
+            List<ChatMessage> chatMessages = chatService.getMessages(roomId, page);
             return ResponseEntity.ok(new Response(200, chatMessages));
         } catch (NumberFormatException ex) {
             throw new BadRequestException("Department id cannot be parsed to integer");

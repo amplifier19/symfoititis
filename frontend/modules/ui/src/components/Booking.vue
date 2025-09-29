@@ -54,18 +54,24 @@ const getRemainingDays = () => {
     cardFooter.value?.classList.add('b-fw')
     return 'Τώρα'
 }
+
+const getUnreadMessages = () => {
+    const unread = chatStats.value.find((s) => s.room == props.booking.room)?.myUnreadCount 
+    if (!!unread) return unread
+    return 0
+}
 </script>
 
 <template>
-    <Card v-if="props.card" :course="course" link="booking" :bookingId="booking.b_id">
+    <Card class="test" v-if="props.card" :course="course" link="booking" :bookingId="booking.b_id" context="booking">
         <template v-if="booking.state == 'CANCELED'" v-slot:card-header>
             <div class="canceled-badge">
                 <h2 class="canceled-text card-badge-text">Ακυρώθηκε</h2>
             </div>
         </template>
-        <template v-else-if="chatStats.some((s) => s.room == props.booking.room && s.myUnreadCount > 0)" v-slot:card-header>
+        <template v-else-if="chatStats.some((s) => s.room == props.booking.room && getUnreadMessages() > 0)" v-slot:card-header>
             <div class="unread-message-badge">
-                <p class="unread-message-text card-top-text" > {{ chatStats.find((s) => s.room == props.booking.room)?.myUnreadCount }}</p>
+                <span class="sm-font unread-message-text card-top-text">{{ getUnreadMessages() > 9 ? "9+": getUnreadMessages() }}</span>
             </div>
         </template>
         <template v-slot:card-footer>
@@ -75,8 +81,8 @@ const getRemainingDays = () => {
 
     <section v-else class="booking-row">
         <div id="course-details" class="details">
-            <span class="course-title booking-field lg-font sb-fw">{{ course.c_display_name }}</span>
-                <span class="semester booking-field lg-font md-fw">{{ alphabet[course.semester - 1] }}' Εξάμηνο</span>
+            <span class="course-title booking-field lg-font md-fw">{{ course.c_display_name }}</span>
+                <span class="semester booking-field lg-font lt-fw">{{ alphabet[course.semester - 1] }}' Εξάμηνο</span>
         </div>
         <div id="booking-details" class="details">
             <span class="time booking-field md-font sb-fw">{{ booking.start_time }}:00 - {{ booking.start_time + 1 }}:00</span>
@@ -89,10 +95,16 @@ const getRemainingDays = () => {
 </template>
 
 <style>
+.unread-message-badge {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .unread-message-text{
     color: white;
-    padding: 0 .5rem;
-    padding-bottom: .15rem;
 }
 
 .card-top-text {
@@ -106,8 +118,8 @@ const getRemainingDays = () => {
 
 .unread-message-badge {
     position: absolute;
-    top: -.5rem;
-    left: -.5rem;
+    top: -10px;
+    left: -10px;
     background-color: var(--orange);
     border-radius: 14px;
 }
@@ -146,7 +158,6 @@ const getRemainingDays = () => {
 
 #course-details {
     border: 1.5px solid var(--orange);
-    border-radius: 5px;
     color: var(--orange);
 }
 
@@ -169,10 +180,11 @@ const getRemainingDays = () => {
     .details {
         padding: 0.3rem 1rem;
     } 
-    /* .card-top-text{
-        color: white;
-        padding: 0 .4rem;
-        padding-top: .1rem;
-    } */
+    .unread-message-badge {
+        width: 22px;
+        height: 22px;
+    }
+
+
 }
 </style>

@@ -46,7 +46,9 @@ const handleDelete = () => {
 <style scoped>
 .nav-wrapper {
   background-color: var(--white);
-  min-height: clamp(80px, 8vw, 220px);
+  min-height: clamp(65px, 5vw, 200px);
+  display: flex;
+  align-items: flex-end;
 }
 
 .nav-container {

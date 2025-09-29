@@ -34,7 +34,7 @@ const enter = (element: Element, done: gsap.Callback) => {
   <section class="gallery-wrapper wrapper">
   <div v-for="semester in uniqueSemesters" :key="semester" class="gallery-container content-width">
     <Subheader :title="`${alphabet[semester - 1]}' Εξάμηνο`" />
-    <transition-group tag="div" name="gallery" class="gallery" @before-enter="beforeEnter" @enter="enter" appear>
+    <transition-group tag="div" name="gallery" class="gallery outline" @before-enter="beforeEnter" @enter="enter" appear>
       <div v-for="(course, index) in semCourses(semester)" :key="course.c_id" class="card-container"
         :data-index="index">
         <Card v-if="course.semester === semester" :course="course" :link="props.link" />

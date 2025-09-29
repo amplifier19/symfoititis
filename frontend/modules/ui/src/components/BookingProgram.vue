@@ -33,7 +33,7 @@ const selectDate = (day: Day) => {
   <section class="wrapper">
 
 <div class="program-container content-width">
-  <Subheader title="Πρόγραμμα" />
+  <Subheader title="Το Πρόγραμμα μου" />
   <div class="date-time-pick-container">
     <Calendar @select-date="selectDate" :booking="true" :bookings="props.bookings" />
     <BookingList :bookings="bookingsFilteredByDate" :selectedDay="selectedDay" />

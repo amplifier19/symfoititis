@@ -25,8 +25,7 @@ export const useChatDataService = () => {
         connectionInitiated, 
         messages, 
         chatStats, 
-        fetchCount, 
-        offset, 
+        page, 
         currentCourseId, 
         currentRoom,
         trackers
@@ -37,19 +36,17 @@ export const useChatDataService = () => {
             if (currentCourseId.value === c_id) {
                 if (!loadNextBatch) return
             } else {
-                offset.value = 0
-                fetchCount.value = 0
+                page.value = 0
                 messages.value = []
             }
-            const response = await chatApiService.getMessages(c_id, participant_id, offset.value)
+            const response = await chatApiService.getMessages(c_id, participant_id, page.value)
             const data = await response.json()
             if (!!data.error) {
                 errorStore.addError(data)
                 return
             }
             messages.value = [...data.data.reverse(), ...messages.value]
-            fetchCount.value += data.data.length
-            offset.value += 16
+            page.value ++
             currentCourseId.value = c_id
         } catch (err) {
             errorStore.addError(err)
@@ -189,7 +186,7 @@ export const useChatDataService = () => {
             JSON.stringify(message),
             { 'content-type':'application/json', receipt: receipt_id }
           );
-          messages.value.push(message)
+          messages.value = [...messages.value, message]
           chatStore.updateMessageState(receipt_id, 'pending')
         });
     }

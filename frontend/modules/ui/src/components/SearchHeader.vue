@@ -42,9 +42,9 @@ watch(props, (newProps, oldProps) => {
 <style scoped>
 .search-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  min-height: clamp(80px, 8vw, 220px);
+  min-height: clamp(65px, 5vw, 200px);
 }
 
 .search-container {
@@ -52,7 +52,7 @@ watch(props, (newProps, oldProps) => {
   flex-direction: row;
   background-color: var(--orange);
   justify-content: space-between;
-  padding: 0.3rem 3rem;
+  padding: 4px 3rem;
 }
 
 .search-name {
@@ -91,13 +91,14 @@ watch(props, (newProps, oldProps) => {
 
 @media screen and (max-width: 1800px) {
   .search-container {
-    padding: 0.2rem 2rem;
+    padding: 4px 2rem;
   }
 }
 
 @media screen and (max-width: 1300px) {
   .search-container {
-    padding: 0.2rem 1rem;
+    padding: 4px 1rem;
+    max-height: 35px
   }
 }
 </style>

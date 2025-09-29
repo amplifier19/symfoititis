@@ -41,7 +41,7 @@ html, body {
 #page-wrapper {
   flex: 1;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
   display: flex;
   background-color: var(--white);
   flex-direction: column;
@@ -77,14 +77,30 @@ html, body {
 
 .gallery {
   display: grid;
-    grid-template-columns: repeat(5, 1fr);
-  padding: 0 auto;
+  grid-template-columns: repeat(5, 1fr);
   justify-items: center;
 }
 
 .card-container {
   width: 100%;
   height: auto;
+  padding-top: 12%;
+}
+
+.outline {
+  position: relative;
+  border: 1.5px solid var(--orange);
+}
+
+.outline::after {
+  content: "";
+  position: absolute;
+  background-color: var(--orange);
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
 }
 
 @media screen and (max-width: 1600px) {
@@ -108,6 +124,17 @@ html, body {
 @media screen and (max-width: 700px) {
   .gallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .outline {
+    border: 1px solid var(--orange);
+  }
+
+  .outline::after {
+    top: -4px;
+    left: -4px;
+    width: 8px;
+    height: 8px;
   }
 }
 

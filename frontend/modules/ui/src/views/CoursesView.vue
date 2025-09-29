@@ -51,7 +51,7 @@ onMounted(async () => {
   </Page>
 </template>
 
-<style>
+<style scoped>
 .search-input {
   width: 100%;
   box-sizing: unset;

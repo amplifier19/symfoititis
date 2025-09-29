@@ -29,7 +29,7 @@ const enter = (element: Element, done: gsap.Callback) => {
   <section class="gallery-wrapper wrapper">
     <div class="gallery-container content-width">
       <Subheader title="Προβλήθηκαν Πρόσφατα" />
-      <transition-group tag="div" class="gallery" @beforeEnter="beforeEnter" @enter="enter" appear>
+      <transition-group tag="div" class="gallery outline" @beforeEnter="beforeEnter" @enter="enter" appear>
         <div v-for="(course, index) in props.recentCourses" :key="course.c_id" class="card-container"
           :data-index="index">
           <Card :course="course" :link="props.link" />
@@ -42,5 +42,11 @@ const enter = (element: Element, done: gsap.Callback) => {
 <style scoped>
 .subheader {
   color: var(--orange);
+}
+
+@media screen and (max-width: 1000px) {
+  .subheader {
+    margin-top: 24px;
+  }
 }
 </style>

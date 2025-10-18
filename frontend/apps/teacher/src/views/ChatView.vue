@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
-import { ref, onMounted, watch, computed, onBeforeUnmount } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 
 import { Course, Booking } from '@symfoititis-frontend-monorepo/interfaces'
 
 import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
 import { useBookingsDataService, useChatDataService, useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
 
-import { useBookingStore, useChatStore } from '@symfoititis-frontend-monorepo/stores'
+import { useBookingStore } from '@symfoititis-frontend-monorepo/stores'
 import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 
 import { Page } from '@symfoititis-frontend-monorepo/ui'
-import { Chat } from '@symfoititis-frontend-monorepo/ui'
+import { Chat, ChatHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import { NavHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
@@ -47,14 +47,14 @@ const handleBookingCancelation = async () => {
 }
 
 onMounted(async () => {
+  getChatStats()
   await getCourses()
   await getBookings()
   await getMessages(c_id.value, booking.value.s_id)
-  getChatStats()
   connectToStompServer()
 })
 
-watch(route, (newRoute, oldRoute) => {
+watch(route, () => {
   c_id.value = parseInt(route.params.c_id as string)
   b_id.value = parseInt(route.params.b_id as string)
 })
@@ -62,17 +62,29 @@ watch(route, (newRoute, oldRoute) => {
 </script>
 
 <template>
-  <!-- <Toasts /> -->
+  <Toasts />
   <Page>
     <template v-slot:header>
       <Masterhead :selected="2" />
     </template>
+
+    <template v-slot:subheader>
+      <div class="sticky-cnt">
+        <NavHeader navigation="bookings" storageItem="bookings_history" :course="course" />
+        <ChatHeader :isTeacher="true" :booking="booking"/>
+      </div>
+    </template>
+
     <template v-slot:main>
-      <NavHeader navigation="bookings" storageItem="bookings_history" :course="course" />
       <Chat :booking="booking" />
     </template>
   </Page>
 </template>
 
 <style scoped>
+.sticky-cnt {
+  background-color: var(--white);
+  position: sticky;
+  top: 0;
+}
 </style>

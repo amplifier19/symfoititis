@@ -12,7 +12,7 @@ import { useBookingStore } from '@symfoititis-frontend-monorepo/stores'
 import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
 
 import { Page } from '@symfoititis-frontend-monorepo/ui'
-import { Chat } from '@symfoititis-frontend-monorepo/ui'
+import { Chat, ChatHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Toasts } from '@symfoititis-frontend-monorepo/ui'
 import { NavHeader } from '@symfoititis-frontend-monorepo/ui'
 import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
@@ -41,6 +41,11 @@ const booking = computed(() => {
 const b_id = ref<number>(parseInt(route.params.b_id as string))
 const c_id = ref<number>(parseInt(route.params.c_id as string))
 
+const formatDate = (date: string) => {
+    const fields = date.split('-')
+    return `${fields.at(2)}/${fields.at(1)}`
+}
+
 const handleBookingCancelation = async () => {
   await cancelBooking(b_id.value)
   await availabilityDataService.getAvailabilitySlots(c_id.value, booking.value.t_id, true)
@@ -68,7 +73,10 @@ watch(route, () => {
     </template>
 
     <template v-slot:subheader>
-      <NavHeader navigation="bookings" storageItem="bookings_history" :course="course" />
+      <div class="sticky-cnt">
+        <NavHeader navigation="bookings" storageItem="bookings_history" :course="course" />
+        <ChatHeader :isTeacher="false" :booking="booking"/>
+      </div>
     </template>
 
     <template v-slot:main>
@@ -78,4 +86,9 @@ watch(route, () => {
 </template>
 
 <style scoped>
+.sticky-cnt {
+  background-color: var(--white);
+  position: sticky;
+  top: 0;
+}
 </style>

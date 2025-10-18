@@ -28,17 +28,6 @@ const loadingNextBatch = ref<boolean>(false)
 const sendingMessagges = ref<boolean>(false)
 let isProgrammaticScroll = true 
 
-const getWeekDay = (date: string) => {
-    const weekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
-    const bookingDate = new Date(date)
-    return weekDays[bookingDate.getDay()]
-}
-
-const formatDate = (date: string) => {
-    const fields = date.split('-')
-    return `${fields.at(2)}/${fields.at(1)}`
-}
-
 const sendMessages = async () => {
     sendingMessagges.value = true
     const { room, c_id, s_id, t_id } = props.booking
@@ -139,13 +128,6 @@ const handleScrollEvent = async () => {
     }
 }
 
-const setStickyNavbar = () => {
-    const navbar = document.getElementById('navbar')
-    if (navbar) {
-        navbar.style.position = 'sticky'
-        navbar.style.top = '0'
-    }
-}
 
 const setScrollListener = () => {
     const pageWrapper = document.getElementById('page-wrapper')
@@ -191,7 +173,6 @@ watch(messages, () => {
 
 onMounted(() => {
     currentRoom.value = props.booking.room
-    setStickyNavbar()
     setScrollListener()
     handleMessageRead()
 })
@@ -269,25 +250,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 </script>
 
 <template>
-    <section class="chat-header-wrapper wrapper">
-        <header class="chat-header">
-            <div class="booking-info-container">
-                <div class="date">{{ formatDate(props.booking.date) }}</div>
-                <div class="name-day-time-container">
-                    <span v-if="isTeacher" class="name">{{ props.booking.student_name }}</span>
-                    <span v-else class="name">
-                        {{ props.booking.teacher_firstname }} {{ props.booking.teacher_lastname }}
-                    </span>
-                    <span class="day-time">
-                        {{ getWeekDay(props.booking.date) }} - {{ props.booking.start_time }}:00
-                    </span>
-                </div>
-            </div>
-            <div class="meet-btn-container">
-                <button class="meet-btn">Meet</button>
-            </div>
-        </header>
-    </section>
+
 
     <section id="chat-body-wrapper" class="chat-body-wrapper wrapper">
         <div class="chat-body-container">
@@ -366,11 +329,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 </template>
 
 <style scoped>
-.chat-header-wrapper {
-    position: sticky;
-    top: clamp(80px, 8vw, 220px);
-    background-color: var(--white);
-}
+
 
 .chat-body-wrapper {
     flex: 1;
@@ -410,44 +369,6 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     height: 2rem;
     width: 100%;
     border-radius: 15px;
-}
-
-.chat-header {
-    display: flex;
-    flex-direction: row;
-    width: 800px;
-}
-
-.booking-info-container {
-    display: flex;
-    flex-direction: row;
-}
-
-.date {
-    width: 50px;
-    height: 50px;
-    background-color: var(--orange);
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    margin-right: 1rem;
-}
-
-.name-day-time-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.day-time {
-    color: var(--orange);
-}
-
-.meet-btn-container {
-    display: flex;
-    flex-grow: 1;
-    justify-content: end;
 }
 
 .loading-spinner-container {
@@ -612,8 +533,8 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     padding: 0.3rem 0.7rem;
   }
 
-    .chat-header, .chat-body-container, .chat-input-container{
-        width: clamp(350px, 70vw, 1500px);
-    }
+  .chat-body-container, .chat-input-container {
+    width: clamp(350px, 70vw, 1500px);
+   }
 }
 </style>

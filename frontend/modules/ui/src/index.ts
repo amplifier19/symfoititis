@@ -1,6 +1,7 @@
 export { default as Calendar } from './components/Calendar.vue'
 export { default as Card } from './components/Card.vue'
 export { default as Chat } from './components/Chat.vue'
+export { default as ChatHeader } from './components/ChatHeader.vue'
 export { default as Drawer } from './components/Drawer.vue'
 export { default as Gallery } from './components/Gallery.vue'
 export { default as History } from './components/History.vue'

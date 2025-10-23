@@ -6,8 +6,8 @@ import SearchHeader from './SearchHeader.vue';
 import { useDate } from '@symfoititis-frontend-monorepo/composables';
 
 const props = defineProps<{
-    bookings: BookingType[]
-    selectedDay: Day
+  bookings: BookingType[]
+  selectedDay: Day
 }>()
 
 const { formatDate } = useDate()
@@ -16,12 +16,14 @@ const { formatDate } = useDate()
 <template>
   <ul class="booking-list">
     <li class="booking-list-header-container ">
-        <SearchHeader :title="props.selectedDay && props.selectedDay.date != '' ? formatDate(props.selectedDay.date, 'dd/MM/yyyy') : 'Επέλεξε ημερομηνία'" :displaySearch="false"/>
+      <SearchHeader
+        :title="props.selectedDay && props.selectedDay.date != '' ? formatDate(props.selectedDay.date, 'dd/MM/yyyy') : 'Επέλεξε ημερομηνία'"
+        :displaySearch="false" />
     </li>
     <li v-for="(booking, idx) in bookings" class="booking-item">
-        <Booking :booking="booking" :card="false"/>
+      <Booking :booking="booking" :card="false" />
     </li>
-    </ul>
+  </ul>
 </template>
 
 <style>

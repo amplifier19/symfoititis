@@ -44,25 +44,21 @@ public class BookingsDaoImpl implements BookingsDao {
         FROM bookings b
         JOIN availability_slots a ON b.av_id = a.av_id
         WHERE b.s_id = ?
-        AND ((a.date = ? AND a.start_time >= ?) OR a.date > ?)
-        GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
-        ORDER BY a.date, a.start_time
+        AND (a.date::timestamp + (interval '1 hour' * a.start_time))::timestamp >= (now()::timestamp - (interval '2 hour'))::timestamp
+        ORDER BY a.date ASC, a.start_time ASC
         LIMIT 50)
         
         UNION ALL
         
-        (SELECT DISTINCT ON (b.room) b.*, a.c_id, a.t_id, a.date, a.start_time
+        (SELECT * FROM (SELECT DISTINCT ON (b.room) b.*, a.c_id, a.t_id, a.date, a.start_time
         FROM bookings b
         JOIN availability_slots a ON b.av_id = a.av_id
         WHERE b.s_id = ?
-        AND ((a.date = ? AND a.start_time < ?) OR a.date < ?)
-        GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
-        ORDER BY b.room, a.date, a.start_time
-        LIMIT 7)
+        AND (a.date::timestamp + (interval '1 hour' * a.start_time))::timestamp < (now()::timestamp - (interval '2 hour'))::timestamp
+        ORDER BY b.room) t ORDER BY t.date DESC, t.start_time DESC
+        LIMIT 5)
         """;
-        Date dateToday = Date.valueOf(LocalDate.now());
-        Integer hour = LocalTime.now().minusHours(2).getHour();
-        return jdbcTemplate.query(sql, new BookingsRowMapper(), s_id, dateToday, hour, dateToday, s_id, dateToday, hour, dateToday);
+        return jdbcTemplate.query(sql, new BookingsRowMapper(), s_id, s_id);
     }
 
     @Override
@@ -72,25 +68,21 @@ public class BookingsDaoImpl implements BookingsDao {
             FROM bookings b
             JOIN availability_slots a ON b.av_id = a.av_id
             WHERE a.t_id = ?
-            AND ((a.date = ? AND a.start_time >= ?) OR a.date > ?)
-            GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
-            ORDER BY a.date, a.start_time
+            AND (a.date::timestamp + (interval '1 hour' * a.start_time))::timestamp >= (now()::timestamp - (interval '2 hour'))::timestamp
+            ORDER BY a.date ASC, a.start_time ASC
             LIMIT 50)
         
             UNION ALL
         
-            (SELECT DISTINCT ON (b.room) b.*, a.c_id, a.t_id, a.date, a.start_time
+            (SELECT * FROM (SELECT DISTINCT ON (b.room) b.*, a.c_id, a.t_id, a.date, a.start_time
             FROM bookings b
             JOIN availability_slots a ON b.av_id = a.av_id
             WHERE a.t_id = ?
-            AND ((a.date = ? AND a.start_time < ?) OR a.date < ?)
-            GROUP BY b.b_id, a.date, a.start_time, a.c_id, a.t_id
-            ORDER BY b.room, a.date, a.start_time
-            LIMIT 7)
+            AND (a.date::timestamp + (interval '1 hour' * a.start_time))::timestamp < (now()::timestamp - (interval '2 hour'))::timestamp
+            ORDER BY b.room) t ORDER BY t.date DESC, t.start_time DESC
+            LIMIT 5)
         """;
-        Date dateToday = Date.valueOf(LocalDate.now());
-        Integer hour = LocalTime.now().minusHours(2).getHour();
-        return jdbcTemplate.query(sql, new BookingsRowMapper(), t_id, dateToday, hour, dateToday, t_id, dateToday, hour, dateToday);
+        return jdbcTemplate.query(sql, new BookingsRowMapper(), t_id, t_id);
     }
 
     @Override

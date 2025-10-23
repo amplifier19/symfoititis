@@ -29,42 +29,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Toasts/>
+  <Toasts />
   <Page>
     <template v-slot:header>
       <Masterhead :selected="1" />
-      <History
-        to="availability"
-        :cid="-100"
-        :history="history"
-        @delete-course="removeCourseFromHistory"
-      />
+      <History to="availability" :cid="-100" :history="history" @delete-course="removeCourseFromHistory" />
     </template>
     <template v-slot:main>
-      <SearchHeader
-        title="Ιδιαίτερα"
-        :display-search="true"
-        :search="search"
-        @clear-search="clearSearch"
-      >
-        <input
-          v-model="search"
-          type="text"
-          class="search-input"
-          placeholder="  Αναζήτησε μάθημα"
-        />
+      <SearchHeader title="Ιδιαίτερα" :display-search="true" :search="search" @clear-search="clearSearch">
+        <input v-model="search" type="text" class="search-input" placeholder="  Αναζήτησε μάθημα" />
       </SearchHeader>
-      <Recents
-        v-if="search.length === 0 && recents.length > 0"
-        key="0"
-        link="availability"
-        :recentCourses="recents"
-      />
-      <Gallery
-        :uniqueSemesters="uniqueSemesters"
-        :filteredCourses="filteredCourses"
-        link="availability"
-      />
+      <Recents v-if="search.length === 0 && recents.length > 0" key="0" link="availability" :recentCourses="recents" />
+      <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredCourses" link="availability" />
     </template>
   </Page>
 </template>

@@ -1,38 +1,39 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
+import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
 
-import { Page } from '@symfoititis-frontend-monorepo/ui'
-import { Toasts } from '@symfoititis-frontend-monorepo/ui'
-import { History } from '@symfoititis-frontend-monorepo/ui'
-import { Recents } from '@symfoititis-frontend-monorepo/ui'
-import { Gallery } from '@symfoititis-frontend-monorepo/ui'
-import { Masterhead } from '@symfoititis-frontend-monorepo/ui'
-import { SearchHeader } from '@symfoititis-frontend-monorepo/ui'
+import { Page } from "@symfoititis-frontend-monorepo/ui";
+import { Toasts } from "@symfoititis-frontend-monorepo/ui";
+import { History } from "@symfoititis-frontend-monorepo/ui";
+import { Recents } from "@symfoititis-frontend-monorepo/ui";
+import { Gallery } from "@symfoititis-frontend-monorepo/ui";
+import { Masterhead } from "@symfoititis-frontend-monorepo/ui";
+import { SearchHeader } from "@symfoititis-frontend-monorepo/ui";
 
-import { useCourseStore } from '@symfoititis-frontend-monorepo/stores'
+import { useCourseStore } from "@symfoititis-frontend-monorepo/stores";
 
-import { useChatDataService, useCoursesDataService } from '@symfoititis-frontend-monorepo/core/services'
+import { useCoursesDataService } from "@symfoititis-frontend-monorepo/core/services";
 
-import { useRecents } from '@symfoititis-frontend-monorepo/composables'
-import { useHistory } from '@symfoititis-frontend-monorepo/composables'
+import { useRecents } from "@symfoititis-frontend-monorepo/composables";
+import { useHistory } from "@symfoititis-frontend-monorepo/composables";
 
-const { getCourses, getAvailableTutoringCourseIds } = useCoursesDataService()
+const { getCourses, getAvailableTutoringCourseIds } = useCoursesDataService();
 
-const courseStore = useCourseStore()
-const { search, uniqueSemesters, filteredAvailableTutoringCourses } = storeToRefs(courseStore)
+const courseStore = useCourseStore();
+const { search, uniqueTutoringSemesters, filteredAvailableTutoringCourses } =
+  storeToRefs(courseStore);
 
-const { recents } = useRecents('bookings_recent')
-const { history, removeCourseFromHistory } = useHistory('bookings_history')
+const { recents } = useRecents("bookings_recent");
+const { history, removeCourseFromHistory } = useHistory("bookings_history");
 
 const clearSearch = () => {
-  search.value = ''
-}
+  search.value = "";
+};
 
 onMounted(async () => {
-  await getCourses()
-  await getAvailableTutoringCourseIds()
-})
+  await getCourses();
+  await getAvailableTutoringCourseIds();
+});
 </script>
 
 <template>
@@ -40,19 +41,39 @@ onMounted(async () => {
   <Page>
     <template v-slot:header>
       <Masterhead :selected="1" />
-      <History to="availability" :cid="-100" :history="history" @delete-course="removeCourseFromHistory" />
+      <History
+        to="availability"
+        :cid="-100"
+        :history="history"
+        @delete-course="removeCourseFromHistory"
+      />
     </template>
     <template v-slot:main>
-      <SearchHeader title="Ιδιαίτερα" :display-search="true" :search="search" @clear-search="clearSearch">
-        <input v-model="search" type="text" class="search-input" placeholder="  Αναζήτησε μάθημα" />
+      <SearchHeader
+        title="Ιδιαίτερα"
+        :display-search="true"
+        :search="search"
+        @clear-search="clearSearch"
+      >
+        <input
+          v-model="search"
+          type="text"
+          class="search-input"
+          placeholder="  Αναζήτησε μάθημα"
+        />
       </SearchHeader>
-      <Recents v-if="!search && recents.length > 0" link="availability" :recentCourses="recents" />
-      <Gallery :uniqueSemesters="uniqueSemesters" :filteredCourses="filteredAvailableTutoringCourses"
-        link="availability" />
+      <Recents
+        v-if="!search && recents.length > 0"
+        link="availability"
+        :recentCourses="recents"
+      />
+      <Gallery
+        :uniqueSemesters="uniqueTutoringSemesters"
+        :filteredCourses="filteredAvailableTutoringCourses"
+        link="availability"
+      />
     </template>
   </Page>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

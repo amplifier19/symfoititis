@@ -33,7 +33,7 @@ const enter = (element: Element, done: gsap.Callback) => {
   <section class="gallery-wrapper wrapper">
     <div class="gallery-container content-width">
       <Subheader :title="props.header" />
-      <transition-group tag="div" name="gallery" class="gallery outline" @before-enter="beforeEnter" @enter="enter" appear>
+      <transition-group v-if="bookings.length > 0" tag="div" name="gallery" class="gallery outline" @before-enter="beforeEnter" @enter="enter" appear>
         <div v-for="(booking, index) in props.bookings" :key="booking.b_id" :data-index="index" class="card-container"> 
           <Booking :key="booking.b_id" :booking="booking" :card="true" />
         </div>

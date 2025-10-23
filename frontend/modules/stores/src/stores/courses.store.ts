@@ -7,14 +7,14 @@ export const useCourseStore = defineStore('courseStore', () => {
   const search = ref<string>('')
   const availableTutoringCourseIds = ref<number[]>([])
 
-  const uniqueSemesters = computed(() => {
-    return [...new Set<number>(courses.value.map((c: Course) => c.semester))]
-  })
-
   const filteredCourses = computed(() => {
     return courses.value.filter((course: Course) =>
       course.c_display_name.toLowerCase().includes(search.value.toLowerCase())
     )
+  })
+
+  const uniqueSemesters = computed(() => {
+    return [...new Set<number>(courses.value.map((c: Course) => c.semester))]
   })
 
   const availableTutoringCourses = computed<Course[]>(() => {
@@ -27,5 +27,9 @@ export const useCourseStore = defineStore('courseStore', () => {
     )
   })
 
-  return { courses, search, uniqueSemesters, filteredCourses, availableTutoringCourseIds, availableTutoringCourses, filteredAvailableTutoringCourses }
+  const uniqueTutoringSemesters = computed(() => {
+    return [...new Set<number>(filteredAvailableTutoringCourses.value.map((c: Course) => c.semester))]
+  })
+
+  return { courses, search, uniqueSemesters, filteredCourses, availableTutoringCourseIds, availableTutoringCourses, filteredAvailableTutoringCourses, uniqueTutoringSemesters }
 })

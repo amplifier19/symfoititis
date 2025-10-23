@@ -1,21 +1,25 @@
 <script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useUserStore } from '@symfoititis-frontend-monorepo/stores';
-import { AuthAdapterService } from '@symfoititis-frontend-monorepo/core/services';
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@symfoititis-frontend-monorepo/stores";
+import { AuthAdapterService } from "@symfoititis-frontend-monorepo/core/services";
 
-const authAdapterService = AuthAdapterService.getAuthAdapterFactory()
-const { profile, university, department } = storeToRefs(useUserStore())
+const authAdapterService = AuthAdapterService.getAuthAdapterFactory();
+const { profile, university, department } = storeToRefs(useUserStore());
 
 const signOut = () => {
-  authAdapterService.logout()
-}
+  authAdapterService.logout();
+};
 </script>
 
 <template>
   <div class="drawer">
     <div class="profile-container">
       <div class="icon-container">
-        <img src="/svg/profile-icon-orange.svg" alt="profile-icon" class="profile-icon" />
+        <img
+          src="/svg/profile-icon-orange.svg"
+          alt="profile-icon"
+          class="profile-icon"
+        />
       </div>
       <div class="item-container">
         <section class="drawer-item" id="username">

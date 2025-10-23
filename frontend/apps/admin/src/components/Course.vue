@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useCourseStore } from '../stores/courses.store'
-import { type Course } from '@symfoititis-frontend-monorepo/interfaces'
+import { useCourseStore } from "../stores/courses.store";
+import { type Course } from "@symfoititis-frontend-monorepo/interfaces";
 
-const props = defineProps<{ course: Course }>()
+const props = defineProps<{ course: Course }>();
 
-const courseStore = useCourseStore()
+const courseStore = useCourseStore();
 </script>
 
 <template>

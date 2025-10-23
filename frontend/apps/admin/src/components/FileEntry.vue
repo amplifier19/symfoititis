@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{ c_id: number; filename: string }>()
+const props = defineProps<{ c_id: number; filename: string }>();
 </script>
 
 <template>
@@ -11,7 +11,12 @@ const props = defineProps<{ c_id: number; filename: string }>()
       <div class="pf-v5-c-overflow-menu__group pf-m-button-group">
         <div class="pf-v5-c-overflow-menu__item">
           <button
-            @click="$emit('activate-remove-modal', { c_id: props.c_id, filename: props.filename })"
+            @click="
+              $emit('activate-remove-modal', {
+                c_id: props.c_id,
+                filename: props.filename,
+              })
+            "
             class="pf-v5-c-button pf-m-primary"
             type="button"
           >

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Masterhead from './Masterhead.vue'
-import Sidebar from './Sidebar.vue'
+import Masterhead from "./Masterhead.vue";
+import Sidebar from "./Sidebar.vue";
 
-import { useSidebarStore } from '../stores/sidebar'
+import { useSidebarStore } from "../stores/sidebar";
 
-const props = defineProps<{ selected: number }>()
+const props = defineProps<{ selected: number }>();
 
-const store = useSidebarStore()
+const store = useSidebarStore();
 </script>
 
 <template>

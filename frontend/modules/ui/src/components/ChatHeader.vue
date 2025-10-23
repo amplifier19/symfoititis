@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { Booking } from '@symfoititis-frontend-monorepo/interfaces';
-import { useDate } from '@symfoititis-frontend-monorepo/composables';
+import { Booking } from "@symfoititis-frontend-monorepo/interfaces";
+import { useDate } from "@symfoititis-frontend-monorepo/composables";
 
 const props = defineProps<{
-  booking: Booking
-  isTeacher: boolean
-}>()
+  booking: Booking;
+  isTeacher: boolean;
+}>();
 
-const { getWeekDay, formatDate } = useDate()
-
-
+const { getWeekDay, formatDate } = useDate();
 </script>
 
 <template>
   <section class="chat-header-wrapper wrapper">
     <header class="chat-header">
       <div class="booking-info-container">
-        <div class="date">{{ formatDate(booking.date, 'dd/MM') }}</div>
+        <div class="date">{{ formatDate(booking.date, "dd/MM") }}</div>
         <div class="name-day-time-container">
-          <span v-if="props.isTeacher" class="name">{{ booking.student_name }}</span>
+          <span v-if="props.isTeacher" class="name">{{
+            booking.student_name
+          }}</span>
           <span v-else class="name">
             {{ booking.teacher_firstname }} {{ booking.teacher_lastname }}
           </span>

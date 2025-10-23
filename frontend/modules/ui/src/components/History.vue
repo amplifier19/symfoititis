@@ -1,26 +1,36 @@
 <script setup lang="ts">
-import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
+import type { Course } from "@symfoititis-frontend-monorepo/interfaces";
 
 const emit = defineEmits<{
-  (e: 'delete-course', c_id: number): void
-}>()
+  (e: "delete-course", c_id: number): void;
+}>();
 
 const props = defineProps<{
-  to: string
-  cid: number
-  history: Course[]
-}>()
+  to: string;
+  cid: number;
+  history: Course[];
+}>();
 </script>
 
 <template>
   <section class="history-wrapper">
-    <transition-group tag="ul" name="history-list" class="history-container" appear>
-      <li class="history-item" v-for="(course, index) in props.history" 
+    <transition-group
+      tag="ul"
+      name="history-list"
+      class="history-container"
+      appear
+    >
+      <li
+        class="history-item"
+        v-for="(course, index) in props.history"
         :key="course.c_id"
-        :class="course.c_id == props.cid ? 'current-history-item' : ''" 
-        :data-index="index">
-
-        <RouterLink class="history-link sm-font rg-fw" :to="{ name: props.to, params: { c_id: course.c_id } }">
+        :class="course.c_id == props.cid ? 'current-history-item' : ''"
+        :data-index="index"
+      >
+        <RouterLink
+          class="history-link sm-font rg-fw"
+          :to="{ name: props.to, params: { c_id: course.c_id } }"
+        >
           {{ course.c_display_name }}
         </RouterLink>
 
@@ -83,7 +93,7 @@ const props = defineProps<{
 .fa-close {
   cursor: pointer;
   color: var(--orange);
-  padding-left: .9rem;
+  padding-left: 0.9rem;
 }
 
 @media screen and (max-width: 1300px) {

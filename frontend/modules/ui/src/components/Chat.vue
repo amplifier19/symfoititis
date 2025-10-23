@@ -1,38 +1,53 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { ChatMessage as ChatMessageType, Booking } from '@symfoititis-frontend-monorepo/interfaces'
-import { useUserStore, useChatStore, useFileStore } from '@symfoititis-frontend-monorepo/stores'
-import ChatMessage from './ChatMessage.vue'
-import { useChatDataService } from '@symfoititis-frontend-monorepo/core/services'
+import {
+  ref,
+  watch,
+  nextTick,
+  onMounted,
+  onBeforeUnmount,
+  computed,
+} from "vue";
+import { storeToRefs } from "pinia";
+import {
+  ChatMessage as ChatMessageType,
+  Booking,
+} from "@symfoititis-frontend-monorepo/interfaces";
+import {
+  useUserStore,
+  useChatStore,
+  useFileStore,
+} from "@symfoititis-frontend-monorepo/stores";
+import ChatMessage from "./ChatMessage.vue";
+import { useChatDataService } from "@symfoititis-frontend-monorepo/core/services";
 
 const props = defineProps<{
-  booking: Booking
-}>()
+  booking: Booking;
+}>();
 
-const chatStore = useChatStore()
-const userStore = useUserStore()
-const fileStore = useFileStore()
-const { attachments } = storeToRefs(fileStore)
-const { messages, connected, currentRoom } = storeToRefs(chatStore)
-const { profile, department } = storeToRefs(userStore)
+const chatStore = useChatStore();
+const userStore = useUserStore();
+const fileStore = useFileStore();
+const { attachments } = storeToRefs(fileStore);
+const { messages, connected, currentRoom } = storeToRefs(chatStore);
+const { profile, department } = storeToRefs(userStore);
 
-const { getMessages, sendMessage, uploadAttachments, readMessages } = useChatDataService()
+const { getMessages, sendMessage, uploadAttachments, readMessages } =
+  useChatDataService();
 
-const chatInputElement = ref<HTMLDivElement>()
-const shiftDown = ref<boolean>(false)
-const fileInput = ref<HTMLInputElement | null>(null)
-const isTeacher = import.meta.env.VITE_KC_REALM === 'teacher'
-const loadingNextBatch = ref<boolean>(false)
-const sendingMessages = ref<boolean>(false)
-let isProgrammaticScroll = true
+const chatInputElement = ref<HTMLDivElement>();
+const shiftDown = ref<boolean>(false);
+const fileInput = ref<HTMLInputElement | null>(null);
+const isTeacher = import.meta.env.VITE_KC_REALM === "teacher";
+const loadingNextBatch = ref<boolean>(false);
+const sendingMessages = ref<boolean>(false);
+let isProgrammaticScroll = true;
 
 const sendMessages = async () => {
-  if (!chatInputElement.value) return
-  sendingMessages.value = true
-  const { room, c_id, s_id, t_id } = props.booking
-  const recipientId = isTeacher ? s_id : t_id
-  const chatInput = chatInputElement.value.innerText || ''
+  if (!chatInputElement.value) return;
+  sendingMessages.value = true;
+  const { room, c_id, s_id, t_id } = props.booking;
+  const recipientId = isTeacher ? s_id : t_id;
+  const chatInput = chatInputElement.value.innerText || "";
   if (chatInput.trim()) {
     const message: ChatMessageType = {
       room,
@@ -41,13 +56,13 @@ const sendMessages = async () => {
       sender_id: profile.value.id!,
       dep_id: department.value.dep_id!,
       is_teacher: isTeacher,
-      type: 'TEXT',
-      content: chatInput.replaceAll(/ +/g, ' '),
-    }
-    sendMessage(message)
+      type: "TEXT",
+      content: chatInput.replaceAll(/ +/g, " "),
+    };
+    sendMessage(message);
   }
   if (attachments.value.length > 0) {
-    const filenames = await uploadAttachments(room)
+    const filenames = await uploadAttachments(room);
     for (const filename of filenames) {
       const message: ChatMessageType = {
         room,
@@ -56,140 +71,141 @@ const sendMessages = async () => {
         sender_id: profile.value.id!,
         dep_id: department.value.dep_id!,
         is_teacher: isTeacher,
-        type: 'ATTACHMENT',
-        content: filename
-      }
-      sendMessage(message)
+        type: "ATTACHMENT",
+        content: filename,
+      };
+      sendMessage(message);
     }
-    attachments.value = []
+    attachments.value = [];
   }
-  chatInputElement.value.innerText = ''
-  sendingMessages.value = false
-}
+  chatInputElement.value.innerText = "";
+  sendingMessages.value = false;
+};
 
 const handleFileChange = () => {
-  if (!fileInput.value) return
-  attachments.value = Array.from(fileInput.value.files || [])
-}
+  if (!fileInput.value) return;
+  attachments.value = Array.from(fileInput.value.files || []);
+};
 
 const handleFileDelete = (idx: number) => {
-  attachments.value = attachments.value.toSpliced(idx, 1)
-}
+  attachments.value = attachments.value.toSpliced(idx, 1);
+};
 
 const handleKeyDown = (e: KeyboardEvent) => {
-  if (e.key == 'Shift') {
-    shiftDown.value = true
+  if (e.key == "Shift") {
+    shiftDown.value = true;
   }
-}
+};
 
 const handleKeyUp = (e: KeyboardEvent) => {
-  if (e.key == 'Shift') {
-    shiftDown.value = false
+  if (e.key == "Shift") {
+    shiftDown.value = false;
   }
-}
+};
 
 const handleKeyPress = (e: KeyboardEvent) => {
-  if (e.key == 'Enter' && !shiftDown.value) {
-    e.preventDefault()
-    sendMessages()
+  if (e.key == "Enter" && !shiftDown.value) {
+    e.preventDefault();
+    sendMessages();
   }
-}
+};
 
-const scrollAt = (top: number, behavior: 'smooth' | 'instant') => {
-  isProgrammaticScroll = true
+const scrollAt = (top: number, behavior: "smooth" | "instant") => {
+  isProgrammaticScroll = true;
   nextTick(() => {
-    const pageWrapper = document.getElementById('page-wrapper')
+    const pageWrapper = document.getElementById("page-wrapper");
     if (pageWrapper) {
       pageWrapper.scrollTo({
         top: top,
-        behavior
-      })
+        behavior,
+      });
     }
-  })
+  });
   setTimeout(() => {
-    isProgrammaticScroll = false
-  }, 500)
-}
+    isProgrammaticScroll = false;
+  }, 500);
+};
 
 const handleScrollEvent = async () => {
-  if (isProgrammaticScroll) return
-  const pageWrapper = document.getElementById("page-wrapper")
-  if (!pageWrapper) return
-  const height = pageWrapper.scrollHeight
+  if (isProgrammaticScroll) return;
+  const pageWrapper = document.getElementById("page-wrapper");
+  if (!pageWrapper) return;
+  const height = pageWrapper.scrollHeight;
   if (pageWrapper.scrollTop == 0) {
-    loadingNextBatch.value = true
-    const { c_id, s_id, t_id } = props.booking
-    const participantId = isTeacher ? s_id : t_id
-    await getMessages(c_id, participantId, true)
-    scrollAt(pageWrapper.scrollHeight - height, 'instant')
+    loadingNextBatch.value = true;
+    const { c_id, s_id, t_id } = props.booking;
+    const participantId = isTeacher ? s_id : t_id;
+    await getMessages(c_id, participantId, true);
+    scrollAt(pageWrapper.scrollHeight - height, "instant");
   }
-}
-
+};
 
 const setScrollListener = () => {
-  const pageWrapper = document.getElementById('page-wrapper')
+  const pageWrapper = document.getElementById("page-wrapper");
   if (pageWrapper) {
-    pageWrapper.addEventListener('scroll', handleScrollEvent);
-    scrollAt(pageWrapper.scrollHeight, 'smooth')
+    pageWrapper.addEventListener("scroll", handleScrollEvent);
+    scrollAt(pageWrapper.scrollHeight, "smooth");
   }
-}
+};
 
 const removeScrollListener = () => {
-  const pageWrapper = document.getElementById('page-wrapper')
+  const pageWrapper = document.getElementById("page-wrapper");
   if (pageWrapper) {
-    pageWrapper.removeEventListener('scroll', handleScrollEvent);
+    pageWrapper.removeEventListener("scroll", handleScrollEvent);
   }
-}
+};
 
 const ifLoadedPreviousMessagesScrollToStart = () => {
   if (loadingNextBatch.value) {
-    loadingNextBatch.value = false
-    return
+    loadingNextBatch.value = false;
+    return;
   }
-  const pageWrapper = document.getElementById("page-wrapper")
+  const pageWrapper = document.getElementById("page-wrapper");
   if (pageWrapper) {
-    scrollAt(pageWrapper.scrollHeight, 'smooth')
+    scrollAt(pageWrapper.scrollHeight, "smooth");
   }
-}
+};
 
 const getLastRecievedMessage = () => {
-  const receivedMessages = messages.value.filter((m) => m.recipient_id == profile.value.id)
-  return receivedMessages.toSorted((a, b) => b.message_id! - a.message_id!)[0]
-}
+  const receivedMessages = messages.value.filter(
+    (m) => m.recipient_id == profile.value.id,
+  );
+  return receivedMessages.toSorted((a, b) => b.message_id! - a.message_id!)[0];
+};
 
 const handleMessageRead = () => {
-  const lastRecievedMessage = getLastRecievedMessage()
+  const lastRecievedMessage = getLastRecievedMessage();
   if (lastRecievedMessage) {
-    readMessages(lastRecievedMessage)
+    readMessages(lastRecievedMessage);
   }
-}
+};
 
 watch(messages, () => {
-  ifLoadedPreviousMessagesScrollToStart()
-})
+  ifLoadedPreviousMessagesScrollToStart();
+});
 
 onMounted(() => {
-  currentRoom.value = props.booking.room
-  setScrollListener()
-  handleMessageRead()
-})
+  currentRoom.value = props.booking.room;
+  setScrollListener();
+  handleMessageRead();
+});
 
 onBeforeUnmount(() => {
-  removeScrollListener()
-  currentRoom.value = ''
-})
+  removeScrollListener();
+  currentRoom.value = "";
+});
 
 const getSeperatorTime = (createdAt: string | undefined) => {
-  if (!createdAt) return ''
-  const time = createdAt.split('T')[1]
-  const fields = time.split(':')
-  return fields[0] + ':' + fields[1]
-}
+  if (!createdAt) return "";
+  const time = createdAt.split("T")[1];
+  const fields = time.split(":");
+  return fields[0] + ":" + fields[1];
+};
 
 const formatSeperatorDate = (createdAt: string | undefined) => {
-  if (!createdAt) return ''
-  const dateString = createdAt.split('T')[0]
-  const [y, m, d] = dateString.split('-').map(s => parseInt(s, 10));
+  if (!createdAt) return "";
+  const dateString = createdAt.split("T")[0];
+  const [y, m, d] = dateString.split("-").map((s) => parseInt(s, 10));
   const dt = new Date(y, m - 1, d);
 
   const today = new Date();
@@ -201,8 +217,21 @@ const formatSeperatorDate = (createdAt: string | undefined) => {
   sunday.setDate(monday.getDate() + 6);
   sunday.setHours(23, 59, 59, 999);
 
-  const WEEKDAYS = ['ΔΕΥ', 'ΤΡΙ', 'ΤΕΤ', 'ΠΕΜ', 'ΠΑΡ', 'ΣΑΒ', 'ΚΥΡ'];
-  const MONTHS = ['ΙΑΝ', 'ΦΕΒ', 'ΜΑΡ', 'ΑΠΡ', 'ΜΑΙ', 'ΙΟΥΝ', 'ΙΟΥΛ', 'ΑΥΓ', 'ΣΕΠ', 'ΟΚΤ', 'ΝΟΕ', 'ΔΕΚ'];
+  const WEEKDAYS = ["ΔΕΥ", "ΤΡΙ", "ΤΕΤ", "ΠΕΜ", "ΠΑΡ", "ΣΑΒ", "ΚΥΡ"];
+  const MONTHS = [
+    "ΙΑΝ",
+    "ΦΕΒ",
+    "ΜΑΡ",
+    "ΑΠΡ",
+    "ΜΑΙ",
+    "ΙΟΥΝ",
+    "ΙΟΥΛ",
+    "ΑΥΓ",
+    "ΣΕΠ",
+    "ΟΚΤ",
+    "ΝΟΕ",
+    "ΔΕΚ",
+  ];
 
   if (dt >= monday && dt <= sunday) {
     const idx = dt.getDay() === 0 ? 6 : dt.getDay() - 1;
@@ -216,49 +245,63 @@ const formatSeperatorDate = (createdAt: string | undefined) => {
     out += ` ${dt.getFullYear()}`;
   }
   return out;
-}
+};
 
 const distinctDates = computed(() => {
   const d = [
-    ...new Set(
-      messages.value.map((m) => m.created_at?.split('T')[0])
-    )
-  ]
+    ...new Set(messages.value.map((m) => m.created_at?.split("T")[0])),
+  ];
   return d.map((el) => {
     return {
       date: el,
-      displayed: false
-    }
-  })
-})
+      displayed: false,
+    };
+  });
+});
 
 const displayDateSeperator = (createdAt: string | undefined) => {
-  if (!createdAt) return false
-  const date = createdAt.split('T')[0]
+  if (!createdAt) return false;
+  const date = createdAt.split("T")[0];
   return distinctDates.value.some((d) => {
-    const condition = d.date == date && d.displayed == false
+    const condition = d.date == date && d.displayed == false;
     if (condition) {
-      d.displayed = true
+      d.displayed = true;
     }
-    return condition
-  })
-}
+    return condition;
+  });
+};
 </script>
 
 <template>
   <section id="chat-body-wrapper" class="chat-body-wrapper wrapper">
     <div class="chat-body-container">
       <div v-if="loadingNextBatch" class="loading-spinner-container">
-        <svg class="pf-v5-c-spinner pf-m-xl" role="progressbar" viewBox="0 0 100 100" aria-label="Loading...">
-          <circle class="pf-v5-c-spinner__path" cx="50" cy="50" r="45" fill="none" />
+        <svg
+          class="pf-v5-c-spinner pf-m-xl"
+          role="progressbar"
+          viewBox="0 0 100 100"
+          aria-label="Loading..."
+        >
+          <circle
+            class="pf-v5-c-spinner__path"
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+          />
         </svg>
       </div>
       <div class="chat-body">
         <div class="chat-message-container" v-for="message in messages">
-          <div v-if="displayDateSeperator(message.created_at)" class="date-seperator-container">
+          <div
+            v-if="displayDateSeperator(message.created_at)"
+            class="date-seperator-container"
+          >
             <p class="seperator-line"></p>
-            <span class="date-seperator-text">{{ formatSeperatorDate(message.created_at) }}, {{
-              getSeperatorTime(message.created_at) }}</span>
+            <span class="date-seperator-text"
+              >{{ formatSeperatorDate(message.created_at) }},
+              {{ getSeperatorTime(message.created_at) }}</span
+            >
             <p class="seperator-line"></p>
           </div>
           <ChatMessage :chatMessage="message" :isTeacher="isTeacher" />
@@ -267,9 +310,22 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     </div>
   </section>
 
-  <section v-if="attachments.length > 0" class="chat-attachments-wrapper wrapper">
-    <transition-group tag="ul" name="chat-attachment-list" class="chat-attachments-container content-width" appear>
-      <li class="chat-attachment-item" v-for="(file, index) in attachments" :key="file.size" :data-index="index">
+  <section
+    v-if="attachments.length > 0"
+    class="chat-attachments-wrapper wrapper"
+  >
+    <transition-group
+      tag="ul"
+      name="chat-attachment-list"
+      class="chat-attachments-container content-width"
+      appear
+    >
+      <li
+        class="chat-attachment-item"
+        v-for="(file, index) in attachments"
+        :key="file.size"
+        :data-index="index"
+      >
         <span>
           {{ file.name }}
         </span>
@@ -283,21 +339,51 @@ const displayDateSeperator = (createdAt: string | undefined) => {
       <div class="icon">
         <form class="file-upload-form" @submit.prevent="">
           <label class="upload-container">
-            <input ref="fileInput" type="file" name="file" id="file" @change="handleFileChange" hidden multiple />
+            <input
+              ref="fileInput"
+              type="file"
+              name="file"
+              id="file"
+              @change="handleFileChange"
+              hidden
+              multiple
+            />
             <i class="fa fa-paperclip"></i>
           </label>
         </form>
       </div>
-      <div id="chatInput" @click.once="handleMessageRead" @keydown="handleKeyDown" @keyup="handleKeyUp"
-        @keypress="handleKeyPress" class="chat-input" contenteditable="true" role="textbox" aria-multiline="true"
-        spellcheck="true" data-placeholder="Type a message…" ref="chatInputElement"></div>
+      <div
+        id="chatInput"
+        @click.once="handleMessageRead"
+        @keydown="handleKeyDown"
+        @keyup="handleKeyUp"
+        @keypress="handleKeyPress"
+        class="chat-input"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        spellcheck="true"
+        data-placeholder="Type a message…"
+        ref="chatInputElement"
+      ></div>
       <div v-if="!sendingMessages" @click="sendMessages" class="icon">
         <i class="fa fa-paper-plane"></i>
       </div>
       <div v-else class="icon">
-        <svg class="pf-v5-c-spinner pf-m-xl" id="send-loading-spinner" role="progressbar" viewBox="0 0 100 100"
-          aria-label="Loading...">
-          <circle class="pf-v5-c-spinner__path" cx="50" cy="50" r="45" fill="none" />
+        <svg
+          class="pf-v5-c-spinner pf-m-xl"
+          id="send-loading-spinner"
+          role="progressbar"
+          viewBox="0 0 100 100"
+          aria-label="Loading..."
+        >
+          <circle
+            class="pf-v5-c-spinner__path"
+            cx="50"
+            cy="50"
+            r="45"
+            fill="none"
+          />
         </svg>
       </div>
     </div>
@@ -305,9 +391,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
     <div v-else class="chat-input-container content-width">
       <div class="pf-v5-c-skeleton"></div>
     </div>
-    <div>
-
-    </div>
+    <div></div>
   </section>
 </template>
 
@@ -391,14 +475,14 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 
 .date-seperator-text {
   color: var(--orange);
-  font-size: .7rem;
+  font-size: 0.7rem;
 }
 
 .seperator-line {
   width: 15%;
   height: 50%;
   border-top: var(--main-border);
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 .chat-input-container {
@@ -476,7 +560,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 .chat-attachment-container {
   display: flex;
   flex-direction: row;
-  font-size: .95rem;
+  font-size: 0.95rem;
 }
 
 .chat-attachment-item {
@@ -498,7 +582,7 @@ const displayDateSeperator = (createdAt: string | undefined) => {
 .fa-close {
   cursor: pointer;
   color: var(--orange);
-  padding-left: .9rem;
+  padding-left: 0.9rem;
 }
 
 @media screen and (max-width: 1800px) {

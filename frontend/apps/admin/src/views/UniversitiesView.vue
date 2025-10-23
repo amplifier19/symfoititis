@@ -1,28 +1,35 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { OnClickOutside } from '@vueuse/components'
+import { onMounted } from "vue";
+import { OnClickOutside } from "@vueuse/components";
 
-import Layout from '../components/Layout.vue'
-import Section from '../components/Section.vue'
-import Modal from '../components/Modal.vue'
-import { Toasts } from '@symfoititis-frontend-monorepo/ui'
-import { type Response } from '@symfoititis-frontend-monorepo/interfaces'
+import Layout from "../components/Layout.vue";
+import Section from "../components/Section.vue";
+import Modal from "../components/Modal.vue";
+import { Toasts } from "@symfoititis-frontend-monorepo/ui";
+import { type Response } from "@symfoititis-frontend-monorepo/interfaces";
 
-import { useUniStore } from '../stores/universities.store'
-import { useDepStore } from '../stores/departments.store'
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores' 
-import { useDisplayModal } from '../stores/displayModal'
+import { useUniStore } from "../stores/universities.store";
+import { useDepStore } from "../stores/departments.store";
+import { useErrorStore } from "@symfoititis-frontend-monorepo/stores";
+import { useDisplayModal } from "../stores/displayModal";
 
-import { useModal } from '../composables/modal'
-import { useFetch } from '../composables/fetchService'
+import { useModal } from "../composables/modal";
+import { useFetch } from "../composables/fetchService";
 
-const uniStore = useUniStore()
-const depStore = useDepStore()
-const modalStore = useDisplayModal()
-const errorStore = useErrorStore()
+const uniStore = useUniStore();
+const depStore = useDepStore();
+const modalStore = useDisplayModal();
+const errorStore = useErrorStore();
 
-const { getUniversities, getDepartments, createUniversity, updateUniversity, deleteUniversity, updateDepartment, deleteDepartment } =
-  useFetch()
+const {
+  getUniversities,
+  getDepartments,
+  createUniversity,
+  updateUniversity,
+  deleteUniversity,
+  updateDepartment,
+  deleteDepartment,
+} = useFetch();
 
 const {
   modal,
@@ -30,20 +37,24 @@ const {
   activateUniEditModal,
   activateUniRemoveModal,
   activateDepEditModal,
-  activateDepRemoveModal
-} = useModal()
+  activateDepRemoveModal,
+} = useModal();
 
 onMounted(async () => {
-  await getUniversities()
-  await getDepartments()
-})
+  await getUniversities();
+  await getDepartments();
+});
 </script>
 
 <template>
   <Toasts />
   <Layout :selected="0">
     <template v-slot:main-section>
-      <button @click="activateUniAddModal" class="pf-v5-c-button pf-m-link" type="button">
+      <button
+        @click="activateUniAddModal"
+        class="pf-v5-c-button pf-m-link"
+        type="button"
+      >
         Add University
         <span class="pf-v5-c-button__icon pf-m-end">
           <i class="fa fa-plus-circle" aria-hidden="true"></i>

@@ -1,33 +1,40 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { Course } from '@symfoititis-frontend-monorepo/interfaces'
+import { computed } from "vue";
+import { Course } from "@symfoititis-frontend-monorepo/interfaces";
 
 const props = defineProps<{
-  course: Course
-  link: string
-  bookingId?: number
-  context?: string
-}>()
+  course: Course;
+  link: string;
+  bookingId?: number;
+  context?: string;
+}>();
 
-const classList = !!props.context && props.context == 'booking' ? 'booking-ctx' : 'card-xtx'
+const classList =
+  !!props.context && props.context == "booking" ? "booking-ctx" : "card-xtx";
 
 const getCourseThumbnail = computed(() => {
   return props.course.c_display_name
-    .split(' ')
+    .split(" ")
     .map((word: string) => {
       const firstLetter = word[0];
-      return firstLetter === firstLetter.toUpperCase() ? firstLetter : ''
+      return firstLetter === firstLetter.toUpperCase() ? firstLetter : "";
     })
-   .join('')
-})
+    .join("");
+});
 </script>
 
 <template>
-  <RouterLink class="card-wrapper" :to="{ name: props.link, params: { c_id: course.c_id, b_id: props.bookingId } }">
+  <RouterLink
+    class="card-wrapper"
+    :to="{
+      name: props.link,
+      params: { c_id: course.c_id, b_id: props.bookingId },
+    }"
+  >
     <div :class="`${classList} card-cnt`">
       <slot name="card-header"></slot>
       <span class="course-thumb xxl-font rg-fw">
-        {{ getCourseThumbnail  }}
+        {{ getCourseThumbnail }}
       </span>
       <slot name="card-footer"></slot>
     </div>
@@ -44,7 +51,7 @@ const getCourseThumbnail = computed(() => {
   align-items: center;
 }
 
-.card-cnt{
+.card-cnt {
   height: clamp(110px, 9vw, 140px);
   width: clamp(110px, 9vw, 140px);
   display: flex;
@@ -53,24 +60,23 @@ const getCourseThumbnail = computed(() => {
   position: relative;
   background-color: var(--white);
   background-repeat: no-repeat;
-  color: var(--orange); 
-
+  color: var(--orange);
 }
 
 .card-cnt:hover {
-  background-image: url('/svg/hover_course_card.svg');
+  background-image: url("/svg/hover_course_card.svg");
 }
 
-.card-cnt{
-  background-image: url('/svg/course-icon.svg');
+.card-cnt {
+  background-image: url("/svg/course-icon.svg");
 }
 
 .booking-ctx:hover {
-  background-image: url('/svg/hover_flipped_card.svg');
+  background-image: url("/svg/hover_flipped_card.svg");
 }
 
-.booking-ctx{
-  background-image: url('/svg/flipped_card.svg'); 
+.booking-ctx {
+  background-image: url("/svg/flipped_card.svg");
 }
 
 .course-thumb {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps(['title'])
+const props = defineProps(["title"]);
 </script>
 
 <template>
@@ -10,7 +10,9 @@ const props = defineProps(['title'])
   >
     <thead class="pf-v5-c-table__thead">
       <tr class="pf-v5-c-table__tr pf-m-striped">
-        <th class="pf-v5-c-table__th" colspan="7" scope="col">{{ props.title }}</th>
+        <th class="pf-v5-c-table__th" colspan="7" scope="col">
+          {{ props.title }}
+        </th>
       </tr>
     </thead>
 

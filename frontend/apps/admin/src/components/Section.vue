@@ -1,31 +1,35 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref } from "vue";
 
-import { useDepStore } from '../stores/departments.store'
+import { useDepStore } from "../stores/departments.store";
 
-import type { University as UniversityInterface } from '@symfoititis-frontend-monorepo/interfaces'
+import type { University as UniversityInterface } from "@symfoititis-frontend-monorepo/interfaces";
 
-import Table from './Table.vue'
-import Department from './Department.vue'
-import University from './University.vue'
+import Table from "./Table.vue";
+import Department from "./Department.vue";
+import University from "./University.vue";
 
-const props = defineProps<{ university: UniversityInterface }>()
+const props = defineProps<{ university: UniversityInterface }>();
 
-const depStore = useDepStore()
+const depStore = useDepStore();
 
-const expanded = ref(false)
+const expanded = ref(false);
 
 const toogleExpanded = () => {
-  expanded.value = !expanded.value
-}
+  expanded.value = !expanded.value;
+};
 
 const filtered = computed(() => {
-  return depStore.departments.filter((dep) => dep.uni_id === props.university.uni_id)
-})
+  return depStore.departments.filter(
+    (dep) => dep.uni_id === props.university.uni_id,
+  );
+});
 </script>
 
 <template>
-  <div class="pf-v5-c-expandable-section pf-m-expanded pf-m-display-lg pf-m-limit-width">
+  <div
+    class="pf-v5-c-expandable-section pf-m-expanded pf-m-display-lg pf-m-limit-width"
+  >
     <div class="pf-v5-c-overflow-menu" id="overflow-menu-simple-expanded">
       <University
         @activate-edit-modal="$emit('activate-uni-edit-modal')"

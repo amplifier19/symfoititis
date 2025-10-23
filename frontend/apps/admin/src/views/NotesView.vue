@@ -1,44 +1,52 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-import { useFileStore } from '../stores/files.store'
-import { useNoteStore } from '../stores/notes.store'
-import { useDisplayModal } from '../stores/displayModal'
+import { useFileStore } from "../stores/files.store";
+import { useNoteStore } from "../stores/notes.store";
+import { useDisplayModal } from "../stores/displayModal";
 
-import { useFetch } from '../composables/fetchService'
-import { useModal } from '../composables/modal'
+import { useFetch } from "../composables/fetchService";
+import { useModal } from "../composables/modal";
 
-import { Toasts } from '@symfoititis-frontend-monorepo/ui'
-import Layout from '../components/Layout.vue'
-import FileUpload from '../components/FileUpload.vue'
-import Table from '../components/Table.vue'
-import FileEntry from '../components/FileEntry.vue'
-import Modal from '../components/Modal.vue'
-import Note from '../components/Note.vue'
+import { Toasts } from "@symfoititis-frontend-monorepo/ui";
+import Layout from "../components/Layout.vue";
+import FileUpload from "../components/FileUpload.vue";
+import Table from "../components/Table.vue";
+import FileEntry from "../components/FileEntry.vue";
+import Modal from "../components/Modal.vue";
+import Note from "../components/Note.vue";
 
-import { OnClickOutside } from '@vueuse/components'
+import { OnClickOutside } from "@vueuse/components";
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const noteStore = useNoteStore()
-const fileStore = useFileStore()
-const modalStore = useDisplayModal()
+const noteStore = useNoteStore();
+const fileStore = useFileStore();
+const modalStore = useDisplayModal();
 
-const { uploadFiles, deleteFile, getFiles, getNotes, createNote, updateNote, deleteNote } = useFetch()
+const {
+  uploadFiles,
+  deleteFile,
+  getFiles,
+  getNotes,
+  createNote,
+  updateNote,
+  deleteNote,
+} = useFetch();
 const {
   modal,
   activateNoteAddModal,
   activateNoteEditModal,
   activateNoteRemoveModal,
-  activateFileRemoveModal
-} = useModal()
+  activateFileRemoveModal,
+} = useModal();
 
 onMounted(async () => {
-  await getNotes(parseInt(route.params.c_id.toString()))
-  await getFiles(parseInt(route.params.c_id.toString()))
-})
+  await getNotes(parseInt(route.params.c_id.toString()));
+  await getFiles(parseInt(route.params.c_id.toString()));
+});
 </script>
 
 <template>
@@ -46,7 +54,11 @@ onMounted(async () => {
 
   <Layout :selected="1">
     <template v-slot:main-section>
-      <button @click="router.go(-1)" class="pf-v5-c-button pf-m-link" type="button">
+      <button
+        @click="router.go(-1)"
+        class="pf-v5-c-button pf-m-link"
+        type="button"
+      >
         Back to Courses
         <span class="pf-v5-c-button__icon pf-m-end">
           <i sclass="fa fa-plus-circle" aria-hidden="true"></i>

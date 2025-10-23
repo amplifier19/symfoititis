@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Department } from '@symfoititis-frontend-monorepo/interfaces'
-import { useDepStore } from '../stores/departments.store'
+import type { Department } from "@symfoititis-frontend-monorepo/interfaces";
+import { useDepStore } from "../stores/departments.store";
 
-const props = defineProps<{ department: Department }>()
+const props = defineProps<{ department: Department }>();
 
-const depStore = useDepStore()
+const depStore = useDepStore();
 </script>
 
 <template>

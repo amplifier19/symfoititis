@@ -1,19 +1,20 @@
 <script setup lang="ts">
-
-const props = defineProps<{ 
-  title: string; 
-  transitionGroupKey?: string 
-}>()
+const props = defineProps<{
+  title: string;
+  transitionGroupKey?: string;
+}>();
 </script>
 
 <template>
-  <span class="subheader lg-font md-fw" :key="props.transitionGroupKey || 1">{{ props.title }}</span>
+  <span class="subheader lg-font md-fw" :key="props.transitionGroupKey || 1">{{
+    props.title
+  }}</span>
 </template>
 
 <style scoped>
 .subheader {
   display: flex;
-  height: clamp(70px, 7vw, 125px); 
+  height: clamp(70px, 7vw, 125px);
   margin-bottom: 32px;
   align-items: flex-end;
 }
@@ -24,4 +25,3 @@ const props = defineProps<{
   }
 }
 </style>
-

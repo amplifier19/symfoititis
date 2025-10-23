@@ -1,17 +1,17 @@
-const vue = require('eslint-plugin-vue');
-const baseConfig = require('../../eslint.config.js');
+const vue = require("eslint-plugin-vue");
+const baseConfig = require("../../eslint.config.js");
 
 module.exports = [
   ...baseConfig,
-  ...vue.configs['flat/recommended'],
+  ...vue.configs["flat/recommended"],
   {
-    files: ['**/*.vue'],
+    files: ["**/*.vue"],
     languageOptions: {
-      parserOptions: { parser: require('@typescript-eslint/parser') },
+      parserOptions: { parser: require("@typescript-eslint/parser") },
     },
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.vue'],
-    rules: { 'vue/multi-word-component-names': 'off' },
+    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.vue"],
+    rules: { "vue/multi-word-component-names": "off" },
   },
 ];

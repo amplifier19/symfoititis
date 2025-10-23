@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  const props = defineProps<{
-    content: number
-    id: string
-  }>()
+const props = defineProps<{
+  content: number;
+  id: string;
+}>();
 </script>
 
 <template>
-  <li v-if="props.content>0" class="sidebox sm-font rg-fw" :id="props.id">
+  <li v-if="props.content > 0" class="sidebox sm-font rg-fw" :id="props.id">
     {{ content }}
   </li>
   <li v-else class="sidebox hidden sm-font rg-fw" :id="props.id">
@@ -27,7 +27,7 @@
 
 .hidden {
   visibility: hidden;
-} 
+}
 
 #left-sidebox {
   border-left: 1px solid var(--white);
@@ -40,11 +40,10 @@
 }
 
 @media screen and (max-width: 1000px) {
-.sidebox {
-  width: 20px;
-  height: 26px;
-
-}
+  .sidebox {
+    width: 20px;
+    height: 26px;
+  }
 }
 
 @media screen and (max-width: 590px) {
@@ -55,6 +54,4 @@
     visibility: hidden;
   }
 }
-
-
 </style>

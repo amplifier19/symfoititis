@@ -1,40 +1,56 @@
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from 'vue'
-import { type Teacher } from '@symfoititis-frontend-monorepo/interfaces'
+import { ref, defineAsyncComponent } from "vue";
+import { type Teacher } from "@symfoititis-frontend-monorepo/interfaces";
 
-
-const rootUrl = import.meta.env.VITE_HOST
+const rootUrl = import.meta.env.VITE_HOST;
 const props = defineProps<{
-  teacher: Teacher
-  selectedTeacherId: string
-}>()
+  teacher: Teacher;
+  selectedTeacherId: string;
+}>();
 
 const emit = defineEmits<{
-  (e: 'select-teacher', teacher: Teacher, event: Event):void
-}>()
+  (e: "select-teacher", teacher: Teacher, event: Event): void;
+}>();
 
-const expandableDiv = ref<HTMLElement>()
+const expandableDiv = ref<HTMLElement>();
 
-const DateTimePicker = defineAsyncComponent(() => import('./DateTimePicker.vue'))
+const DateTimePicker = defineAsyncComponent(
+  () => import("./DateTimePicker.vue"),
+);
 
 const handleSelectTeacher = (event: Event) => {
-  emit('select-teacher', props.teacher, event)
-}
+  emit("select-teacher", props.teacher, event);
+};
 </script>
 
 <template>
-  <div ref="expandableDiv" class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width teacher-card">
-    <section @click="handleSelectTeacher" class="pf-v5-c-expandable-section__toggle">
-      <span class="regular-text pf-v5-c-expandable-section__toggle-text toogle-item">
+  <div
+    ref="expandableDiv"
+    class="pf-v5-c-expandable-section pf-m-display-lg pf-m-limit-width teacher-card"
+  >
+    <section
+      @click="handleSelectTeacher"
+      class="pf-v5-c-expandable-section__toggle"
+    >
+      <span
+        class="regular-text pf-v5-c-expandable-section__toggle-text toogle-item"
+      >
         {{ props.teacher.firstname }} {{ props.teacher.lastname }}
       </span>
       <span class="pf-v5-c-expandable-section__toggle-icon toogle-item">
         <!-- <i class="fa fa-angle-right" aria-hidden="true"></i> -->
-         <img class="angle-icon" src="./angle-icon-orange.svg" alt="angle-icon">
+        <img
+          class="angle-icon"
+          src="./angle-icon-orange.svg"
+          alt="angle-icon"
+        />
       </span>
     </section>
 
-    <div v-if="props.selectedTeacherId === props.teacher.t_id" class="pf-v5-c-expandable-section__content calendar-container">
+    <div
+      v-if="props.selectedTeacherId === props.teacher.t_id"
+      class="pf-v5-c-expandable-section__content calendar-container"
+    >
       <DateTimePicker :teacher="props.teacher" />
     </div>
   </div>
@@ -48,8 +64,8 @@ const handleSelectTeacher = (event: Event) => {
 }
 
 .pf-v5-c-expandable-section__content {
-  padding-inline-start: 0; 
-  padding-inline-end: 0; 
+  padding-inline-start: 0;
+  padding-inline-end: 0;
 }
 
 .pf-v5-c-expandable-section__toggle {
@@ -67,11 +83,17 @@ const handleSelectTeacher = (event: Event) => {
   user-select: none;
 }
 
-.pf-v5-c-expandable-section > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > img {
+.pf-v5-c-expandable-section
+  > .pf-v5-c-expandable-section__toggle
+  > .pf-v5-c-expandable-section__toggle-icon
+  > img {
   rotate: 180deg;
 }
 
-.pf-m-expanded > .pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > img {
+.pf-m-expanded
+  > .pf-v5-c-expandable-section__toggle
+  > .pf-v5-c-expandable-section__toggle-icon
+  > img {
   rotate: -90deg;
 }
 
@@ -100,17 +122,24 @@ const handleSelectTeacher = (event: Event) => {
   border-bottom: transparent;
   color: var(--black);
 }
-.pf-v5-c-expandable-section__toggle:hover > .pf-v5-c-expandable-section__toggle-icon > img {
+.pf-v5-c-expandable-section__toggle:hover
+  > .pf-v5-c-expandable-section__toggle-icon
+  > img {
   /* color: white; */
-  content: url('./angle-icon-white.svg');
+  content: url("./angle-icon-white.svg");
 }
-.pf-v5-c-expandable-section__toggle > .pf-v5-c-expandable-section__toggle-icon > img {
+.pf-v5-c-expandable-section__toggle
+  > .pf-v5-c-expandable-section__toggle-icon
+  > img {
   /* color: var(--orange); */
-  content: url('./angle-icon-orange.svg');
+  content: url("./angle-icon-orange.svg");
 }
-.pf-m-expanded > .pf-v5-c-expandable-section__toggle:hover > .pf-v5-c-expandable-section__toggle-icon > img {
+.pf-m-expanded
+  > .pf-v5-c-expandable-section__toggle:hover
+  > .pf-v5-c-expandable-section__toggle-icon
+  > img {
   /* color: var(--orange); */
-  content: url('./angle-icon-orange.svg');
+  content: url("./angle-icon-orange.svg");
 }
 
 .angle-icon {

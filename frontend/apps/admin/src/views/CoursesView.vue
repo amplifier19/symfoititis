@@ -1,38 +1,43 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { OnClickOutside } from '@vueuse/components'
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { OnClickOutside } from "@vueuse/components";
 
-import { useCourseStore } from '../stores/courses.store'
-import { useDepStore } from '../stores/departments.store'
-import { useDisplayModal } from '../stores/displayModal'
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
+import { useCourseStore } from "../stores/courses.store";
+import { useDepStore } from "../stores/departments.store";
+import { useDisplayModal } from "../stores/displayModal";
+import { useErrorStore } from "@symfoititis-frontend-monorepo/stores";
 
-import { useModal } from '../composables/modal'
-import { useFetch } from '../composables/fetchService'
+import { useModal } from "../composables/modal";
+import { useFetch } from "../composables/fetchService";
 
-import Layout from '../components/Layout.vue'
-import { Toasts } from '@symfoititis-frontend-monorepo/ui'
-import Table from '../components/Table.vue'
-import Course from '../components/Course.vue'
-import Modal from '../components/Modal.vue'
+import Layout from "../components/Layout.vue";
+import { Toasts } from "@symfoititis-frontend-monorepo/ui";
+import Table from "../components/Table.vue";
+import Course from "../components/Course.vue";
+import Modal from "../components/Modal.vue";
 
-const route = useRoute()
+const route = useRoute();
 
-const depStore = useDepStore()
-const courseStore = useCourseStore()
-const errorStore = useErrorStore()
-const modalStore = useDisplayModal()
+const depStore = useDepStore();
+const courseStore = useCourseStore();
+const errorStore = useErrorStore();
+const modalStore = useDisplayModal();
 
-const { modal, activateCourseAddModal, activateCourseEditModal, activateCourseRemoveModal } =
-  useModal()
+const {
+  modal,
+  activateCourseAddModal,
+  activateCourseEditModal,
+  activateCourseRemoveModal,
+} = useModal();
 
-const { getDepartments, getCourses, createCourse, updateCourse, deleteCourse } = useFetch()
+const { getDepartments, getCourses, createCourse, updateCourse, deleteCourse } =
+  useFetch();
 
 onMounted(async () => {
-  await getDepartments()
-  await getCourses(parseInt(route.params.dep_id.toString()))
-})
+  await getDepartments();
+  await getCourses(parseInt(route.params.dep_id.toString()));
+});
 </script>
 
 <template>
@@ -40,7 +45,9 @@ onMounted(async () => {
   <Layout :selected="1">
     <template v-slot:main-section>
       <button
-        @click="activateCourseAddModal(parseInt(route.params.dep_id.toString()))"
+        @click="
+          activateCourseAddModal(parseInt(route.params.dep_id.toString()))
+        "
         class="pf-v5-c-button pf-m-link"
         type="button"
       >
@@ -59,7 +66,8 @@ onMounted(async () => {
           >
             <td class="pf-v5-c-table__td" role="cell">
               {{
-                depStore.departments.find((dep) => dep.dep_id == course.dep_id)?.dep_display_name
+                depStore.departments.find((dep) => dep.dep_id == course.dep_id)
+                  ?.dep_display_name
               }}
             </td>
           </Course>

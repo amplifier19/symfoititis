@@ -1,11 +1,11 @@
 <script setup lang="ts">
 function setRealVh() {
-const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--real-vh', `${vh}px`);
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--real-vh", `${vh}px`);
 }
 
-window.addEventListener('resize', setRealVh);
-window.addEventListener('orientationchange', setRealVh);
+window.addEventListener("resize", setRealVh);
+window.addEventListener("orientationchange", setRealVh);
 setRealVh();
 </script>
 
@@ -23,7 +23,8 @@ setRealVh();
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -48,7 +49,7 @@ html, body {
 }
 
 .wrapper {
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -175,25 +176,24 @@ html, body {
 }
 
 @media screen and (max-width: 1000px) {
-.sm-font {
-  font-size: 12px;
-}
+  .sm-font {
+    font-size: 12px;
+  }
 
-.md-font {
-  font-size: 16px;
-}
+  .md-font {
+    font-size: 16px;
+  }
 
-.lg-font {
-  font-size: 18px;
-}
+  .lg-font {
+    font-size: 18px;
+  }
 
-.xl-font {
-  font-size: 22px;
-}
+  .xl-font {
+    font-size: 22px;
+  }
 
-.xxl-font {
-  font-size: 30px;
+  .xxl-font {
+    font-size: 30px;
+  }
 }
-}
-
 </style>

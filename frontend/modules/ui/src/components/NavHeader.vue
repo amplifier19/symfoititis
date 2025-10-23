@@ -1,40 +1,44 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
-import type { Course } from '@symfoititis-frontend-monorepo/interfaces'
+import type { Course } from "@symfoititis-frontend-monorepo/interfaces";
 
-import { useHistory } from '@symfoititis-frontend-monorepo/composables'
+import { useHistory } from "@symfoititis-frontend-monorepo/composables";
 
 const props = defineProps<{
-  course: Course
-  navigation: string
-  storageItem: string
-}>()
+  course: Course;
+  navigation: string;
+  storageItem: string;
+}>();
 
-const router = useRouter()
+const router = useRouter();
 
-const alphabet = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'
+const alphabet = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
 
-const { removeCourseFromHistory } = useHistory(props.storageItem)
+const { removeCourseFromHistory } = useHistory(props.storageItem);
 
 const handleDelete = () => {
-  removeCourseFromHistory(props.course.c_id!)
-  router.push({ name: props.navigation })
-}
+  removeCourseFromHistory(props.course.c_id!);
+  router.push({ name: props.navigation });
+};
 </script>
 
 <template>
   <section class="nav-wrapper wrapper" id="navbar">
     <nav class="nav-container content-width">
       <div class="title-container">
-        <RouterLink :to="{name: props.navigation}" class="icon-container">
+        <RouterLink :to="{ name: props.navigation }" class="icon-container">
           <img class="title-icon" src="/svg/arrow_white.svg" alt="left-arrow" />
         </RouterLink>
-        <span class="title lg-font md-fw" id="course-title">{{ props.course.c_display_name }}</span>
+        <span class="title lg-font md-fw" id="course-title">{{
+          props.course.c_display_name
+        }}</span>
       </div>
 
       <div class="title-container">
-        <span class="title lg-font lt-fw" id="semester-title">{{ alphabet[props.course.semester - 0] }}' Εξάμηνο</span>
+        <span class="title lg-font lt-fw" id="semester-title"
+          >{{ alphabet[props.course.semester - 0] }}' Εξάμηνο</span
+        >
         <div @click="handleDelete" class="icon-container">
           <img class="title-icon" src="/svg/close_white.svg" alt="close-icon" />
         </div>
@@ -123,7 +127,6 @@ const handleDelete = () => {
   .title-icon {
     height: 1rem;
     width: 1rem;
-
   }
 
   #course-title {

@@ -1,39 +1,48 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch } from "vue";
 
 const props = defineProps<{
-  title: string
-  displaySearch: boolean
-  search?: string
-}>()
+  title: string;
+  displaySearch: boolean;
+  search?: string;
+}>();
 
 const emit = defineEmits<{
-  (e: 'clear-search'): void
-}>()
+  (e: "clear-search"): void;
+}>();
 
-const search = ref<string>("")
+const search = ref<string>("");
 
 watch(props, (newProps, oldProps) => {
-  search.value = props.search || ""
-})
+  search.value = props.search || "";
+});
 </script>
 
 <template>
   <section class="search-wrapper">
     <div class="search-container content-width">
-
       <span class="search-name lg-font md-fw">{{ props.title }}</span>
 
       <div v-if="props.displaySearch" class="searchbar">
-          <slot></slot>
+        <slot></slot>
 
-          <div v-if="!search" class="icon-container" id="search-icon-container">
-            <img class="icon" id="search-icon" src="/svg/search_icon.svg" alt="search" />
-          </div>
+        <div v-if="!search" class="icon-container" id="search-icon-container">
+          <img
+            class="icon"
+            id="search-icon"
+            src="/svg/search_icon.svg"
+            alt="search"
+          />
+        </div>
 
-          <div v-else @click="emit('clear-search')" class="icon-container" id="close-icon-container">
-            <img class="icon" src="/svg/close_orange.svg" alt="X" />
-          </div>
+        <div
+          v-else
+          @click="emit('clear-search')"
+          class="icon-container"
+          id="close-icon-container"
+        >
+          <img class="icon" src="/svg/close_orange.svg" alt="X" />
+        </div>
       </div>
     </div>
   </section>
@@ -85,7 +94,7 @@ watch(props, (newProps, oldProps) => {
   flex: 0 0 auto;
   object-fit: fill;
   background-color: white;
-  width:  18px;
+  width: 18px;
   height: 18px;
 }
 
@@ -98,7 +107,7 @@ watch(props, (newProps, oldProps) => {
 @media screen and (max-width: 1300px) {
   .search-container {
     padding: 4px 1rem;
-    max-height: 35px
+    max-height: 35px;
   }
 }
 </style>

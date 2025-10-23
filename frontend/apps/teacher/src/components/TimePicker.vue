@@ -1,36 +1,45 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { ref, computed, watch } from 'vue'
+import { useRoute } from "vue-router";
+import { ref, computed, watch } from "vue";
 
-import TimeSlot from './TimeSlot.vue'
+import TimeSlot from "./TimeSlot.vue";
 
-import { Day } from '@symfoititis-frontend-monorepo/interfaces'
+import { Day } from "@symfoititis-frontend-monorepo/interfaces";
 
-import { useAvailabilityStore } from '../stores/availability'
+import { useAvailabilityStore } from "../stores/availability";
 
-import { AvailabilityDataService } from '../core/services/availability/availability-data.service'
+import { AvailabilityDataService } from "../core/services/availability/availability-data.service";
 
 const props = defineProps<{
-  selectedDay: Day
-}>()
+  selectedDay: Day;
+}>();
 
-const route = useRoute()
+const route = useRoute();
 
-const availabilityStore = useAvailabilityStore()
+const availabilityStore = useAvailabilityStore();
 
-const availabilityDataService = AvailabilityDataService.getAvailabilityDataFactory()
+const availabilityDataService =
+  AvailabilityDataService.getAvailabilityDataFactory();
 
-const cid = ref<number>(parseInt(route.params.c_id as string))
-const weekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
+const cid = ref<number>(parseInt(route.params.c_id as string));
+const weekDays = [
+  "Κυριακή",
+  "Δευτέρα",
+  "Τρίτη",
+  "Τετάρτη",
+  "Πέμπτη",
+  "Παρασκευή",
+  "Σάββατο",
+];
 
 watch(props, (newDate, oldDate) => {
-  availabilityStore.handleDateChange(props.selectedDay)
-  availabilityStore.getAvailabilityPreferences(props.selectedDay.weekDay)
-})
+  availabilityStore.handleDateChange(props.selectedDay);
+  availabilityStore.getAvailabilityPreferences(props.selectedDay.weekDay);
+});
 
 watch(route, async (oldRoute, newRoute) => {
-  cid.value = parseInt(route.params.c_id as string)
-})
+  cid.value = parseInt(route.params.c_id as string);
+});
 </script>
 
 <template>
@@ -38,28 +47,46 @@ watch(route, async (oldRoute, newRoute) => {
     <span>Επελεξε μια ημερομηνια </span>
   </div>
 
-  <div v-else-if="availabilityStore.availabilityPreferences.length > 0" class="time-picker preferences-container">
+  <div
+    v-else-if="availabilityStore.availabilityPreferences.length > 0"
+    class="time-picker preferences-container"
+  >
     <span class="date-prompt pf-v5-c-title pf-m-lg">
       {{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}
     </span>
     <section class="preferences-prompt-container">
       <span class="">Αυτή την ημέρα, συνήθως προτιμάς τις παρακάτω ώρες.</span>
       <ul class="preference-slot-list">
-        <li v-for="(el, idx) in availabilityStore.availabilityPreferences" :key="idx"> {{ el.start_time }}:00 - {{
-          el.start_time + 1 }}:00
+        <li
+          v-for="(el, idx) in availabilityStore.availabilityPreferences"
+          :key="idx"
+        >
+          {{ el.start_time }}:00 - {{ el.start_time + 1 }}:00
         </li>
       </ul>
-      <span class="">Θα ήθελες να ξεκινήσεις τον προγραμματισμό της ημέρας με εκείνες τις ώρες;</span>
+      <span class=""
+        >Θα ήθελες να ξεκινήσεις τον προγραμματισμό της ημέρας με εκείνες τις
+        ώρες;</span
+      >
     </section>
     <section class="preference-btn-container">
-      <button @click="availabilityStore.declinePreferences" class="pf-v5-c-button pf-m-link preference-btn"
-        id="preference-no-btn" type="button"> Όχι
+      <button
+        @click="availabilityStore.declinePreferences"
+        class="pf-v5-c-button pf-m-link preference-btn"
+        id="preference-no-btn"
+        type="button"
+      >
+        Όχι
         <span class="pf-v5-c-button__icon pf-m-end">
           <i class="fa fa-times" aria-hidden="true"></i>
         </span>
       </button>
-      <button @click="availabilityStore.applyPreferences" class="pf-v5-c-button pf-m-link preference-btn"
-        id="preference-yes-btn" type="button">
+      <button
+        @click="availabilityStore.applyPreferences"
+        class="pf-v5-c-button pf-m-link preference-btn"
+        id="preference-yes-btn"
+        type="button"
+      >
         Ναι
         <span class="pf-v5-c-button__icon pf-m-end">
           <i class="fa fa-check" aria-hidden="true"></i>
@@ -72,19 +99,41 @@ watch(route, async (oldRoute, newRoute) => {
     <li class="date-prompt pf-v5-c-title pf-m-lg">
       {{ weekDays[props.selectedDay.weekDay] }}, {{ props.selectedDay.date }}
     </li>
-    <li v-for="(slot, idx) in availabilityStore.filteredByDateAvailabilitySlots" class="time-slot">
-      <TimeSlot @update-updatable-slot="availabilityStore.updateUpdatableSlot"
-        @cancel-updatable-slot="availabilityStore.cancelUpdatableSlot(slot.av_id!)" :slotKey="slot.av_id!"
-        :startTime="slot.start_time" :state="slot.state" updateEvent="update-updatable-slot" removeEvent="cancel-updatable-slot" />
+    <li
+      v-for="(slot, idx) in availabilityStore.filteredByDateAvailabilitySlots"
+      class="time-slot"
+    >
+      <TimeSlot
+        @update-updatable-slot="availabilityStore.updateUpdatableSlot"
+        @cancel-updatable-slot="
+          availabilityStore.cancelUpdatableSlot(slot.av_id!)
+        "
+        :slotKey="slot.av_id!"
+        :startTime="slot.start_time"
+        :state="slot.state"
+        updateEvent="update-updatable-slot"
+        removeEvent="cancel-updatable-slot"
+      />
     </li>
-    <li v-for="(slot, idx) in availabilityStore.insertableAvailabilitySlots" class="time-slot">
-      <TimeSlot @update-insertable-slot="availabilityStore.updateInsertableSlot"
-        @remove-insertable-slot="availabilityStore.removeInsertableSlot(idx)" :slotKey="idx"
-        :startTime="slot.start_time" updateEvent="update-insertable-slot" removeEvent="remove-insertable-slot" />
+    <li
+      v-for="(slot, idx) in availabilityStore.insertableAvailabilitySlots"
+      class="time-slot"
+    >
+      <TimeSlot
+        @update-insertable-slot="availabilityStore.updateInsertableSlot"
+        @remove-insertable-slot="availabilityStore.removeInsertableSlot(idx)"
+        :slotKey="idx"
+        :startTime="slot.start_time"
+        updateEvent="update-insertable-slot"
+        removeEvent="remove-insertable-slot"
+      />
     </li>
     <li>
-      <button @click="availabilityStore.addInsertableSlot(cid)"
-        class="pf-v5-c-button pf-m-link add-time-slot-btn" type="button">
+      <button
+        @click="availabilityStore.addInsertableSlot(cid)"
+        class="pf-v5-c-button pf-m-link add-time-slot-btn"
+        type="button"
+      >
         Προσθήκη χρονοθυρίδας
         <span class="pf-v5-c-button__icon pf-m-end">
           <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -93,13 +142,16 @@ watch(route, async (oldRoute, newRoute) => {
     </li>
 
     <section class="btn-container">
-      <div v-if="
-        availabilityStore.filteredInsertableAvailabilitySlots.length > 0 ||
-        availabilityStore.updatableAvailabilitySlots.length > 0 ||
-        availabilityStore.cancelableAvailabilitySlotIds.length > 0
-      "
-       @click="availabilityDataService.saveAvailabilityChanges(cid)"
-        class="booking-btn" id="book-btn">
+      <div
+        v-if="
+          availabilityStore.filteredInsertableAvailabilitySlots.length > 0 ||
+          availabilityStore.updatableAvailabilitySlots.length > 0 ||
+          availabilityStore.cancelableAvailabilitySlotIds.length > 0
+        "
+        @click="availabilityDataService.saveAvailabilityChanges(cid)"
+        class="booking-btn"
+        id="book-btn"
+      >
         <span>ΑΠΟΘΗΚΕΥΣΗ</span>
       </div>
       <div v-else class="booking-btn" id="choose-time-btn">
@@ -148,7 +200,7 @@ watch(route, async (oldRoute, newRoute) => {
   align-items: center;
 }
 
-.preference-slot-list>li {
+.preference-slot-list > li {
   color: black;
 }
 
@@ -206,17 +258,17 @@ watch(route, async (oldRoute, newRoute) => {
 }
 
 #book-btn {
-  background-image: url('/svg/booking-cta-btn.svg');
+  background-image: url("/svg/booking-cta-btn.svg");
   cursor: pointer;
 }
 
-#book-btn>span {
+#book-btn > span {
   margin-bottom: 12px;
-  font-family: 'Geologica-Medium';
+  font-family: "Geologica-Medium";
 }
 
 #choose-time-btn {
-  background-image: url('/svg/booking-dashed-cta-btn.svg');
+  background-image: url("/svg/booking-dashed-cta-btn.svg");
 }
 
 .active-btn,

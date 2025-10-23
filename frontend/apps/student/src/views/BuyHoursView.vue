@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { Masterhead, Page, Toasts, SearchHeader } from '@symfoititis-frontend-monorepo/ui';
+import {
+  Masterhead,
+  Page,
+  Toasts,
+  SearchHeader,
+} from "@symfoititis-frontend-monorepo/ui";
 </script>
 
 <template>
@@ -14,6 +19,4 @@ import { Masterhead, Page, Toasts, SearchHeader } from '@symfoititis-frontend-mo
   </Page>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

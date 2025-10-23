@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Modal } from '../interfaces/Modal'
+import type { Modal } from "../interfaces/Modal";
 
-const props = defineProps<{ content: Modal }>()
+const props = defineProps<{ content: Modal }>();
 </script>
 
 <template>
@@ -27,7 +27,9 @@ const props = defineProps<{ content: Modal }>()
         <span class="pf-v5-c-modal-box__title-icon">
           <i :class="props.content.icon" aria-hidden="true"></i>
         </span>
-        <span class="pf-v5-c-modal-box__title-text">{{ props.content.title }}</span>
+        <span class="pf-v5-c-modal-box__title-text">{{
+          props.content.title
+        }}</span>
       </h1>
     </header>
     <div class="pf-v5-c-modal-box__body" id="icon-description">
@@ -61,7 +63,10 @@ const props = defineProps<{ content: Modal }>()
         </div>
         <!--  -->
         <div v-if="props.content?.selects && props.content?.selects.length > 0">
-          <div v-for="select in props.content.selects" class="pf-v5-c-form__group">
+          <div
+            v-for="select in props.content.selects"
+            class="pf-v5-c-form__group"
+          >
             <div class="pf-v5-c-form__group-label">
               <label class="pf-v5-c-form__label" :for="select.name">
                 <span class="pf-v5-c-form__label-text">{{ select.label }}</span
@@ -75,7 +80,11 @@ const props = defineProps<{ content: Modal }>()
             </div>
             <div class="pf-v5-c-form__group-control">
               <span class="pf-v5-c-form-control pf-m-required">
-                <select :name="select.name" :id="select.name" :required="select?.required">
+                <select
+                  :name="select.name"
+                  :id="select.name"
+                  :required="select?.required"
+                >
                   <option
                     v-for="option in select.options"
                     :value="
@@ -104,13 +113,20 @@ const props = defineProps<{ content: Modal }>()
         <!--  -->
         <footer class="pf-v5-c-modal-box__footer">
           <div class="pf-v5-c-overflow-menu__group pf-m-button-group">
-            <div v-for="btn in props.content.buttons" class="pf-v5-c-overflow-menu__item">
+            <div
+              v-for="btn in props.content.buttons"
+              class="pf-v5-c-overflow-menu__item"
+            >
               <button :type="btn?.type" :class="btn.classes">
                 {{ btn.text }}
               </button>
             </div>
             <div class="pf-v5-c-overflow-menu__item">
-              <button @click="$emit('hide')" type="button" class="pf-v5-c-button pf-m-secondary">
+              <button
+                @click="$emit('hide')"
+                type="button"
+                class="pf-v5-c-button pf-m-secondary"
+              >
                 Cancel
               </button>
             </div>

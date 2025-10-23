@@ -1,35 +1,36 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
-import { useErrorStore } from '@symfoititis-frontend-monorepo/stores'
+import { useErrorStore } from "@symfoititis-frontend-monorepo/stores";
 
-import type { Note } from '@symfoititis-frontend-monorepo/interfaces'
+import type { Note } from "@symfoititis-frontend-monorepo/interfaces";
 
-import { useFetch } from '../composables/fetchService'
+import { useFetch } from "../composables/fetchService";
 
-const props = defineProps<{ note: Note }>()
+const props = defineProps<{ note: Note }>();
 
-const errorStore = useErrorStore()
+const errorStore = useErrorStore();
 
-const { generatePresignedUrl } = useFetch()
+const { generatePresignedUrl } = useFetch();
 
-const attachmentUrl = ref<string>('')
-const linkRef = ref<HTMLAnchorElement>()
-const urlExpiresAt = ref<Date>(new Date())
+const attachmentUrl = ref<string>("");
+const linkRef = ref<HTMLAnchorElement>();
+const urlExpiresAt = ref<Date>(new Date());
 
 const openAttachment = async () => {
-    const urlExpired = Date.now() >= urlExpiresAt.value.getTime()
-    if (attachmentUrl.value === '' || urlExpired) {
-        attachmentUrl.value = await generatePresignedUrl(props.note.c_id, props.note.note_filename)
-        urlExpiresAt.value = new Date(Date.now() + 1000 * 1000)
-    }
-    if (linkRef.value) {
-        linkRef.value.href = attachmentUrl.value
-        linkRef.value.click()
-    }
-}
-
-
+  const urlExpired = Date.now() >= urlExpiresAt.value.getTime();
+  if (attachmentUrl.value === "" || urlExpired) {
+    attachmentUrl.value = await generatePresignedUrl(
+      props.note.c_id,
+      props.note.note_filename,
+    );
+    urlExpiresAt.value = new Date(Date.now() + 1000 * 1000);
+  }
+  if (linkRef.value) {
+    linkRef.value.href = attachmentUrl.value;
+    linkRef.value.click();
+  }
+};
 </script>
 
 <template>
@@ -58,10 +59,12 @@ const openAttachment = async () => {
         :href="attachmentUrl"
         target="_blank"
         rel="noopener noreferrer"
-        style="display: none;"
+        style="display: none"
       >
       </a>
-      <button @click="openAttachment" class="pf-v5-c-button pf-m-link">Open Note</button>
+      <button @click="openAttachment" class="pf-v5-c-button pf-m-link">
+        Open Note
+      </button>
     </td>
     <td class="pf-v5-c-table__td pf-v5-c-table__action" role="cell">
       <div class="pf-v5-c-overflow-menu__group pf-m-button-group">

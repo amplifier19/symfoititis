@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useUserDataService } from '@symfoititis-frontend-monorepo/core/services'
+import { useUserDataService } from "@symfoititis-frontend-monorepo/core/services";
 
-const { logout } = useUserDataService()
-const rootUrl = import.meta.env.VITE_HOST
-
+const { logout } = useUserDataService();
+const rootUrl = import.meta.env.VITE_HOST;
 </script>
 
 <template>
@@ -20,11 +19,19 @@ const rootUrl = import.meta.env.VITE_HOST
     </span>
     <div class="pf-v5-c-masthead__main">
       <RouterLink class="pf-v5-c-masthead__brand" :to="{ name: 'home' }">
-        <img class="pf-v5-c-brand" :src="`${rootUrl}/svg/logo-hor-white.svg`" alt="white-logo" />
+        <img
+          class="pf-v5-c-brand"
+          :src="`${rootUrl}/svg/logo-hor-white.svg`"
+          alt="white-logo"
+        />
       </RouterLink>
     </div>
     <div class="pf-v5-c-masthead__content">
-      <button @click="logout()" class="pf-v5-c-button pf-m-tertiary" type="button">
+      <button
+        @click="logout()"
+        class="pf-v5-c-button pf-m-tertiary"
+        type="button"
+      >
         Logout
       </button>
     </div>

@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
-import { useFileStore } from '../stores/files.store'
+import { useFileStore } from "../stores/files.store";
 
-const props = defineProps<{ c_id: number }>()
-const rootUrl = import.meta.env.VITE_HOST
-const fileStore = useFileStore()
-const fileInput = ref<HTMLInputElement | null>(null)
-const drag = ref(false)
+const props = defineProps<{ c_id: number }>();
+const rootUrl = import.meta.env.VITE_HOST;
+const fileStore = useFileStore();
+const fileInput = ref<HTMLInputElement | null>(null);
+const drag = ref(false);
 
 const handleDrag = (e: Event) => {
-  e.preventDefault()
-  drag.value = true
-}
+  e.preventDefault();
+  drag.value = true;
+};
 const dragStopped = () => {
-  drag.value = false
-}
+  drag.value = false;
+};
 const handleFileChange = () => {
-  if (!fileInput.value) return
-  const fileListAsArry = Array.from(fileInput.value!.files!)
-  fileStore.setAttachments(fileListAsArry)
-}
+  if (!fileInput.value) return;
+  const fileListAsArry = Array.from(fileInput.value!.files!);
+  fileStore.setAttachments(fileListAsArry);
+};
 const handleDrop = (e: DragEvent) => {
-  e.preventDefault()
-  if (!!fileInput.value) return
-  fileInput.value!.files = e.dataTransfer!.files
-  handleFileChange()
-  drag.value = false
-}
+  e.preventDefault();
+  if (!!fileInput.value) return;
+  fileInput.value!.files = e.dataTransfer!.files;
+  handleFileChange();
+  drag.value = false;
+};
 </script>
 
 <template>
@@ -62,7 +62,13 @@ const handleDrop = (e: DragEvent) => {
         </section>
       </div>
     </label>
-    <button v-if="fileStore.attachments.length > 0" class="submit-btn" type="submit">Upload</button>
+    <button
+      v-if="fileStore.attachments.length > 0"
+      class="submit-btn"
+      type="submit"
+    >
+      Upload
+    </button>
   </form>
 </template>
 

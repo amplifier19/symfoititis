@@ -27,9 +27,6 @@ coverage
 *.sln
 *.sw?
 *.env*
-**/custom-keycloak-themes*
-*patternfly*
-*font-awesome*
 *.tsbuildinfo
 
 HELP.md
@@ -44,7 +41,6 @@ target/
 !**/src/test/**/target/
 
 .nx
-keycloak/themes
 
 ### STS ###
 .apt_generated

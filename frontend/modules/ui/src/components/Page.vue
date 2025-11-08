@@ -23,6 +23,16 @@ setRealVh();
   -webkit-tap-highlight-color: transparent;
 }
 
+:root {
+    --orange-shadow: #DB7A0A;
+    --orange: #F59120;
+    --white: #FFFFFA;
+    --black: #4D4D4D;
+    --gray: #666666;
+    --light-gray: #B3B3B3;
+    --main-border: 1.5px solid var(--orange);
+}
+
 html,
 body {
   height: 100%;

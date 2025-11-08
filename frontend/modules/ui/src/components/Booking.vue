@@ -23,7 +23,7 @@ const props = defineProps<{
 
 const courseStore = useCourseStore();
 const chatStore = useChatStore();
-const { formatDate } = useDate();
+const { getDateDiffString } = useDate();
 
 const { courses } = storeToRefs(courseStore);
 const { chatStats } = storeToRefs(chatStore);
@@ -42,45 +42,6 @@ const course = computed(() => {
 const cardFooter = ref<HTMLElement>();
 const alphabet = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
 const isStudent = import.meta.env.VITE_KC_REALM === "student";
-
-const getRemainingDays = () => {
-  const MINUTE_MILLISEC = 1000 * 60;
-  const HOUR_MILLISEC = 1000 * 60 * 60;
-  const DAY_MILLISEC = 1000 * 60 * 60 * 24;
-  const formattedHour =
-    props.booking.start_time < 10
-      ? `0${props.booking.start_time}`
-      : `${props.booking.start_time}`;
-  const bookingDate = new Date(`${props.booking.date}T${formattedHour}:00:00`);
-  const currentDate = new Date();
-  const difference = bookingDate.getTime() - currentDate.getTime();
-  const days = Math.floor(Math.abs(difference) / DAY_MILLISEC);
-  const hours = Math.floor(
-    (Math.abs(difference) - days * DAY_MILLISEC) / HOUR_MILLISEC,
-  );
-  const minutes = Math.floor(
-    (Math.abs(difference) - days * DAY_MILLISEC - hours * HOUR_MILLISEC) /
-      MINUTE_MILLISEC,
-  );
-  if (days > 0) {
-    cardFooter.value?.classList.add("rg-fw");
-    return difference < 0
-      ? formatDate(props.booking.date, "dd/MM")
-      : `Σε ${days} μέρες`;
-  } else if (hours > 0) {
-    cardFooter.value?.classList.add("sb-fw");
-    return difference < 0
-      ? formatDate(props.booking.date, "dd/MM")
-      : `Σε ${hours} ώρες`;
-  } else if (minutes > 0) {
-    cardFooter.value?.classList.add("b-fw");
-    return difference < 0
-      ? formatDate(props.booking.date, "dd/MM")
-      : `Σε ${minutes} λεπτά`;
-  }
-  cardFooter.value?.classList.add("b-fw");
-  return "Τώρα";
-};
 
 const getUnreadMessages = () => {
   const unread = chatStats.value.find(
@@ -121,7 +82,7 @@ const getUnreadMessages = () => {
     </template>
     <template v-slot:card-footer>
       <span ref="cardFooter" class="card-footer-text sm-font">{{
-        getRemainingDays()
+        getDateDiffString(props.booking.date, props.booking.start_time)
       }}</span>
     </template>
   </Card>

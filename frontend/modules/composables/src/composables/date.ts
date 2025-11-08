@@ -22,5 +22,24 @@ export const useDate = () => {
     return weekDays[bookingDate.getDay()];
   };
 
-  return { formatDate, getWeekDay };
+const getDateDiffString = (dateISO: string, time: number) => {
+  const HHmmss =
+    time.toString().padStart(2, "0") + ":00:00";
+  const date = new Date(`${dateISO}T${HHmmss}`);
+  const diffMs = date.getTime() - Date.now();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+  const HHmm = HHmmss.slice(0, 5);
+  if (diffDays > 0) {
+    return `Σε ${diffDays} ημέρες`;
+  } else if (diffDays < 0) {
+    return formatDate(dateISO, "dd/MM");
+  } else {
+    return `Σήμερα ${HHmm}`;
+  }
+}
+
+  return { formatDate, getWeekDay, getDateDiffString };
 };

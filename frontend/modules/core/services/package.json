@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/sockjs-client": "^1.5.4"
   }
 }

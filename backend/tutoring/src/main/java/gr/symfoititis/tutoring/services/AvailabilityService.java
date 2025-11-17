@@ -49,7 +49,7 @@ public class AvailabilityService {
     @Transactional
     public void addAvailabilitySlots(List<AvailabilitySlot> availabilitySlots, Integer dep_id, String t_id) {
         availabilitySlots.forEach(slot -> {
-            if (slot.dep_id() != dep_id) {
+            if (dep_id.equals(slot.dep_id())) {
                 throw new BadRequestException("Invalid Department id");
             }
             if (!slot.t_id().equals(t_id)) {

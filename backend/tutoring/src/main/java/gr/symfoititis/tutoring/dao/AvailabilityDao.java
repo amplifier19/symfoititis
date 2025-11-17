@@ -3,7 +3,6 @@ package gr.symfoititis.tutoring.dao;
 import gr.symfoititis.tutoring.records.AvailabilitySlot;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AvailabilityDao {
     List<AvailabilitySlot> getAvailabilitySlots (Integer dep_id, Integer c_id, String t_id);

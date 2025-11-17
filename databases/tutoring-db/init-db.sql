@@ -170,7 +170,16 @@ AFTER UPDATE ON bookings
 FOR EACH ROW
 EXECUTE FUNCTION after_update_on_bookings();
 
+CREATE TABLE purchase_products (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  price  BIGINT NOT NULL,
+  hours INT NOT NULL CHECK (hours > 0)
+);
 
-
-
-
+CREATE TABLE student_balance (
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  student_id VARCHAR(36) NOT NULL,
+  hours INT NOT NULL DEFAULT 0,
+  is_premium BOOLEAN NOT NULL DEFAULT false
+);
+CREATE INDEX idx_hours_user_id ON hours(user_id);

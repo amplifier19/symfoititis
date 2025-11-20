@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e 
+set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$POSTGRES_DB" <<-EOSQL
         CREATE USER ${SERVICE_USER} WITH PASSWORD '${SERVICE_PASSWORD}';
@@ -7,5 +7,6 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname="$POSTGRES_DB" <<-E
         GRANT SELECT, INSERT, UPDATE ON TABLE availability_events TO ${SERVICE_USER};
         GRANT SELECT, INSERT, UPDATE ON TABLE bookings TO ${SERVICE_USER};
         GRANT SELECT, INSERT, UPDATE ON TABLE booking_events TO ${SERVICE_USER};
+        GRANT SELECT, INSERT, UPDATE ON TABLE purchase_products TO ${SERVICE_USER};
+        GRANT SELECT, INSERT, UPDATE ON TABLE student_balance TO ${SERVICE_USER};
 EOSQL
-

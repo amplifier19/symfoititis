@@ -25,15 +25,15 @@ public class PurchaseService {
         this.purchaseDao = purchaseDao;
     }
 
-    public String createPaymentIntent(int prodId) throws PaymentException {
+    public String createPaymentIntent(int prodId, String student_id) throws PaymentException {
         try {
             Stripe.apiKey = this.stripeApiKey;
 
-            Long price = getPriceByProdId(prodId);
+            Integer price = getPriceByProdId(prodId, student_id);
 
             PaymentIntentCreateParams params =
                     PaymentIntentCreateParams.builder()
-                            .setAmount(price)
+                            .setAmount(price.longValue())
                             .setCurrency("eur")
                             .setAutomaticPaymentMethods(
                                     PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
@@ -48,16 +48,16 @@ public class PurchaseService {
         }
     }
 
-    public Long getPriceByProdId(int prodId) {
-        return purchaseDao.getPriceByProdId(prodId).orElseThrow(() -> new NotFoundException(String.format("Price for product %d not found", prodId)));
+    public Integer getPriceByProdId(int prodId, String student_id) {
+        return purchaseDao.getPriceByProdId(prodId, student_id).orElseThrow(() -> new NotFoundException(String.format("Price for product %d not found", prodId)));
     }
 
-    public List<PurchaseProduct> getProducts() {
-        return purchaseDao.getProducts();
+    public List<PurchaseProduct> getProducts(String student_id) {
+        return purchaseDao.getProducts(student_id);
     }
 
-    public PurchaseProduct getProduct(int prodId) {
-        return purchaseDao.getProduct(prodId).orElseThrow(() -> new NotFoundException(String.format("Product %d not found", prodId)));
+    public PurchaseProduct getProduct(int prodId, String student_id) {
+        return purchaseDao.getProduct(prodId, student_id).orElseThrow(() -> new NotFoundException(String.format("Product %d not found", prodId)));
     }
 
     public void addProduct(PurchaseProduct product) {

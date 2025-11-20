@@ -13,7 +13,7 @@ public class StudentBalanceRowMapper implements RowMapper<StudentBalance> {
                 rs.getInt("id"),
                 rs.getString("student_id"),
                 rs.getInt("hours"),
-                rs.getBoolean("is_premium")
+                rs.getInt("weight")
         );
     }
 }

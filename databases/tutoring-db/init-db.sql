@@ -172,14 +172,17 @@ EXECUTE FUNCTION after_update_on_bookings();
 
 CREATE TABLE purchase_products (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  price  BIGINT NOT NULL,
-  hours INT NOT NULL CHECK (hours > 0)
+  price INT NOT NULL CHECK (price > 0),
+  anchor_price INT CHECK (anchor_price > 0),
+  hours INT NOT NULL CHECK (hours > 0),
+  weight INT NOT NULL DEFAULT 0,
+  increment_balance_weight BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE student_balance (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   student_id VARCHAR(36) NOT NULL,
   hours INT NOT NULL DEFAULT 0,
-  is_premium BOOLEAN NOT NULL DEFAULT false
+  weight INT NOT NULL DEFAULT 0
 );
-CREATE INDEX idx_hours_user_id ON hours(user_id);
+CREATE INDEX idx_student_balance_student_id ON student_balance(student_id);

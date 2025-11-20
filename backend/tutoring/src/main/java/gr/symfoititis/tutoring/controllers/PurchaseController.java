@@ -6,6 +6,7 @@ import gr.symfoititis.tutoring.entities.StudentBalance;
 import gr.symfoititis.tutoring.services.PurchaseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static gr.symfoititis.common.utils.RoleValidation.isAdmin;
-import static gr.symfoititis.common.utils.RoleValidation.isStudent;
+import static gr.symfoititis.common.utils.RoleValidation.*;
 
 @Validated
 @RestController
@@ -29,10 +29,14 @@ public class PurchaseController {
     ResponseEntity<Response> getPriceByProdId(
             @NotBlank
             @RequestHeader("X-Role")
-            String role
+            String role,
+            @NotNull
+            @NotBlank
+            @RequestHeader("X-User-Id")
+            String user_id
     ) {
-        isStudent(role);
-        List<PurchaseProduct> products = purchaseService.getProducts();
+        isStudentOrAdmin(role);
+        List<PurchaseProduct> products = purchaseService.getProducts(user_id);
         return ResponseEntity.ok(new Response(200, products));
     }
 
@@ -43,10 +47,14 @@ public class PurchaseController {
         int id,
         @NotBlank
         @RequestHeader("X-Role")
-        String role
+        String role,
+        @NotNull
+        @NotBlank
+        @RequestHeader("X-User-Id")
+        String user_id
     ) {
         isStudent(role);
-        PurchaseProduct product = purchaseService.getProduct(id);
+        PurchaseProduct product = purchaseService.getProduct(id, user_id);
         return ResponseEntity.ok(new Response(200, product));
     }
 
@@ -117,14 +125,14 @@ public class PurchaseController {
             PurchaseProduct product
     ) {
         StudentBalance balance = purchaseService.getStudentBalance(student_id);
+        int weight;
         if (balance == null) {
-            balance = new StudentBalance(student_id, product.hours(), false);
-            if (product.hours() == 10) balance.setIsPremium(true);
+            weight = product.increment_balance_weight() ? 1 : 0;
+            balance = new StudentBalance(student_id, product.hours(), weight);
             purchaseService.addStudentBalance(balance);
         } else {
-            Integer hours = balance.getHours();
-            balance.setHours(product.hours() + hours);
-            if (product.hours() == 10) balance.setIsPremium(true);
+            weight = balance.getWeight();
+            if (product.increment_balance_weight()) balance.setWeight(weight+1);
             purchaseService.updateStudentBalance(balance);
         }
         return ResponseEntity.ok(new Response(200, "Successfully updated balance"));

@@ -11,8 +11,11 @@ public class PurchaseProductsRowMapper implements RowMapper<PurchaseProduct> {
     public PurchaseProduct mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new PurchaseProduct(
                 rs.getInt("id"),
-                rs.getLong("price"),
-                rs.getInt("hours")
+                rs.getInt("price"),
+                rs.getInt("anchor_price"),
+                rs.getInt("hours"),
+                rs.getInt("weight"),
+                rs.getBoolean("increment_balance_weight")
         );
     }
 }

@@ -21,49 +21,49 @@ public class PurchaseDaoImpl implements PurchaseDao {
     }
 
     @Override
-    public Optional<Long> getPriceByProdId(int prodId) {
-        String sql = """
-            SELECT price FROM products WHERE id = ?
+    public Optional<Integer> getPriceByProdId(int prodId, String student_id) {
+         String sql = """
+            SELECT pp.price FROM purchase_products pp, student_balance sb WHERE pp.id = ? pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight)
         """;
-        return jdbcTemplate.query(sql, new PurchaseProductPriceRowMapper(), prodId).stream().findFirst();
+        return jdbcTemplate.query(sql, new PurchaseProductPriceRowMapper(), prodId, student_id).stream().findFirst();
     }
 
     @Override
-    public List<PurchaseProduct> getProducts() {
+    public List<PurchaseProduct> getProducts(String student_id) {
         String sql = """
-            SELECT * FROM products
+            SELECT pp.* FROM purchase_products pp, student_balance sb WHERE pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight)
         """;
-        return jdbcTemplate.query(sql, new PurchaseProductsRowMapper());
+        return jdbcTemplate.query(sql, new PurchaseProductsRowMapper(), student_id);
     }
 
     @Override
-    public Optional<PurchaseProduct> getProduct(int prodId) {
+    public Optional<PurchaseProduct> getProduct(int prodId, String student_id) {
         String sql = """
-            SELECT * FROM products where id = ?
+            SELECT pp.* FROM purchase_products pp, student_balance sb WHERE pp.id = ? AND sb.student_id = ? AND pp.weight <= sb.weight
         """;
-        return jdbcTemplate.query(sql, new PurchaseProductsRowMapper(), prodId).stream().findFirst();
+        return jdbcTemplate.query(sql, new PurchaseProductsRowMapper(), prodId, student_id).stream().findFirst();
     }
 
     @Override
     public void addProduct(PurchaseProduct product) {
         String sql = """
-            INSERT INTO products (price, hours) VALUES (?, ?)
+            INSERT INTO purchase_products (price, anchor_price, hours, weight, increment_balance_weight) VALUES (?, ?, ?, ?, ?)
         """;
-        jdbcTemplate.update(sql, product.price(), product.hours());
+        jdbcTemplate.update(sql, product.price(), product.anchor_price(), product.hours(), product.weight(), product.increment_balance_weight());
     }
 
     @Override
     public void updateProduct(PurchaseProduct product) {
         String sql = """
-            UPDATE products SET price = ?, hours = ? WHERE id = ?
+            UPDATE purchase_products SET price = ?, anchor_price = ? hours = ?, weight = ?, increment_balance_weight = ? WHERE id = ?
         """;
-        jdbcTemplate.update(sql, product.price(), product.hours(), product.id());
+        jdbcTemplate.update(sql, product.price(), product.anchor_price(), product.hours(), product.weight(), product.increment_balance_weight(), product.id());
     }
 
     @Override
     public void deleteProduct(int prodId) {
         String sql = """
-            DELETE products WHERE id = ?
+            DELETE purchase_products WHERE id = ?
         """;
         jdbcTemplate.update(sql, prodId);
     }
@@ -79,16 +79,16 @@ public class PurchaseDaoImpl implements PurchaseDao {
     @Override
     public void addStudentBalance(StudentBalance studentBalance) {
         String sql = """
-            INSERT INTO student_balance (student_id, hours, is_premium) VALUES (?, ?, ?)
+            INSERT INTO student_balance (student_id, hours, weight) VALUES (?, ?, ?)
         """;
-        jdbcTemplate.update(sql, studentBalance.getStudentId(), studentBalance.getHours(), studentBalance.getIsPremium());
+        jdbcTemplate.update(sql, studentBalance.getStudentId(), studentBalance.getHours(), studentBalance.getWeight());
     }
 
     @Override
     public void updateStudentBalance(StudentBalance studentBalance) {
         String sql = """
-            UPDATE student_balance SET hours = ?, is_premium = ? WHERE student_id = ?
+            UPDATE student_balance SET hours = ?, weight = ? WHERE student_id = ?
         """;
-        jdbcTemplate.update(sql, studentBalance.getStudentId(), studentBalance.getHours(), studentBalance.getIsPremium());
+        jdbcTemplate.update(sql, studentBalance.getHours(), studentBalance.getWeight(), studentBalance.getStudentId());
     }
 }

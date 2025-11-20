@@ -14,19 +14,22 @@ public class StudentBalance {
     @PositiveOrZero
     private Integer hours;
     @NotNull
-    private Boolean isPremium;
+    @PositiveOrZero
+    private Integer weight;
 
     public StudentBalance(
             @NotBlank
             String studentId,
+            @NotNull
             @PositiveOrZero
             Integer hours,
             @NotNull
-            Boolean isPremium
+            @PositiveOrZero
+            Integer weight
     ) {
         this.studentId = studentId;
         this.hours = hours;
-        this.isPremium = isPremium;
+        this.weight = weight;
     }
 
     public StudentBalance(
@@ -35,15 +38,17 @@ public class StudentBalance {
             Integer id,
             @NotBlank
             String studentId,
+            @NotNull
             @PositiveOrZero
             Integer hours,
             @NotNull
-            Boolean isPremium
+            @PositiveOrZero
+            Integer weight
     ) {
         this.id = id;
         this.studentId = studentId;
         this.hours = hours;
-        this.isPremium = isPremium;
+        this.weight = weight;
     }
 
     public Integer getId() {
@@ -70,12 +75,12 @@ public class StudentBalance {
         this.hours = hours;
     }
 
-    public Boolean getIsPremium() {
-        return isPremium;
+    public Integer getWeight() {
+        return weight;
     }
 
-    public void setIsPremium(Boolean isPremium) {
-        this.isPremium = isPremium;
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
 }

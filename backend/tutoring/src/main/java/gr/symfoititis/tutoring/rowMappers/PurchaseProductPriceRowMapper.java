@@ -5,9 +5,9 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PurchaseProductPriceRowMapper implements RowMapper<Long> {
+public class PurchaseProductPriceRowMapper implements RowMapper<Integer> {
     @Override
-    public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return rs.getLong("price");
+    public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return rs.getInt("price");
     }
 }

@@ -12,10 +12,9 @@ import Loading from 'modules/ui/src/components/Loading.vue';
 
 const route = useRoute();
 const purchaseStore = usePurchaseStore();
-const { stripe, currentProduct } = storeToRefs(purchaseStore);
+const { stripe, clientSecrets, currentProduct } = storeToRefs(purchaseStore);
 const errorStore = useErrorStore();
 const purchaseDataService = PurchaseDataService.getPurchaseDataFactory();
-const loading = ref<boolean>(false);
 
 const initStripe = async () => {
     try {
@@ -41,8 +40,6 @@ const createStripeElement = async (clientSecret: string) => {
 };
 
 onMounted(async () => {
-    // loading.value = true;
-
     await purchaseDataService.getPurchaseProducts();
     if (currentProduct.value === null && route.params.p_id) {
         const prod = purchaseStore.purchaseProducts.find(p => p.id === Number(route.params.p_id)) || null;
@@ -50,7 +47,6 @@ onMounted(async () => {
             currentProduct.value = prod;
         } else {
             errorStore.addError('Product not found');
-            loading.value = false;
             return;
         }
     }
@@ -59,14 +55,16 @@ onMounted(async () => {
     
     if (!stripe.value) {
         errorStore.addError('Failed to load payment gateway');
-        loading.value = false;
         return;
     }
 
-    const clientSecret = await purchaseDataService.createPaymentIntent(Number(route.params.p_id))
+    await purchaseDataService.createPaymentIntent(Number(route.params.p_id))
+    const clientSecret = clientSecrets.value.get(Number(route.params.p_id));
+    if (!clientSecret) {
+        errorStore.addError('Failed to initialize payment');
+        return;
+    }
     await createStripeElement(clientSecret);
-
-    loading.value = false;
 })
 
 onUnmounted(() => {
@@ -82,8 +80,7 @@ onUnmounted(() => {
         </template>
         <template v-slot:main>
             <section class="wrapper checkout-wrapper">
-                <Loading v-if="loading || !currentProduct" />
-                <div v-else class="checkout-card">
+                <div v-if="currentProduct" class="checkout-card">
                     <div class="product-section">
                         <Product :product="currentProduct" />
                     </div>

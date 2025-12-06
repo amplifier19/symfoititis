@@ -62,6 +62,9 @@ export class PurchaseDataService {
   };
 
   public createPaymentIntent = async (id: number) => {
+    if (this.purchaseStore.clientSecrets.has(id)) {
+      return;
+    }
     try {
       const response = await this.purchaseApiService.createPaymentIntent(id);
       const data = await response.json();
@@ -71,7 +74,7 @@ export class PurchaseDataService {
         return;
       }
       if (data.data != null) {
-        return data.data;
+        this.purchaseStore.clientSecrets.set(id, data.data);
       }
     } catch (err) {
       this.errorStore.addError(err);

@@ -8,6 +8,7 @@ export const usePurchaseStore = defineStore("purchaseStore", () => {
   const currentProduct = ref<PurchaseProduct | null>(null);
   const purchaseProducts = ref<PurchaseProduct[]>([]);
   const stripe = ref<Stripe | null>(null);
+  const clientSecrets = ref<Map<number, string>>(new Map<number, string>());
 
   const studentBalance = ref<StudentBalance>({
     id: undefined,
@@ -16,5 +17,5 @@ export const usePurchaseStore = defineStore("purchaseStore", () => {
     weight: 0,
   });
 
-  return { stripe, currentProduct, purchaseProducts, studentBalance };
+  return { stripe, clientSecrets, currentProduct, purchaseProducts, studentBalance };
 });

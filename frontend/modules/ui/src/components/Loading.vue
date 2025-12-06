@@ -37,5 +37,6 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  color: var(--orange);
 }
 </style>

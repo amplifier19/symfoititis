@@ -174,6 +174,7 @@ CREATE TABLE purchase_products (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   price INT NOT NULL CHECK (price > 0),
   anchor_price INT CHECK (anchor_price > 0),
+  message TEXT,
   hours INT NOT NULL CHECK (hours > 0),
   weight INT NOT NULL DEFAULT 0,
   increment_balance_weight BOOLEAN NOT NULL DEFAULT false

@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public class PurchaseService {
-    @Value("{stripe.apikey}")
+    @Value("${stripe.key}")
     private String stripeApiKey;
 
     private final PurchaseDao purchaseDao;
@@ -28,12 +28,14 @@ public class PurchaseService {
     public String createPaymentIntent(int prodId, String student_id) throws PaymentException {
         try {
             Stripe.apiKey = this.stripeApiKey;
+            System.out.println("Stripe key: " + this.stripeApiKey);
 
             Integer price = getPriceByProdId(prodId, student_id);
+            System.out.println(price.longValue());
 
             PaymentIntentCreateParams params =
                     PaymentIntentCreateParams.builder()
-                            .setAmount(price.longValue())
+                            .setAmount(price.longValue()*100)
                             .setCurrency("eur")
                             .setAutomaticPaymentMethods(
                                     PaymentIntentCreateParams.AutomaticPaymentMethods.builder()

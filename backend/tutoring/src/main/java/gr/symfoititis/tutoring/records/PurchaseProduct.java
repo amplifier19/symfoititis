@@ -12,6 +12,7 @@ public record PurchaseProduct(
         Integer price,
         @Positive
         Integer anchor_price,
+        String message,
         @NotNull
         @Positive
         Integer hours,

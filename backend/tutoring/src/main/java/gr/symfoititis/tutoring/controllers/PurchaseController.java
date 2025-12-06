@@ -1,5 +1,6 @@
 package gr.symfoititis.tutoring.controllers;
 
+import gr.symfoititis.common.exceptions.PaymentException;
 import gr.symfoititis.common.records.Response;
 import gr.symfoititis.tutoring.records.PurchaseProduct;
 import gr.symfoititis.tutoring.entities.StudentBalance;
@@ -18,6 +19,7 @@ import static gr.symfoititis.common.utils.RoleValidation.*;
 
 @Validated
 @RestController
+@RequestMapping("/purchase")
 public class PurchaseController {
     private final PurchaseService purchaseService;
 
@@ -40,7 +42,7 @@ public class PurchaseController {
         return ResponseEntity.ok(new Response(200, products));
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/product/{id}")
     ResponseEntity<Response> getPriceByProdId(
         @Positive
         @PathVariable(value="id", required = true)
@@ -86,7 +88,7 @@ public class PurchaseController {
         return ResponseEntity.ok(new Response(200, "Successfully updated one product"));
     }
 
-    @DeleteMapping("/products/{id}")
+    @DeleteMapping("/product/{id}")
     ResponseEntity<Response> deleteProduct(
             @Positive
             @PathVariable(value="id", required = true)
@@ -100,7 +102,7 @@ public class PurchaseController {
         return ResponseEntity.ok(new Response(200, "Successfully deleted one product"));
     }
 
-    @GetMapping("/balance")
+    @GetMapping("/student-balance")
     ResponseEntity<Response> getStudentBalance(
             @NotBlank
             @RequestHeader("X-User-Id")
@@ -112,6 +114,23 @@ public class PurchaseController {
         isStudent(role);
         StudentBalance studentBalance = purchaseService.getStudentBalance(student_id);
         return ResponseEntity.ok(new Response(200, studentBalance));
+    }
+
+    @GetMapping("/payment-intent/product/{id}")
+    ResponseEntity<Response> createPaymentIntent(
+            @NotBlank
+            @RequestHeader("X-User-Id")
+            String student_id,
+            @NotBlank
+            @RequestHeader("X-Role")
+            String role,
+            @Positive
+            @PathVariable(value="id", required = true)
+            int id
+    ) throws PaymentException {
+        isStudent(role);
+        String clientSecret =  purchaseService.createPaymentIntent(id, student_id);
+        return ResponseEntity.ok(new Response(200, clientSecret));
     }
 
     // stripe webhook

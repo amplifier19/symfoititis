@@ -20,7 +20,7 @@ const { getWeekDay, formatDate } = useDate();
         <div class="name-day-time-container">
           <span v-if="props.isTeacher" class="name">{{
             booking.student_name
-          }}</span>
+            }}</span>
           <span v-else class="name md-font rg-fw">
             {{ booking.teacher_firstname }} {{ booking.teacher_lastname }}
           </span>
@@ -31,7 +31,7 @@ const { getWeekDay, formatDate } = useDate();
       </div>
       <div class="meet-btn-container outline">
         <img class="meet-img" src="/svg/meet_icon_light-grey.svg" alt="">
-        <span class="meet-hours md-font">{{ getDateDiffString(booking.date, booking.start_time) }}</span>
+        <span class="meet-hours sm-font">{{ getDateDiffString(booking.date, booking.start_time) }}</span>
       </div>
     </header>
   </section>
@@ -55,7 +55,7 @@ const { getWeekDay, formatDate } = useDate();
   width: 50px;
   height: 50px;
   margin-left: 12px;
-  background-image: url("/svg/date_icon_for-chat.svg"); 
+  background-image: url("/svg/date_icon_for-chat.svg");
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,16 +87,18 @@ const { getWeekDay, formatDate } = useDate();
 }
 
 .meet-btn-container::after {
-  background-color: var(--light-gray); 
+  background-color: var(--light-gray);
 }
 
 .meet-img {
+
+  margin-top: 5px;
   width: 38px;
-  height: 38px; 
+  height: 38px;
 }
 
 .meet-hours {
-  line-height: 1;
+  line-height: 1.5;
   color: var(--light-gray);
 }
 

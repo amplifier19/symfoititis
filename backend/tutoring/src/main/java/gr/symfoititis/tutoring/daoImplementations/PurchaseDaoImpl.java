@@ -23,7 +23,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
     @Override
     public Optional<Integer> getPriceByProdId(int prodId, String student_id) {
          String sql = """
-            SELECT pp.price FROM purchase_products pp, student_balance sb WHERE pp.id = ? pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight)
+            SELECT pp.price FROM purchase_products pp, student_balance sb WHERE pp.id = ? AND (pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight))
         """;
         return jdbcTemplate.query(sql, new PurchaseProductPriceRowMapper(), prodId, student_id).stream().findFirst();
     }
@@ -31,7 +31,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
     @Override
     public List<PurchaseProduct> getProducts(String student_id) {
         String sql = """
-            SELECT pp.* FROM purchase_products pp, student_balance sb WHERE pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight)
+            SELECT pp.* FROM purchase_products pp, student_balance sb WHERE pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight) ORDER BY pp.hours
         """;
         return jdbcTemplate.query(sql, new PurchaseProductsRowMapper(), student_id);
     }
@@ -39,7 +39,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
     @Override
     public Optional<PurchaseProduct> getProduct(int prodId, String student_id) {
         String sql = """
-            SELECT pp.* FROM purchase_products pp, student_balance sb WHERE pp.id = ? AND sb.student_id = ? AND pp.weight <= sb.weight
+            SELECT pp.* FROM purchase_products pp, student_balance sb WHERE pp.id = ? AND (pp.weight = 0 OR (sb.student_id = ? AND pp.weight <= sb.weight))
         """;
         return jdbcTemplate.query(sql, new PurchaseProductsRowMapper(), prodId, student_id).stream().findFirst();
     }

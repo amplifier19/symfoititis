@@ -13,6 +13,7 @@ public class PurchaseProductsRowMapper implements RowMapper<PurchaseProduct> {
                 rs.getInt("id"),
                 rs.getInt("price"),
                 rs.getInt("anchor_price"),
+                rs.getString("message"),
                 rs.getInt("hours"),
                 rs.getInt("weight"),
                 rs.getBoolean("increment_balance_weight")

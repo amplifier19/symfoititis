@@ -11,3 +11,5 @@ export { ChatMessage } from "./interfaces/ChatMessage";
 export { ChatStats } from "./interfaces/ChatStats";
 export { ReadReceipt } from "./interfaces/ReadReceipt";
 export { MessageTracker } from "./interfaces/MessageTracker";
+export { PurchaseProduct } from "./interfaces/PurchaseProduct";
+export { StudentBalance } from "./interfaces/StudentBalance";

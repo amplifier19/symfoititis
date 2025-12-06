@@ -31,7 +31,7 @@ export const useCoursesDataService = () => {
   const getAvailableTutoringCourseIds = async () => {
     try {
       const response = await coursesApiService.getAvailableTutoringCourseIds(
-        department.value.dep_id,
+        department.value.dep_id || 0,
       );
       const data = await response.json();
       if (!!data.error) {

@@ -162,9 +162,9 @@ body {
 }
 
 .xl-font {
-  font-size: 40px;
+  font-size: 30px;
 }
-
+  
 .xxl-font {
   font-size: 40px;
 }

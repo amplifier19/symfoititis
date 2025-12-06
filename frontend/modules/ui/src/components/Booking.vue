@@ -54,7 +54,6 @@ const getUnreadMessages = () => {
 
 <template>
   <Card
-    class="test"
     v-if="props.card"
     :course="course"
     link="booking"

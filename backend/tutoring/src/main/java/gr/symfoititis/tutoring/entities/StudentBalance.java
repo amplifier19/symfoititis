@@ -9,7 +9,7 @@ public class StudentBalance {
     @Positive
     private  Integer id;
     @NotBlank
-    private String studentId;
+    private String student_id;
     @NotNull
     @PositiveOrZero
     private Integer hours;
@@ -19,7 +19,7 @@ public class StudentBalance {
 
     public StudentBalance(
             @NotBlank
-            String studentId,
+            String student_id,
             @NotNull
             @PositiveOrZero
             Integer hours,
@@ -27,7 +27,7 @@ public class StudentBalance {
             @PositiveOrZero
             Integer weight
     ) {
-        this.studentId = studentId;
+        this.student_id = student_id;
         this.hours = hours;
         this.weight = weight;
     }
@@ -37,7 +37,7 @@ public class StudentBalance {
             @Positive
             Integer id,
             @NotBlank
-            String studentId,
+            String student_id,
             @NotNull
             @PositiveOrZero
             Integer hours,
@@ -46,7 +46,7 @@ public class StudentBalance {
             Integer weight
     ) {
         this.id = id;
-        this.studentId = studentId;
+        this.student_id = student_id;
         this.hours = hours;
         this.weight = weight;
     }
@@ -60,11 +60,11 @@ public class StudentBalance {
     }
 
     public String getStudentId() {
-        return studentId;
+        return student_id;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setStudentId(String student_id) {
+        this.student_id = student_id;
     }
 
     public Integer getHours() {
